@@ -24,6 +24,14 @@ namespace Dev.PlayerLogic
             Cursor.lockState = CursorLockMode.Locked;
         }
 
+        public override void Spawned()
+        {
+            if (HasInputAuthority == false)
+            {
+                GetComponentInChildren<Camera>().gameObject.SetActive(false);
+            }
+        }
+
         public override void FixedUpdateNetwork()
         {
             if (GetInput<PlayerInput>(out var input))
