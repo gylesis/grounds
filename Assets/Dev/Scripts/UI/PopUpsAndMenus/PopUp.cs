@@ -3,24 +3,34 @@ using DG.Tweening;
 using UniRx;
 using UnityEngine;
 
-namespace Dev.UI
+namespace Dev.UI.PopUpsAndMenus
 {
     [RequireComponent(typeof(CanvasGroup))]
     public abstract class PopUp : MonoBehaviour
     {
+        [Header("Sets if pop up or menus is root UI screen")]
+        [SerializeField] private bool _isRoot;
         [SerializeField] protected CanvasGroup _canvasGroup;
         [SerializeField] protected DefaultReactiveButton _procceedButton;
 
-        [SerializeField] private float _smoothFadeInOutDuration = 1f;
+        [SerializeField] protected float _smoothFadeInOutDuration = 1f;
 
-        public Subject<bool> OnHide { get; } = new Subject<bool>();
+        public bool IsRoot => _isRoot;
+
+        public Subject<bool> ShowAndHide { get; } = new Subject<bool>();
 
         private IDisposable _disposable;
+        protected PopUpService PopUpService;
 
         private void Reset()
         {
             _canvasGroup = GetComponent<CanvasGroup>();
             _procceedButton = GetComponentInChildren<DefaultReactiveButton>();
+        }
+
+        public void InitPopUpService(PopUpService popUpService)
+        {
+            PopUpService = popUpService;
         }
 
         public void OnSucceedButtonClicked(Action action)
@@ -34,7 +44,7 @@ namespace Dev.UI
             _procceedButton.Clicked.OnNext(Unit.Default);
         }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             _canvasGroup.alpha = 0;
             _canvasGroup.interactable = false;
@@ -53,14 +63,14 @@ namespace Dev.UI
 
         protected void EnableCanvasGroup()
         {
-            OnHide.OnNext(false);
+            ShowAndHide.OnNext(false);
             _canvasGroup.interactable = true;
             _canvasGroup.blocksRaycasts = true;
         }
 
         protected void DisableCanvasGroup()
         {
-            OnHide.OnNext(true);
+            ShowAndHide.OnNext(true);
             _canvasGroup.interactable = false;
             _canvasGroup.blocksRaycasts = false;
         }
@@ -75,6 +85,24 @@ namespace Dev.UI
         {
             DisableCanvasGroup();
             _canvasGroup.DOFade(0, _smoothFadeInOutDuration);
+        }
+
+        protected void EnableScaled()
+        {
+            _canvasGroup.alpha = 1;
+            _canvasGroup.transform.localScale = Vector3.zero;
+            EnableCanvasGroup();
+            _canvasGroup.transform.DOScale(1, _smoothFadeInOutDuration).SetEase(Ease.OutBounce);
+        }
+
+        protected void DisableScaled()
+        {
+            _canvasGroup.transform.localScale = Vector3.one;
+            DisableCanvasGroup();
+            _canvasGroup.transform.DOScale(0, _smoothFadeInOutDuration).SetEase(Ease.OutBounce).OnComplete((() =>
+            {
+                _canvasGroup.alpha = 0;
+            }));
         }
 
         protected virtual void OnDestroy()
