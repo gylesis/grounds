@@ -69,7 +69,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _kinematicSpeed: 8
-  _kinematicSpeedLimitFactor: 0.025
+  _kinematicSpeedLimitFactor: 1
   _kinematicDirectionResponsivity: 0.4
   _constantKinematicAcceleration: 0
   _relativeKinematicAcceleration: 5

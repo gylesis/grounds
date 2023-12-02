@@ -44,10 +44,12 @@ namespace Dev.Scripts.PlayerLogic
         {
             if(HasInputAuthority == false) return;
             
+            ItemHandle();
+            
             if (Time.frameCount % 3 != 0) return;
 
             if(_player == null) return; // TEMP
-            
+
             var center = new Vector2(Screen.width / 2, Screen.height / 2);
 
             Ray ray = _player.CameraController.CharacterCamera.ScreenPointToRay(center);
@@ -87,16 +89,16 @@ namespace Dev.Scripts.PlayerLogic
             }
         }
 
-        private void Update()
+        private void ItemHandle()
         {
             bool hasItemInLeftHand = _handsService.HasItemInHand(HandType.Left);
             var hasItemInRightHand = _handsService.HasItemInHand(HandType.Right);
             var hasItemInCenterHand = _handsService.HasItemInHand(HandType.Center);
-            
+
             /*_playerView.OnItemPickup(HandType.Left, hasItemInLeftHand);
             _playerView.OnItemPickup(HandType.Right, hasItemInRightHand);
             _playerView.OnItemPickup(HandType.Center, hasItemInCenterHand);*/
-            
+
             if (hasItemInLeftHand) // left hand
             {
                 if (_player.InputService.PlayerInputs.Player.DropItemLeft.WasPressedThisFrame())
@@ -121,7 +123,7 @@ namespace Dev.Scripts.PlayerLogic
                     _handsService.DropItemFromHand(HandType.Center);
                 }
             }
-            
+
             if (TargetItem == null) return;
 
             if (_player.InputService.PlayerInputs.Player.Interaction.WasPressedThisFrame())
@@ -131,8 +133,6 @@ namespace Dev.Scripts.PlayerLogic
                     _handsService.PutItemInHand(TargetItem.HandType, TargetItem);
                 }
             }
-
-           
         }
     }
 }
