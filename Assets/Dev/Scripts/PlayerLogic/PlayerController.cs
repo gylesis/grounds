@@ -44,7 +44,7 @@ namespace Dev.PlayerLogic
                 moveDirection.Normalize();
                 _kcc.SetInputDirection(moveDirection);
 
-                _playerView.OnInput(input.MoveDirection);
+                _playerView.RPC_OnInput(input.MoveDirection);
                 
                 if (input.Jump)
                 {
