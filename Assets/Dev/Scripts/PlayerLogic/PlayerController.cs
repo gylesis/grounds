@@ -1,5 +1,6 @@
 ﻿using System;
 using Dev.Infrastructure;
+using Dev.Scripts.PlayerLogic;
 using Dev.UI.PopUpsAndMenus;
 using Fusion.KCC;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace Dev.PlayerLogic
 {
     public class PlayerController : NetworkContext
     {
+        [SerializeField] private PlayerView _playerView;
         [SerializeField] private KCC _kcc;
 
         [SerializeField] private Transform _cameraTransform;
@@ -42,6 +44,8 @@ namespace Dev.PlayerLogic
                 moveDirection.Normalize();
                 _kcc.SetInputDirection(moveDirection);
 
+                _playerView.OnInput(input.MoveDirection);
+                
                 if (input.Jump)
                 {
                     _kcc.Jump(Vector3.up * _jumpModifier);

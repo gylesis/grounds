@@ -6,17 +6,21 @@ namespace Dev.Scripts.PlayerLogic
 {
     public class PlayerView : NetworkContext
     {
-        [SerializeField] private NetworkTransform _armsTransform;
+        [SerializeField] private Transform _armsTransform;
         [SerializeField] private Transform _bodyTransform;
 
         [SerializeField] private Transform _cameraTransform;
+
+        [SerializeField] private NetworkMecanimAnimator _animator;
         
+        private static readonly int MoveX = Animator.StringToHash("MoveX");
+        private static readonly int MoveY = Animator.StringToHash("MoveY");
+
         public override void Spawned()
         {
             if (HasInputAuthority)
             {
-                _armsTransform.InterpolationSpace = Spaces.World;
-                _armsTransform.Transform.parent = _cameraTransform;
+                _armsTransform.parent = _cameraTransform;
                 _bodyTransform.gameObject.SetActive(false);                
             }
             else
@@ -26,12 +30,11 @@ namespace Dev.Scripts.PlayerLogic
             }
         }
 
-        public override void Render()
+        public void OnInput(Vector2 moveDirection)
         {
-            if (HasInputAuthority)
-            {
-                _armsTransform.Transform.SetPositionAndRotation(_cameraTransform.position, _cameraTransform.rotation);
-            }
+            _animator.Animator.SetFloat(MoveX, moveDirection.x);
+            _animator.Animator.SetFloat(MoveY, moveDirection.y);
         }
+        
     }
 }
