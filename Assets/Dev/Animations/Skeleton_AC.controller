@@ -68,7 +68,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: -6217389266773117732, guid: e5901ce40e7bc6f45be465c564aa05e0,
       type: 3}
-    m_Threshold: 0.2
+    m_Threshold: 0.11904763
     m_Position: {x: 0, y: 0.75}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -77,16 +77,16 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: -203655887218126122, guid: 70bb2cbbc0afece469871a3fcc144703,
       type: 3}
-    m_Threshold: 0.4
+    m_Threshold: 0.23809525
     m_Position: {x: 0, y: 1}
-    m_TimeScale: 2
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: MoveX
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: -203655887218126122, guid: d8a98633255eb1141b3a6cc001ae00d6,
       type: 3}
-    m_Threshold: 0.6
+    m_Threshold: 0.35714287
     m_Position: {x: 0, y: -1}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -95,8 +95,8 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: -203655887218126122, guid: 89e6bb6121991334aad3c724388fee49,
       type: 3}
-    m_Threshold: 0.8
-    m_Position: {x: -0.25, y: -0.02}
+    m_Threshold: 0.4761905
+    m_Position: {x: -0.25, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: MoveX
@@ -104,8 +104,17 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: -203655887218126122, guid: 3e6d6c488df394e4c8af2588c050b609,
       type: 3}
-    m_Threshold: 1
-    m_Position: {x: 0.24, y: -0.02}
+    m_Threshold: 0.5952381
+    m_Position: {x: 0.25, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: MoveX
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: -203655887218126122, guid: bef1f401f5a54c44385b357dd236fc1b,
+      type: 3}
+    m_Threshold: 0.71428573
+    m_Position: {x: -0.25, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: MoveX
@@ -113,7 +122,7 @@ BlendTree:
   m_BlendParameter: MoveX
   m_BlendParameterY: MoveY
   m_MinThreshold: 0
-  m_MaxThreshold: 1
+  m_MaxThreshold: 0.71428573
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
   m_BlendType: 1
