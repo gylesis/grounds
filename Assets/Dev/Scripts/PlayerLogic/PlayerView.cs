@@ -1,4 +1,5 @@
-﻿using Dev.Infrastructure;
+﻿using System;
+using Dev.Infrastructure;
 using Fusion;
 using UnityEngine;
 
@@ -13,6 +14,10 @@ namespace Dev.Scripts.PlayerLogic
         
         private static readonly int MoveX = Animator.StringToHash("MoveX");
         private static readonly int MoveY = Animator.StringToHash("MoveY");
+        private static readonly int LeftHand = Animator.StringToHash("LeftHand");
+        private static readonly int RightHand = Animator.StringToHash("RightHand");
+        private static readonly int CenterHand = Animator.StringToHash("CenterHand");
+
 
         public override void Spawned()
         {
@@ -27,6 +32,23 @@ namespace Dev.Scripts.PlayerLogic
             }
         }
 
+        public void OnItemPickup(HandType handType, bool isCarrying)
+        {
+            switch (handType)
+            {
+                case HandType.Left:
+                    _animator.Animator.SetBool(LeftHand, isCarrying);
+                    break;
+                case HandType.Right:
+                    _animator.Animator.SetBool(RightHand, isCarrying);
+                    break;
+                case HandType.Center:
+                    _animator.Animator.SetBool(CenterHand, isCarrying);
+                    break;
+            }
+        }
+        
+        
         [Rpc]
         public void RPC_OnInput(Vector2 moveDirection)
         {

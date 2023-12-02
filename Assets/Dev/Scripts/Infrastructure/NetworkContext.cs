@@ -128,5 +128,23 @@ namespace Dev.Infrastructure
                 transform.parent = newParent.transform;
             }
         }
+        
+        [Rpc]
+        public void RPC_SetParentAndSetZero(NetworkObject newParent)
+        {
+            if (newParent == null)
+            {
+                transform.parent = null;
+            }
+            else
+            {
+                transform.parent = newParent.transform;
+                transform.localPosition = Vector3.zero;
+                transform.localRotation = Quaternion.identity;
+            }
+        }
+        
+        
+        
     }
 }

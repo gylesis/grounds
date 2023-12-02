@@ -71,6 +71,33 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interaction"",
+                    ""type"": ""Button"",
+                    ""id"": ""37504976-9313-4081-bd72-a701ac89aad1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DropItemLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""d735b5af-7e2b-4916-a767-ffd52f0ec0ee"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DropItemRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""8c27732a-c565-4df0-8f52-316a276b9bef"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -324,6 +351,50 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Sprint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f6b526f9-59b6-442a-afd9-6f93c89b7c40"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Interaction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a61dc4bf-f596-4878-a230-5992e55ba416"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Interaction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9b2211e6-8044-45cf-8624-bb412c678602"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DropItemLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d048e9d6-ceb6-4e62-87cb-4c107d42da3a"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DropItemRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -916,6 +987,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
+        m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
+        m_Player_DropItemLeft = m_Player.FindAction("DropItemLeft", throwIfNotFound: true);
+        m_Player_DropItemRight = m_Player.FindAction("DropItemRight", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -994,6 +1068,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Sprint;
+    private readonly InputAction m_Player_Interaction;
+    private readonly InputAction m_Player_DropItemLeft;
+    private readonly InputAction m_Player_DropItemRight;
     public struct PlayerActions
     {
         private @PlayerInputs m_Wrapper;
@@ -1003,6 +1080,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
+        public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
+        public InputAction @DropItemLeft => m_Wrapper.m_Player_DropItemLeft;
+        public InputAction @DropItemRight => m_Wrapper.m_Player_DropItemRight;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1027,6 +1107,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
+            @Interaction.started += instance.OnInteraction;
+            @Interaction.performed += instance.OnInteraction;
+            @Interaction.canceled += instance.OnInteraction;
+            @DropItemLeft.started += instance.OnDropItemLeft;
+            @DropItemLeft.performed += instance.OnDropItemLeft;
+            @DropItemLeft.canceled += instance.OnDropItemLeft;
+            @DropItemRight.started += instance.OnDropItemRight;
+            @DropItemRight.performed += instance.OnDropItemRight;
+            @DropItemRight.canceled += instance.OnDropItemRight;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1046,6 +1135,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
+            @Interaction.started -= instance.OnInteraction;
+            @Interaction.performed -= instance.OnInteraction;
+            @Interaction.canceled -= instance.OnInteraction;
+            @DropItemLeft.started -= instance.OnDropItemLeft;
+            @DropItemLeft.performed -= instance.OnDropItemLeft;
+            @DropItemLeft.canceled -= instance.OnDropItemLeft;
+            @DropItemRight.started -= instance.OnDropItemRight;
+            @DropItemRight.performed -= instance.OnDropItemRight;
+            @DropItemRight.canceled -= instance.OnDropItemRight;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1233,6 +1331,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         void OnFire(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
+        void OnInteraction(InputAction.CallbackContext context);
+        void OnDropItemLeft(InputAction.CallbackContext context);
+        void OnDropItemRight(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

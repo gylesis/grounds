@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Dev.UI;
 using Dev.UI.PopUpsAndMenus;
 using Fusion;
@@ -25,6 +26,7 @@ namespace Dev.Infrastructure
 
         private PlayerInputs _playerInputs;
 
+        public PlayerInputs PlayerInputs => _playerInputs;
 
         public override void Spawned()
         {

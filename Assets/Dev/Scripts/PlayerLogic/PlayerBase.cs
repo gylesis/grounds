@@ -1,4 +1,5 @@
 ﻿using Dev.Infrastructure;
+using Dev.Scripts.PlayerLogic;
 using Fusion;
 using UnityEngine;
 
@@ -8,5 +9,8 @@ namespace Dev.PlayerLogic
     {
         [HideInInspector] [Networked] public PlayerCharacter PlayerCharacterInstance { get; set; }
 
+        [SerializeField] private CameraController _cameraController;
+
+        public CameraController CameraController => _cameraController;
     }
 }
