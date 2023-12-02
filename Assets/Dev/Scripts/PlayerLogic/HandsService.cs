@@ -31,7 +31,7 @@ namespace Dev.Scripts.PlayerLogic
         public void PutItemInHand(HandType handType, Item item)
         {
             HandInfoContainer handInfoContainer = GetHandInfoByHandType(handType);
-            handInfoContainer.CarryingItem = item;
+            handInfoContainer.RPC_SetItem(item);
             handInfoContainer.CarryingItem.RPC_OnPickup(true);
             item.RPC_SetParent(handInfoContainer.Parent);
             item.RPC_SetLocalPos(Vector3.zero);
@@ -67,8 +67,7 @@ namespace Dev.Scripts.PlayerLogic
             
             item.RPC_OnPickup(false);
 
-
-            handInfoContainer.CarryingItem = null;
+            handInfoContainer.RPC_SetItem(null);
         }
         
     }

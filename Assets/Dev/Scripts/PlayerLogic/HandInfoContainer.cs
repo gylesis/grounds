@@ -15,9 +15,14 @@ namespace Dev.Scripts.PlayerLogic
 
         [Networked] public Item CarryingItem { get; set; }
 
-
         public bool IsFreeHand => CarryingItem == null;
 
+        [Rpc]
+        public void RPC_SetItem(Item item)
+        {
+            CarryingItem = item;
+        }
+        
     }
     
     

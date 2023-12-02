@@ -5328,6 +5328,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4499176733960800270, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
         type: 3}
+      propertyPath: _handType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4499176733960800270, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
+        type: 3}
       propertyPath: _testName
       value: "\u0440\u0443\u043D\u0434\u0443\u043A"
       objectReference: {fileID: 0}
