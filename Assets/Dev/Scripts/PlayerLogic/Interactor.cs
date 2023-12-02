@@ -1,6 +1,8 @@
 ﻿using System;
+using Cysharp.Threading.Tasks;
 using Dev.Infrastructure;
-using Fusion;
+using Dev.PlayerLogic;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
 namespace Dev.Scripts.PlayerLogic
@@ -8,9 +10,6 @@ namespace Dev.Scripts.PlayerLogic
     public class Interactor : NetworkContext
     {
         [SerializeField] private HandsService _handsService;
-        [SerializeField] private Camera _camera;
-        [SerializeField] private InputService _inputService;
-        [SerializeField] private PlayerView _playerView;
         
         [SerializeField] private float _maxDistance = 5f;
         [SerializeField] private float _radius = 0.2f;
@@ -19,12 +18,26 @@ namespace Dev.Scripts.PlayerLogic
 
         private InteractorView _interactorView;
         private bool _hadItemInPrevFrame;
+        private GameDataService _gameDataService;
+        private PlayerCharacter _player;
 
         private Item TargetItem { get; set; }
 
         private void Start()
         {
             _interactorView = DependenciesContainer.Instance.GetDependency<InteractorView>();
+          //  _gameDataService = DependenciesContainer.Instance.GetDependency<GameDataService>();
+        }
+
+        public override async void Spawned()
+        {
+            base.Spawned();
+
+            //_player = _gameDataService.GetPlayer(Object.InputAuthority);
+
+            await UniTask.DelayFrame(5);
+            
+            _player = Runner.GetPlayerObject(Object.InputAuthority).GetComponent<PlayerCharacter>(); // TEMP
         }
 
         public override void Render()
@@ -33,9 +46,11 @@ namespace Dev.Scripts.PlayerLogic
             
             if (Time.frameCount % 3 != 0) return;
 
+            if(_player == null) return; // TEMP
+            
             var center = new Vector2(Screen.width / 2, Screen.height / 2);
 
-            Ray ray = _camera.ScreenPointToRay(center);
+            Ray ray = _player.CameraController.CharacterCamera.ScreenPointToRay(center);
 
             var sphereCast = Physics.SphereCast(transform.position, _radius, ray.direction, out var hit, _maxDistance,
                 _itemLayer);
@@ -84,7 +99,7 @@ namespace Dev.Scripts.PlayerLogic
             
             if (hasItemInLeftHand) // left hand
             {
-                if (_inputService.PlayerInputs.Player.DropItemLeft.WasPressedThisFrame())
+                if (_player.InputService.PlayerInputs.Player.DropItemLeft.WasPressedThisFrame())
                 {
                     _handsService.DropItemFromHand(HandType.Left);
                 }
@@ -92,7 +107,7 @@ namespace Dev.Scripts.PlayerLogic
 
             if (hasItemInRightHand) // right hand
             {
-                if (_inputService.PlayerInputs.Player.DropItemRight.WasPressedThisFrame())
+                if (_player.InputService.PlayerInputs.Player.DropItemRight.WasPressedThisFrame())
                 {
                     _handsService.DropItemFromHand(HandType.Right);
                 }
@@ -100,8 +115,8 @@ namespace Dev.Scripts.PlayerLogic
 
             if (hasItemInCenterHand) // center hand
             {
-                if (_inputService.PlayerInputs.Player.DropItemRight.WasPressedThisFrame() ||
-                    _inputService.PlayerInputs.Player.DropItemLeft.WasPressedThisFrame())
+                if (_player.InputService.PlayerInputs.Player.DropItemRight.WasPressedThisFrame() ||
+                    _player.InputService.PlayerInputs.Player.DropItemLeft.WasPressedThisFrame())
                 {
                     _handsService.DropItemFromHand(HandType.Center);
                 }
@@ -109,7 +124,7 @@ namespace Dev.Scripts.PlayerLogic
             
             if (TargetItem == null) return;
 
-            if (_inputService.PlayerInputs.Player.Interaction.WasPressedThisFrame())
+            if (_player.InputService.PlayerInputs.Player.Interaction.WasPressedThisFrame())
             {
                 if (_handsService.AbleToPutItem(TargetItem.HandType))
                 {

@@ -2,6 +2,7 @@
 using Dev.Infrastructure;
 using Dev.Scripts.PlayerLogic;
 using Dev.UI.PopUpsAndMenus;
+using Fusion;
 using Fusion.KCC;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -14,9 +15,11 @@ namespace Dev.PlayerLogic
         [SerializeField] private KCC _kcc;
 
         [SerializeField] private Transform _cameraTransform;
-            
+
         [SerializeField] private float _jumpModifier = 2;
         [SerializeField] private float _sensivity = 2;
+
+        [SerializeField] private float _sprintAcceleration = 4.5f;
         
         private PopUpService _popUpService;
 
@@ -40,25 +43,31 @@ namespace Dev.PlayerLogic
             {
                 _kcc.AddLookRotation(input.LookDirection * _sensivity * Runner.DeltaTime);
 
-                Vector3 moveDirection = _kcc.transform.forward * input.MoveDirection.y + _kcc.transform.right * input.MoveDirection.x;  
+                Vector3 moveDirection = _kcc.transform.forward * input.MoveDirection.y +
+                                        _kcc.transform.right * input.MoveDirection.x;
                 moveDirection.Normalize();
                 _kcc.SetInputDirection(moveDirection);
 
                 _playerView.RPC_OnInput(input.MoveDirection);
-                
+
                 if (input.Jump)
                 {
                     _kcc.Jump(Vector3.up * _jumpModifier);
                 }
-            }
 
+                if (input.Sprint)
+                {
+                    _kcc.AddExternalVelocity(moveDirection * _sprintAcceleration);
+                }
+            }
         }
 
         public override void Render()
         {
             Quaternion quaternion = _cameraTransform.transform.rotation;
-            Vector3 eulerAngles = quaternion.eulerAngles;   
-            _cameraTransform.transform.rotation = Quaternion.Euler(-_kcc.FixedData.LookPitch,eulerAngles.y,eulerAngles.z);
+            Vector3 eulerAngles = quaternion.eulerAngles;
+            _cameraTransform.transform.rotation =
+                Quaternion.Euler(-_kcc.FixedData.LookPitch, eulerAngles.y, eulerAngles.z);
         }
     }
 }

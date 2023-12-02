@@ -899,7 +899,7 @@ namespace Fusion.KCC
 		/// Changes done in render will vanish with next fixed update.
 		/// </summary>
 		public void AddModifier<T>(T provider) where T : Component, IKCCInteractionProvider
-		{
+		{	
 			if (provider == null)
 				return;
 			if (HasAnyAuthority == false)

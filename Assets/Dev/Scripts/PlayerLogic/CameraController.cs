@@ -5,8 +5,8 @@ namespace Dev.Scripts.PlayerLogic
 {
     public class CameraController : NetworkContext
     {
-        [SerializeField] private Camera _camera;
+        [SerializeField] private Camera _characterCamera;
 
-        public Camera Camera => _camera;
+        public Camera CharacterCamera => _characterCamera;
     }
 }

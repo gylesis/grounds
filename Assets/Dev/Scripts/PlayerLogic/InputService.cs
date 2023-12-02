@@ -28,12 +28,15 @@ namespace Dev.Infrastructure
 
         public PlayerInputs PlayerInputs => _playerInputs;
 
+        private void Awake()
+        {
+            _playerInputs = new PlayerInputs();
+            _playerInputs.Enable();
+        }
+
         public override void Spawned()
         {
             Runner.AddCallbacks(this);
-
-            _playerInputs = new PlayerInputs();
-            _playerInputs.Enable();
         }
 
         public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) { }
@@ -42,20 +45,18 @@ namespace Dev.Infrastructure
 
         public void OnInput(NetworkRunner runner, NetworkInput input)
         {
-            bool jump = _playerInputs.Player.Jump.IsPressed();
+            bool jump = _playerInputs.Player.Jump.WasPressedThisFrame();
+            bool sprint = _playerInputs.Player.Sprint.IsPressed();
 
             Vector2 inputVector = _playerInputs.Player.Move.ReadValue<Vector2>();
             Vector2 lookVector = _playerInputs.Player.Look.ReadValue<Vector2>();
 
             Vector2 look = new Vector2(lookVector.y, lookVector.x);
-            
-            var keyBoardInput = new Vector2(inputVector.x,inputVector.y);
-    
-            //moveDirection.Normalize();
+            Vector2 keyBoardInput = new Vector2(inputVector.x,inputVector.y);
 
             PlayerInput playerInput = new PlayerInput();
 
-            playerInput.Sprint = _playerInputs.Player.Sprint.IsPressed();
+            playerInput.Sprint = sprint;
             playerInput.MoveDirection = keyBoardInput;
             playerInput.LookDirection = look;
             playerInput.Jump = jump;
