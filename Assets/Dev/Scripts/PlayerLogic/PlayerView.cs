@@ -9,8 +9,6 @@ namespace Dev.Scripts.PlayerLogic
         [SerializeField] private Transform _armsTransform;
         [SerializeField] private Transform _bodyTransform;
 
-        [SerializeField] private Transform _cameraTransform;
-
         [SerializeField] private NetworkMecanimAnimator _animator;
         
         private static readonly int MoveX = Animator.StringToHash("MoveX");
@@ -20,17 +18,17 @@ namespace Dev.Scripts.PlayerLogic
         {
             if (HasInputAuthority)
             {
-                _armsTransform.parent = _cameraTransform;
                 _bodyTransform.gameObject.SetActive(false);                
             }
             else
             {
                 _bodyTransform.gameObject.SetActive(true);
-                _armsTransform.gameObject.SetActive(true);
+                _armsTransform.gameObject.SetActive(false);
             }
         }
 
-        public void OnInput(Vector2 moveDirection)
+        [Rpc]
+        public void RPC_OnInput(Vector2 moveDirection)
         {
             _animator.Animator.SetFloat(MoveX, moveDirection.x);
             _animator.Animator.SetFloat(MoveY, moveDirection.y);
