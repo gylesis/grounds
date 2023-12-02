@@ -117,5 +117,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22f4cd63ba954bd6aff571a6074a88dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _impulse: {x: 0, y: 25, z: 0}
+  _impulse: {x: 0, y: 35, z: 0}
   _limitKinematicVelocityProcessor: {fileID: 0}
