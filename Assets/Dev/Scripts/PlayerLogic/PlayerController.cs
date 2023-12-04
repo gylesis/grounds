@@ -1,16 +1,17 @@
-﻿using System;
-using Dev.Infrastructure;
+﻿using Dev.Infrastructure;
 using Dev.Scripts.PlayerLogic;
 using Dev.UI.PopUpsAndMenus;
 using Fusion;
 using Fusion.KCC;
 using UnityEngine;
-using UnityEngine.Serialization;
+using Cursor = UnityEngine.Cursor;
 
 namespace Dev.PlayerLogic
 {
     public class PlayerController : NetworkContext
     {
+        [Networked] private NetworkButtons _buttonsPrevious { get; set; }
+        
         [SerializeField] private PlayerView _playerView;
         [SerializeField] private KCC _kcc;
 
@@ -41,6 +42,11 @@ namespace Dev.PlayerLogic
         {
             if (GetInput<PlayerInput>(out var input))
             {
+                var pressed = input.Buttons.GetPressed(_buttonsPrevious);
+                var released = input.Buttons.GetReleased(_buttonsPrevious);
+
+                _buttonsPrevious = input.Buttons;
+                
                 _kcc.AddLookRotation(input.LookDirection * _sensivity * Runner.DeltaTime);
 
                 Vector3 moveDirection = _kcc.transform.forward * input.MoveDirection.y +
@@ -50,7 +56,7 @@ namespace Dev.PlayerLogic
 
                 _playerView.RPC_OnInput(input.MoveDirection);
 
-                if (input.Jump)
+                if (pressed.IsSet(Buttons.Jump))  
                 {
                     _kcc.Jump(Vector3.up * _jumpModifier);
                 }

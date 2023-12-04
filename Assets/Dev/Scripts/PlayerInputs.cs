@@ -82,18 +82,63 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""DropItemLeft"",
+                    ""name"": ""DropItem"",
                     ""type"": ""Button"",
                     ""id"": ""d735b5af-7e2b-4916-a767-ffd52f0ec0ee"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(duration=0.8,pressPoint=0.5)"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LeftHand"",
+                    ""type"": ""Button"",
+                    ""id"": ""959be239-c840-4c7f-b87e-df9421f45ab7"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""DropItemRight"",
+                    ""name"": ""RightHand"",
                     ""type"": ""Button"",
-                    ""id"": ""8c27732a-c565-4df0-8f52-316a276b9bef"",
+                    ""id"": ""1fa058db-41fc-431d-bc39-92b31592f649"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AnyHand"",
+                    ""type"": ""Button"",
+                    ""id"": ""b5962704-4344-449a-8738-187e45a2565a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwingItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""ad532e37-cb23-4ac0-a7b6-a64b48a8ba46"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ThrowItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""e69fe3b2-3427-4f7f-8f69-a309f6be8f58"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(duration=0.8,pressPoint=0.5)"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UseItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""6357dd76-dd3a-451c-81d5-949cba02db8a"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -357,7 +402,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""f6b526f9-59b6-442a-afd9-6f93c89b7c40"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -379,22 +424,88 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""9b2211e6-8044-45cf-8624-bb412c678602"",
-                    ""path"": ""<Keyboard>/1"",
+                    ""path"": ""<Keyboard>/v"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""DropItemLeft"",
+                    ""action"": ""DropItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""d048e9d6-ceb6-4e62-87cb-4c107d42da3a"",
-                    ""path"": ""<Keyboard>/2"",
+                    ""id"": ""9da30f66-42ed-4e52-a431-2f7b5a7895d4"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""DropItemRight"",
+                    ""action"": ""LeftHand"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fbe120e7-ea6f-44aa-977a-fec767f2bb1b"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightHand"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""28630b2d-d161-47b5-8e98-741dd441f0c9"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwingItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""266c0b3f-8aec-46b0-85ff-214f2b31b228"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ThrowItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0ed3ace2-12e5-49e5-be37-170e9401133e"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0ca8cebb-6fea-4fc1-8853-61316a93c4d1"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AnyHand"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""869997cb-8843-4284-b025-46060a66990b"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AnyHand"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -988,8 +1099,13 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
-        m_Player_DropItemLeft = m_Player.FindAction("DropItemLeft", throwIfNotFound: true);
-        m_Player_DropItemRight = m_Player.FindAction("DropItemRight", throwIfNotFound: true);
+        m_Player_DropItem = m_Player.FindAction("DropItem", throwIfNotFound: true);
+        m_Player_LeftHand = m_Player.FindAction("LeftHand", throwIfNotFound: true);
+        m_Player_RightHand = m_Player.FindAction("RightHand", throwIfNotFound: true);
+        m_Player_AnyHand = m_Player.FindAction("AnyHand", throwIfNotFound: true);
+        m_Player_SwingItem = m_Player.FindAction("SwingItem", throwIfNotFound: true);
+        m_Player_ThrowItem = m_Player.FindAction("ThrowItem", throwIfNotFound: true);
+        m_Player_UseItem = m_Player.FindAction("UseItem", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1069,8 +1185,13 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Interaction;
-    private readonly InputAction m_Player_DropItemLeft;
-    private readonly InputAction m_Player_DropItemRight;
+    private readonly InputAction m_Player_DropItem;
+    private readonly InputAction m_Player_LeftHand;
+    private readonly InputAction m_Player_RightHand;
+    private readonly InputAction m_Player_AnyHand;
+    private readonly InputAction m_Player_SwingItem;
+    private readonly InputAction m_Player_ThrowItem;
+    private readonly InputAction m_Player_UseItem;
     public struct PlayerActions
     {
         private @PlayerInputs m_Wrapper;
@@ -1081,8 +1202,13 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
-        public InputAction @DropItemLeft => m_Wrapper.m_Player_DropItemLeft;
-        public InputAction @DropItemRight => m_Wrapper.m_Player_DropItemRight;
+        public InputAction @DropItem => m_Wrapper.m_Player_DropItem;
+        public InputAction @LeftHand => m_Wrapper.m_Player_LeftHand;
+        public InputAction @RightHand => m_Wrapper.m_Player_RightHand;
+        public InputAction @AnyHand => m_Wrapper.m_Player_AnyHand;
+        public InputAction @SwingItem => m_Wrapper.m_Player_SwingItem;
+        public InputAction @ThrowItem => m_Wrapper.m_Player_ThrowItem;
+        public InputAction @UseItem => m_Wrapper.m_Player_UseItem;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1110,12 +1236,27 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Interaction.started += instance.OnInteraction;
             @Interaction.performed += instance.OnInteraction;
             @Interaction.canceled += instance.OnInteraction;
-            @DropItemLeft.started += instance.OnDropItemLeft;
-            @DropItemLeft.performed += instance.OnDropItemLeft;
-            @DropItemLeft.canceled += instance.OnDropItemLeft;
-            @DropItemRight.started += instance.OnDropItemRight;
-            @DropItemRight.performed += instance.OnDropItemRight;
-            @DropItemRight.canceled += instance.OnDropItemRight;
+            @DropItem.started += instance.OnDropItem;
+            @DropItem.performed += instance.OnDropItem;
+            @DropItem.canceled += instance.OnDropItem;
+            @LeftHand.started += instance.OnLeftHand;
+            @LeftHand.performed += instance.OnLeftHand;
+            @LeftHand.canceled += instance.OnLeftHand;
+            @RightHand.started += instance.OnRightHand;
+            @RightHand.performed += instance.OnRightHand;
+            @RightHand.canceled += instance.OnRightHand;
+            @AnyHand.started += instance.OnAnyHand;
+            @AnyHand.performed += instance.OnAnyHand;
+            @AnyHand.canceled += instance.OnAnyHand;
+            @SwingItem.started += instance.OnSwingItem;
+            @SwingItem.performed += instance.OnSwingItem;
+            @SwingItem.canceled += instance.OnSwingItem;
+            @ThrowItem.started += instance.OnThrowItem;
+            @ThrowItem.performed += instance.OnThrowItem;
+            @ThrowItem.canceled += instance.OnThrowItem;
+            @UseItem.started += instance.OnUseItem;
+            @UseItem.performed += instance.OnUseItem;
+            @UseItem.canceled += instance.OnUseItem;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1138,12 +1279,27 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Interaction.started -= instance.OnInteraction;
             @Interaction.performed -= instance.OnInteraction;
             @Interaction.canceled -= instance.OnInteraction;
-            @DropItemLeft.started -= instance.OnDropItemLeft;
-            @DropItemLeft.performed -= instance.OnDropItemLeft;
-            @DropItemLeft.canceled -= instance.OnDropItemLeft;
-            @DropItemRight.started -= instance.OnDropItemRight;
-            @DropItemRight.performed -= instance.OnDropItemRight;
-            @DropItemRight.canceled -= instance.OnDropItemRight;
+            @DropItem.started -= instance.OnDropItem;
+            @DropItem.performed -= instance.OnDropItem;
+            @DropItem.canceled -= instance.OnDropItem;
+            @LeftHand.started -= instance.OnLeftHand;
+            @LeftHand.performed -= instance.OnLeftHand;
+            @LeftHand.canceled -= instance.OnLeftHand;
+            @RightHand.started -= instance.OnRightHand;
+            @RightHand.performed -= instance.OnRightHand;
+            @RightHand.canceled -= instance.OnRightHand;
+            @AnyHand.started -= instance.OnAnyHand;
+            @AnyHand.performed -= instance.OnAnyHand;
+            @AnyHand.canceled -= instance.OnAnyHand;
+            @SwingItem.started -= instance.OnSwingItem;
+            @SwingItem.performed -= instance.OnSwingItem;
+            @SwingItem.canceled -= instance.OnSwingItem;
+            @ThrowItem.started -= instance.OnThrowItem;
+            @ThrowItem.performed -= instance.OnThrowItem;
+            @ThrowItem.canceled -= instance.OnThrowItem;
+            @UseItem.started -= instance.OnUseItem;
+            @UseItem.performed -= instance.OnUseItem;
+            @UseItem.canceled -= instance.OnUseItem;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1332,8 +1488,13 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnInteraction(InputAction.CallbackContext context);
-        void OnDropItemLeft(InputAction.CallbackContext context);
-        void OnDropItemRight(InputAction.CallbackContext context);
+        void OnDropItem(InputAction.CallbackContext context);
+        void OnLeftHand(InputAction.CallbackContext context);
+        void OnRightHand(InputAction.CallbackContext context);
+        void OnAnyHand(InputAction.CallbackContext context);
+        void OnSwingItem(InputAction.CallbackContext context);
+        void OnThrowItem(InputAction.CallbackContext context);
+        void OnUseItem(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

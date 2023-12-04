@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Dev.UI;
-using Dev.UI.PopUpsAndMenus;
 using Fusion;
 using Fusion.Sockets;
 using UnityEngine;
@@ -45,8 +42,8 @@ namespace Dev.Infrastructure
 
         public void OnInput(NetworkRunner runner, NetworkInput input)
         {
-            bool jump = _playerInputs.Player.Jump.WasPressedThisFrame();
-            bool sprint = _playerInputs.Player.Sprint.IsPressed();
+            bool jumpState = _playerInputs.Player.Jump.IsPressed();
+            bool sprintState = _playerInputs.Player.Sprint.IsPressed();
 
             Vector2 inputVector = _playerInputs.Player.Move.ReadValue<Vector2>();
             Vector2 lookVector = _playerInputs.Player.Look.ReadValue<Vector2>();
@@ -56,10 +53,11 @@ namespace Dev.Infrastructure
 
             PlayerInput playerInput = new PlayerInput();
 
-            playerInput.Sprint = sprint;
+            playerInput.Sprint = sprintState;
             playerInput.MoveDirection = keyBoardInput;
             playerInput.LookDirection = look;
-            playerInput.Jump = jump;
+            playerInput.Buttons.Set(Buttons.Jump, jumpState);
+            
 
             /*for (int i = 0; i < _keyCodes.Length; i++)
             {

@@ -361,7 +361,7 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _IsActive:
     _value: 1
-  _handType: 1
+  handType: 1
   _parent: {fileID: 2649448449979968153}
   _CarryingItem: {fileID: 0}
 --- !u!1 &1068708981001118909
@@ -849,7 +849,7 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _IsActive:
     _value: 1
-  _handType: 0
+  handType: 0
   _parent: {fileID: 5091040268904405783}
   _CarryingItem: {fileID: 0}
 --- !u!1 &2122922072800034053
@@ -1523,7 +1523,7 @@ MonoBehaviour:
     ColliderLayer: 0
     CollisionLayerMask:
       serializedVersion: 2
-      m_Bits: 1
+      m_Bits: 9
     RenderBehavior: 1
     Features: -1
     SuppressConvexMeshColliders: 0
@@ -1569,10 +1569,10 @@ MonoBehaviour:
   _IsActive:
     _value: 1
   _camera: {fileID: 5384968157959353973}
-  _handInfoContainers:
+  _hands:
   - {fileID: 1749262853793814394}
-  - {fileID: 384047101695566126}
   - {fileID: 1086429060926523364}
+  - {fileID: 384047101695566126}
 --- !u!114 &2126260200385715225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1592,7 +1592,7 @@ MonoBehaviour:
   _kcc: {fileID: 8738784936676509605}
   _cameraTransform: {fileID: 7152790470979342241}
   _jumpModifier: 5
-  _sensivity: 2.5
+  _sensivity: 6
   _sprintAcceleration: 4.5
 --- !u!114 &5652419671481334003
 MonoBehaviour:
@@ -1839,7 +1839,7 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _IsActive:
     _value: 1
-  _handsService: {fileID: 8256951257243662499}
+  _hands: {fileID: 8256951257243662499}
   _maxDistance: 5
   _radius: 0.2
   _itemLayer:
@@ -2004,7 +2004,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
   Animator: {fileID: 7339092735656724895}
-  TotalWords: 2
+  TotalWords: 4
   SyncSettings: 79
   FloatAccuracy:
     _value: 0
@@ -2018,7 +2018,7 @@ MonoBehaviour:
     _value: 0
     _inverse: 0
     _hash: -814817977
-  StateHashes: 000000008a18fce4b9abd9d3
+  StateHashes: 000000008a18fce4b9abd9d3958341e26c7c1356e4f31ee3a3ebcb27304df975c9b2abc16cf375b6903d34ef
   TriggerHashes: 00000000
 --- !u!95 &7339092735656724895
 Animator:
@@ -2410,7 +2410,7 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _IsActive:
     _value: 1
-  _handType: 2
+  handType: 2
   _parent: {fileID: 3707793341912709865}
   _CarryingItem: {fileID: 0}
 --- !u!1 &5642992930283670624

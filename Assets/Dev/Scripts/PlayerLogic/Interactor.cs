@@ -1,16 +1,14 @@
-﻿using System;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using Dev.Infrastructure;
 using Dev.PlayerLogic;
-using UnityEditor.VersionControl;
 using UnityEngine;
 
 namespace Dev.Scripts.PlayerLogic
 {
     public class Interactor : NetworkContext
     {
-        [SerializeField] private HandsService _handsService;
-        
+        [SerializeField] private Hands _hands;
+
         [SerializeField] private float _maxDistance = 5f;
         [SerializeField] private float _radius = 0.2f;
 
@@ -26,7 +24,7 @@ namespace Dev.Scripts.PlayerLogic
         private void Start()
         {
             _interactorView = DependenciesContainer.Instance.GetDependency<InteractorView>();
-          //  _gameDataService = DependenciesContainer.Instance.GetDependency<GameDataService>();
+            //  _gameDataService = DependenciesContainer.Instance.GetDependency<GameDataService>();
         }
 
         public override async void Spawned()
@@ -36,19 +34,19 @@ namespace Dev.Scripts.PlayerLogic
             //_player = _gameDataService.GetPlayer(Object.InputAuthority);
 
             await UniTask.DelayFrame(5);
-            
+
             _player = Runner.GetPlayerObject(Object.InputAuthority).GetComponent<PlayerCharacter>(); // TEMP
         }
 
         public override void Render()
         {
-            if(HasInputAuthority == false) return;
-            
+            if (HasInputAuthority == false) return;
+
             ItemHandle();
-            
+
             if (Time.frameCount % 3 != 0) return;
 
-            if(_player == null) return; // TEMP
+            if (_player == null) return; // TEMP
 
             var center = new Vector2(Screen.width / 2, Screen.height / 2);
 
@@ -91,48 +89,39 @@ namespace Dev.Scripts.PlayerLogic
 
         private void ItemHandle()
         {
-            bool hasItemInLeftHand = _handsService.HasItemInHand(HandType.Left);
-            var hasItemInRightHand = _handsService.HasItemInHand(HandType.Right);
-            var hasItemInCenterHand = _handsService.HasItemInHand(HandType.Center);
-
-            /*_playerView.OnItemPickup(HandType.Left, hasItemInLeftHand);
-            _playerView.OnItemPickup(HandType.Right, hasItemInRightHand);
-            _playerView.OnItemPickup(HandType.Center, hasItemInCenterHand);*/
-
-            if (hasItemInLeftHand) // left hand
+            if (_player.InputService.PlayerInputs.Player.DropItem.WasPressedThisFrame())
             {
-                if (_player.InputService.PlayerInputs.Player.DropItemLeft.WasPressedThisFrame())
+                if (_player.InputService.PlayerInputs.Player.RightHand.IsPressed())
                 {
-                    _handsService.DropItemFromHand(HandType.Left);
+                    _hands.GetHandByType(HandType.Right).DropItem();
                 }
-            }
-
-            if (hasItemInRightHand) // right hand
-            {
-                if (_player.InputService.PlayerInputs.Player.DropItemRight.WasPressedThisFrame())
+                else if (_player.InputService.PlayerInputs.Player.LeftHand.IsPressed())
                 {
-                    _handsService.DropItemFromHand(HandType.Right);
+                    _hands.GetHandByType(HandType.Left).DropItem();
                 }
-            }
-
-            if (hasItemInCenterHand) // center hand
-            {
-                if (_player.InputService.PlayerInputs.Player.DropItemRight.WasPressedThisFrame() ||
-                    _player.InputService.PlayerInputs.Player.DropItemLeft.WasPressedThisFrame())
+                else
                 {
-                    _handsService.DropItemFromHand(HandType.Center);
+                    _hands.GetOccupiedHand()?.DropItem();
                 }
             }
 
             if (TargetItem == null) return;
 
-            if (_player.InputService.PlayerInputs.Player.Interaction.WasPressedThisFrame())
+
+            if (TargetItem.HandType == HandType.Center &&
+                _player.InputService.PlayerInputs.Player.AnyHand.WasPressedThisFrame())
             {
-                if (_handsService.AbleToPutItem(TargetItem.HandType))
-                {
-                    _handsService.PutItemInHand(TargetItem.HandType, TargetItem);
-                }
+                _hands.PutItem(TargetItem);
             }
+            else if (_player.InputService.PlayerInputs.Player.LeftHand.WasPressedThisFrame())
+            {
+                _hands.GetHandByType(HandType.Left).PutItem(TargetItem);
+            }
+            else if (_player.InputService.PlayerInputs.Player.RightHand.WasPressedThisFrame())
+            {
+                _hands.GetHandByType(HandType.Right).PutItem(TargetItem);
+            }
+
         }
     }
 }

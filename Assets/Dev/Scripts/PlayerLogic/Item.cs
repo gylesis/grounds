@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Dev.Scripts.PlayerLogic
 {
-    [OrderAfter(typeof(HandsService))]
+    [OrderAfter(typeof(Hands))]
     public class Item : NetworkContext
     {
         [SerializeField] private HitboxRoot _hitboxRoot;
@@ -13,9 +13,9 @@ namespace Dev.Scripts.PlayerLogic
 
         [SerializeField] private string _testName = "Good Item 12312";
 
-        [SerializeField] private HandType _handType;
+        [SerializeField] private HandType handType;
 
-        public HandType HandType => _handType;
+        public HandType HandType => handType;
         public string TestName => _testName;
 
         [Networked] private NetworkBool IsCarrying { get; set; }

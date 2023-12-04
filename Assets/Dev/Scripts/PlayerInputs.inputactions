@@ -60,18 +60,63 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "DropItemLeft",
+                    "name": "DropItem",
                     "type": "Button",
                     "id": "d735b5af-7e2b-4916-a767-ffd52f0ec0ee",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold(duration=0.8,pressPoint=0.5)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "LeftHand",
+                    "type": "Button",
+                    "id": "959be239-c840-4c7f-b87e-df9421f45ab7",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "DropItemRight",
+                    "name": "RightHand",
                     "type": "Button",
-                    "id": "8c27732a-c565-4df0-8f52-316a276b9bef",
+                    "id": "1fa058db-41fc-431d-bc39-92b31592f649",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "AnyHand",
+                    "type": "Button",
+                    "id": "b5962704-4344-449a-8738-187e45a2565a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SwingItem",
+                    "type": "Button",
+                    "id": "ad532e37-cb23-4ac0-a7b6-a64b48a8ba46",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ThrowItem",
+                    "type": "Button",
+                    "id": "e69fe3b2-3427-4f7f-8f69-a309f6be8f58",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold(duration=0.8,pressPoint=0.5)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "UseItem",
+                    "type": "Button",
+                    "id": "6357dd76-dd3a-451c-81d5-949cba02db8a",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -335,7 +380,7 @@
                 {
                     "name": "",
                     "id": "f6b526f9-59b6-442a-afd9-6f93c89b7c40",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
@@ -357,22 +402,88 @@
                 {
                     "name": "",
                     "id": "9b2211e6-8044-45cf-8624-bb412c678602",
-                    "path": "<Keyboard>/1",
+                    "path": "<Keyboard>/v",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "DropItemLeft",
+                    "action": "DropItem",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "d048e9d6-ceb6-4e62-87cb-4c107d42da3a",
-                    "path": "<Keyboard>/2",
+                    "id": "9da30f66-42ed-4e52-a431-2f7b5a7895d4",
+                    "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "DropItemRight",
+                    "action": "LeftHand",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fbe120e7-ea6f-44aa-977a-fec767f2bb1b",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightHand",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "28630b2d-d161-47b5-8e98-741dd441f0c9",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwingItem",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "266c0b3f-8aec-46b0-85ff-214f2b31b228",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ThrowItem",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0ed3ace2-12e5-49e5-be37-170e9401133e",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UseItem",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0ca8cebb-6fea-4fc1-8853-61316a93c4d1",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AnyHand",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "869997cb-8843-4284-b025-46060a66990b",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AnyHand",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

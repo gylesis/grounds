@@ -84,6 +84,7 @@ MonoBehaviour:
   _rigidbody: {fileID: 985134276059957871}
   _collider: {fileID: 104402805518434976}
   _testName: Good Item 12312
+  _handType: 2
 --- !u!114 &2844729881576192006
 MonoBehaviour:
   m_ObjectHideFlags: 0
