@@ -10,7 +10,6 @@ namespace Dev.Scripts.PlayerLogic
         [SerializeField] private Transform _rightForeArmJoint;
         [SerializeField] private Transform _leftForeArmJoint;
 
-
         private void AnimateSwing(HandType handType)
         {
             DOTween.Sequence()

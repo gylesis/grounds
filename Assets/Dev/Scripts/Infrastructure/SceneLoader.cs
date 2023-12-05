@@ -18,12 +18,7 @@ namespace Dev.Infrastructure
         private void Awake()
         {
             _loadedScene = SceneManager.GetActiveScene();
-        }
-
-        [Inject]
-        private void Init(NetworkRunner runner)
-        {
-            _networkRunner = runner;
+            _networkRunner = FindObjectOfType<NetworkRunner>();
         }
 
         [ContextMenu(nameof(LoadScene))]

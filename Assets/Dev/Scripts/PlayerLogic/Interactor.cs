@@ -42,10 +42,10 @@ namespace Dev.Scripts.PlayerLogic
         public override void Render()
         {
             if (HasInputAuthority == false) return;
+            
+            if (_player == null) return; // TEMP
 
             if (Time.frameCount % 3 != 0) return;
-
-            if (_player == null) return; // TEMP
 
             var center = new Vector2(Screen.width / 2, Screen.height / 2);
 
