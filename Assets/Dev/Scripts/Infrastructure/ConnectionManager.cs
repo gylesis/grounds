@@ -1,19 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
+using Dev.Scripts;
 using Dev.UI.PopUpsAndMenus;
 using Fusion;
 using Fusion.Sockets;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Zenject;
 
 namespace Dev.Infrastructure
 {
     public class ConnectionManager : NetworkContext, INetworkRunnerCallbacks
     {
         [SerializeField] private NetworkRunner _networkRunner;
-
+        [SerializeField] private Transform _testSpawner;
+        
         private PopUpService _popUpService;
+        private PlayersSpawner _playersSpawner;
+        private SceneCameraController _sceneCameraController;
 
         public static ConnectionManager Instance { get; private set; }
 
@@ -28,51 +33,70 @@ namespace Dev.Infrastructure
                 Instance = this;
             }
 
-            NetworkRunner networkRunner = FindObjectOfType<NetworkRunner>();
+            TryAutoConnect();
+        }
+
+        private async void TryAutoConnect()
+        {
+            _networkRunner.gameObject.SetActive(false);
             
-            if (networkRunner.IsConnectedToServer)
+            NetworkRunner networkRunner = FindObjectOfType<NetworkRunner>();
+
+            if (networkRunner == null)
             {
+                _networkRunner.gameObject.SetActive(true);
+                networkRunner = _networkRunner;
+            }
+            
+            if (networkRunner.State == NetworkRunner.States.Running)
+            {
+                _testSpawner.gameObject.SetActive(false);
+                networkRunner.AddCallbacks(this);
                 _networkRunner.gameObject.SetActive(false);
                 return;
             }
             else
             {
+                _networkRunner.gameObject.SetActive(true);
+                _testSpawner.gameObject.SetActive(true);
                 _networkRunner.AddCallbacks(this);
 
+                return;
+                
                 var startGameArgs = new StartGameArgs();
 
-                startGameArgs.GameMode = GameMode.Shared;
+                startGameArgs.GameMode = GameMode.AutoHostOrClient;
                 startGameArgs.SceneManager = FindObjectOfType<SceneLoader>();
                 startGameArgs.Scene = SceneManager.GetActiveScene().buildIndex;
+                startGameArgs.SessionName = "Test1";
 
-                _networkRunner.StartGame(startGameArgs);
+                StartGameResult startGameResult = await _networkRunner.StartGame(startGameArgs);
+
+                if (startGameResult.Ok)
+                {
+                    Debug.Log($"Started game with mode: {_networkRunner.GameMode}");
+                }
+                else
+                {
+                    Debug.LogError($"{startGameResult.ErrorMessage}");
+                }
             }
         }
 
-        public override void Spawned()
+        [Inject]
+        private void Init(PlayersSpawner playersSpawner, SceneCameraController sceneCameraController)
         {
-            Runner.AddCallbacks(this);
+            _sceneCameraController = sceneCameraController;
+            _playersSpawner = playersSpawner;
         }
-
-        public void Disconnect()
+        
+        // for new player after lobby started. invokes if game starts from Lobby
+        public async void OnPlayerJoined(NetworkRunner runner, PlayerRef player) 
         {
-            Runner.Shutdown();
-            
-            _popUpService.HideAllPopUps();
-
-            SceneManager.LoadScene(0);
-        }
-
-        public async void
-            OnPlayerJoined(NetworkRunner runner,
-                PlayerRef player) // for new player after lobby started. invokes if game starts from Lobby
-        {
-            if (runner.GameMode == GameMode.Shared)
+            if (runner.IsServer)
             {
-                Debug.Log($"Someone's late connection to the game, spawning {player}");
-
-                await Task.Delay(2000);
-
+                Debug.Log($"Player joined, Spawning");
+                _playersSpawner.SpawnPlayer(player);
             }
         }
 
@@ -80,10 +104,10 @@ namespace Dev.Infrastructure
         {
             Debug.Log($"On Player Left");
 
-            if (runner.IsSharedModeMasterClient)
+            if (runner.IsServer)
             {
+                _playersSpawner.DespawnPlayer(player);
                 Debug.Log($"Despawning player");
-                //_playersSpawner.DespawnPlayer(player, true);
             }
         }
 
@@ -96,24 +120,9 @@ namespace Dev.Infrastructure
             Debug.Log($"On Shutdown: {shutdownReason}");
         }
 
-        public async void OnConnectedToServer(NetworkRunner runner) // invokes if game starts from Main scene
-        {
-            if (runner.GameMode == GameMode.Shared)
-            {
-                PlayerRef playerRef = runner.LocalPlayer;
+        public async void OnConnectedToServer(NetworkRunner runner) { }
 
-                Debug.Log($"Someone connected to the game");
-                Debug.Log($"Spawning player... {playerRef}");
-
-
-            }
-        }
-
-        public void OnDisconnectedFromServer(NetworkRunner runner)
-        {
-            Debug.Log($"On disconnect from server");
-            Application.Quit();
-        }
+        public void OnDisconnectedFromServer(NetworkRunner runner) { }
 
         public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request,
             byte[] token) { }
@@ -128,36 +137,41 @@ namespace Dev.Infrastructure
 
         public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
         {
-            Debug.Log($"On Host migration");
         }
 
         public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ArraySegment<byte> data) { }
 
         public async void OnSceneLoadDone(NetworkRunner runner)
         {
+            await UniTask.Delay(TimeSpan.FromSeconds(1));
+            
+            _sceneCameraController.Camera.gameObject.SetActive(false);
+            
             Debug.Log($"OnSceneLoadDone");
 
-            /*if (runner.IsSharedModeMasterClient)
+            if (runner.IsServer)
             {
-                LevelService.Instance.LoadLevel(_gameSettings.FirstLevelName.ToString());
-
-                await Task.Delay(3000); // TODO wait until all players load the scene
-
-                foreach (PlayerRef playerRef in PlayerManager.PlayerQueue)
+                foreach (PlayerRef playerRef in PlayersGameData.PlayersQueue)
                 {
-                    // Debug.Log($"Respawning Player {_playersDataService.GetNickname(playerRef)}");
-                    Debug.Log($"Spawning Player {playerRef}");
-
-                    _playersSpawner.ChooseCharacterClass(playerRef);
+                    _playersSpawner.SpawnPlayer(playerRef);
                 }
 
-                PlayerManager.PlayerQueue.Clear();
-            }*/
+                PlayersGameData.PlayersQueue.Clear();
+            }
         }
 
         public void OnSceneLoadStart(NetworkRunner runner)
         {
             Debug.Log($"OnSceneLoadStart");
+        }
+
+        public void Disconnect()
+        {
+            Runner.Shutdown();
+
+            _popUpService.HideAllPopUps();
+
+            SceneManager.LoadScene(0);
         }
     }
 }

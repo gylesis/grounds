@@ -25,7 +25,6 @@ namespace Dev.Levels.Interactions
         {   
             if (obj.CompareTag("Player"))
             {
-                Debug.Log($"Player entered zone", obj);
                 PlayerCharacter playerCharacter = obj.GetComponent<PlayerCharacter>();
 
                 PlayerEntered.OnNext(playerCharacter);

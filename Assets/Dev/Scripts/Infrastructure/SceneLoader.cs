@@ -18,18 +18,26 @@ namespace Dev.Infrastructure
         private void Awake()
         {
             _loadedScene = SceneManager.GetActiveScene();
-            _networkRunner = FindObjectOfType<NetworkRunner>();
         }
 
+        private void TryGetNetRunner()
+        {
+            if(_networkRunner == null)
+                _networkRunner = FindObjectOfType<NetworkRunner>();
+        }
+        
         [ContextMenu(nameof(LoadScene))]
         private void LoadScene()
         {
+            TryGetNetRunner();
             _networkRunner.SetActiveScene(_sceneName);
         }
 
         public void LoadScene(string sceneName)
         {
             if(SceneManager.GetActiveScene().name == sceneName) return;
+
+            TryGetNetRunner();
             
             _networkRunner.SetActiveScene(sceneName);
         }
@@ -37,7 +45,7 @@ namespace Dev.Infrastructure
         protected override IEnumerator SwitchScene(SceneRef prevScene, SceneRef newScene,
             FinishedLoadingDelegate finished)
         {
-//             Debug.Log($"Switching Scene from {prevScene} to {newScene}");
+            Debug.Log($"Switching Scene from {prevScene} to {newScene}");
 
             if (newScene <= 0)
             {

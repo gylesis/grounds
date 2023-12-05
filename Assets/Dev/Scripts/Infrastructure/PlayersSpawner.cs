@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Dev.PlayerLogic;
-using Dev.UI.PopUpsAndMenus;
+﻿using Dev.PlayerLogic;
+using Dev.Scripts;
 using Fusion;
 using UniRx;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
-using Random = UnityEngine.Random;
-using Zenject;
 
 namespace Dev.Infrastructure
 {
@@ -18,41 +12,20 @@ namespace Dev.Infrastructure
         [SerializeField] private Transform _spawnPoint;
         [SerializeField] private PlayerCharacter _playerCharacterPrefab;
 
-        [SerializeField] private PlayerSpawnerPrototype _playerSpawnerPrototype;
         public Subject<PlayerRef> PlayerSpawned { get; } = new Subject<PlayerRef>();
         public Subject<PlayerRef> PlayerDeSpawned { get; } = new Subject<PlayerRef>();
         
         [Networked] private NetworkDictionary<PlayerRef, PlayerCharacter> PlayersList { get; }
         
         public int PlayersCount => PlayersList.Count;
-
-
-        public void DepositPlayer(NetworkObject playerNetObj)
-        {
-            
-        }
         
-        public PlayerCharacter SpawnPlayer(PlayerRef playerRef,  NetworkRunner networkRunner, bool firstSpawn = true)
+        public PlayerCharacter SpawnPlayer(PlayerRef playerRef, bool firstSpawn = true)
         {
-            /*if (firstSpawn)
-            {
-                //AssignTeam(playerRef);
-
-                PlayerCharacter player = networkRunner.Spawn(_playerCharacterPrefab, null, null, playerRef);
-                player.Object.AssignInputAuthority(playerRef);
-
-                RPC_AddPlayer(playerRef, player);
-            }
-            else
-            {
-                DespawnPlayer(playerRef, false);
-            }*/
-
             PlayerCharacter playerCharacterPrefab = _playerCharacterPrefab;
 
             Vector3 spawnPos = _spawnPoint.position;
 
-            PlayerCharacter playerCharacter = networkRunner.Spawn(playerCharacterPrefab, spawnPos,
+            PlayerCharacter playerCharacter = Runner.Spawn(playerCharacterPrefab, spawnPos,
                 quaternion.identity, playerRef);
 
             NetworkObject playerNetObj = playerCharacter.Object;
@@ -61,13 +34,15 @@ namespace Dev.Infrastructure
 
             playerNetObj.RequestStateAuthority();
             playerNetObj.AssignInputAuthority(playerRef);
-            networkRunner.SetPlayerObject(playerRef, playerNetObj);
+            Runner.SetPlayerObject(playerRef, playerNetObj);
 
             var playerName = $"Player №{playerNetObj.InputAuthority.PlayerId}";
             playerCharacter.RPC_SetName(playerName);
 
             //RespawnPlayer(playerRef);
 
+            PlayersGameData.AddAlivePlayer(playerRef);
+            
             RPC_OnPlayerSpawnedInvoke(playerCharacter);
 
             //LoadWeapon(player);
@@ -75,25 +50,16 @@ namespace Dev.Infrastructure
             return playerCharacter;
         }
 
-        public void DespawnPlayer(PlayerRef playerRef, bool isLeftFromSession)
-        {
+        public void DespawnPlayer(PlayerRef playerRef)
+        {   
             PlayerCharacter playerCharacter = GetPlayer(playerRef);
 
             Runner.Despawn(playerCharacter.Object);
 
             PlayerDeSpawned.OnNext(playerRef);
 
-            //GetPlayerCameraController(playerRef).SetFollowState(false);
-
-            if (isLeftFromSession)
-            {
-                // remove player's NO
-
-                //_teamsService.RemoveFromTeam(playerRef);
-
-                PlayersList.Remove(playerRef);
-            }
-
+            PlayersGameData.RemoveAlivePlayer(playerRef);
+            PlayersList.Remove(playerRef);
         }
 
         private void RPC_AddPlayer(PlayerRef playerRef, PlayerCharacter playerBase)

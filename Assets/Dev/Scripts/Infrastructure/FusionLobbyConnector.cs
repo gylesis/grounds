@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Dev.Levels.Interactions;
 using Dev.PlayerLogic;
+using Dev.Scripts;
 using Fusion;
 using Fusion.Sockets;
 using UniRx;
@@ -12,10 +12,10 @@ using UnityEngine.SceneManagement;
 
 namespace Dev.Infrastructure
 {
-    [RequireComponent(typeof(NetworkRunner))]
-    public class FusionLobbyConnector : MonoBehaviour, INetworkRunnerCallbacks
+    public class FusionLobbyConnector : NetworkContext, INetworkRunnerCallbacks
     {
         [SerializeField] private PlayerTriggerZone _playerTriggerZone;
+        [SerializeField] private int _neededPlayersAmountToStartGame = 1;
         
         private NetworkRunner _networkRunner;
         private SceneLoader _sceneLoader;
@@ -24,67 +24,71 @@ namespace Dev.Infrastructure
         {
             _sceneLoader = FindObjectOfType<SceneLoader>();
             _playerTriggerZone.PlayerEntered.TakeUntilDestroy(this).Subscribe((OnPlayerEntered));
-
-            Debug.Log($"Subscription");
-            
-            ConnectToLobby();
         }
 
-        private async void ConnectToLobby()
+        public override void Spawned()
         {
-            _networkRunner = GetComponent<NetworkRunner>();
-            _networkRunner.ProvideInput = true;
+            _networkRunner = FindObjectOfType<NetworkRunner>();
             _networkRunner.AddCallbacks(this);
-
-            var joinSessionLobby = _networkRunner.JoinSessionLobby(SessionLobby.ClientServer);
-
-            await joinSessionLobby;
-
-            StartGameResult result = joinSessionLobby.Result;
-
-            if (result.Ok)
-            {
-                Debug.Log($"Joined lobby");
-            }
-            else
-            {
-                Debug.LogError($"Failed to Start: {result.ShutdownReason}");
-            }
+            base.Spawned();
         }
 
-        private async void OnPlayerEntered(PlayerCharacter playerCharacter)
+        private void OnPlayerEntered(PlayerCharacter playerCharacter)
         {
-            Debug.Log($"Player entered");
-            
-            var startGameArgs = new StartGameArgs();
-            startGameArgs.GameMode = GameMode.AutoHostOrClient;
-            startGameArgs.SceneManager = _sceneLoader;
-            startGameArgs.Scene = SceneManager.GetActiveScene().buildIndex;
-
-            StartGameResult startGameResult = await _networkRunner.StartGame(startGameArgs);
-
-            if (startGameResult.Ok)
-            {
-                Debug.Log($"Game started");
-            }
-            else
-            {
-                Debug.Log($"{startGameResult.ErrorMessage}");
-            }
-            
+            if(Runner.IsServer == false) return;
+             
+            PlayersGameData.PutPlayerInQueue(playerCharacter.Object.InputAuthority);
+            OnReadyPlayersUpdate();
         }
 
+        private async void OnReadyPlayersUpdate()
+        {
+            if(Runner.IsServer == false) return;
+            
+            if (PlayersGameData.CountPlayersInQueue >= _neededPlayersAmountToStartGame)
+            {
+                Debug.Log($"Enough players are connected, starting game");
+
+                if (_networkRunner.State == NetworkRunner.States.Running)
+                {
+                    await _networkRunner.Shutdown(false, ShutdownReason.GameClosed);
+
+                    await UniTask.DelayFrame(5);
+                }
+                
+                var startGameArgs = new StartGameArgs();
+                startGameArgs.GameMode = GameMode.AutoHostOrClient;
+                startGameArgs.SceneManager = _sceneLoader;
+                startGameArgs.Scene = SceneManager.GetSceneByName("MainScene").buildIndex;
+
+                StartGameResult gameResult = await _networkRunner.StartGame(startGameArgs);
+
+                if (gameResult.Ok)
+                {
+                    _sceneLoader.LoadScene("MainScene");
+                    Debug.Log($"Game started, loading main level");
+                }
+                else
+                {
+                    Debug.LogError($"Game not started {gameResult.ErrorMessage}");
+                }
+                
+            }
+        }
+        
         public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
         {
+            Debug.Log($"Player {player} joined");
+
             if (runner.IsServer)
             {
-                Debug.Log($"Player {player} joined");
-                
-                if (runner.ActivePlayers.Count() > 0)
+                /*PlayersGameData.PutPlayerInQueue(player);
+
+                if (PlayersGameData.CountPlayersInQueue > 0)
                 {
                     Debug.Log($"Enough players are connected, starting game");
                     _sceneLoader.LoadScene("MainScene");
-                }
+                }*/
             }
         }
 
@@ -94,7 +98,10 @@ namespace Dev.Infrastructure
 
         public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
 
-        public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
+        public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
+        {
+            Debug.Log($"Game shutdown - {shutdownReason}");
+        }
 
         public void OnConnectedToServer(NetworkRunner runner) { }
 
@@ -123,6 +130,8 @@ namespace Dev.Infrastructure
 
         public void OnSceneLoadStart(NetworkRunner runner)
         {
+            //Runner.RemoveCallbacks(this);
+
             Debug.Log($"Scene load started 1");
         }
     }

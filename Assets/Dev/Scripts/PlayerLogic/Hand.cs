@@ -29,7 +29,7 @@ namespace Dev.Scripts.PlayerLogic
         {
             _activeTween?.Complete();
             _activeTween = AnimateThrow();
-            LaunchItem();
+            RPC_LaunchItem();
         }
 
         public Tween AnimatePrepare()

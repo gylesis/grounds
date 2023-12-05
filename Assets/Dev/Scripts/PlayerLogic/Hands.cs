@@ -50,11 +50,11 @@ namespace Dev.Scripts.PlayerLogic
             return firstHand;
         }
 
-        public override void PutItem(Item item)
+        public override void RPC_PutItem(Item item)
         {
             if (AllHandsFree == false) return;
 
-            base.PutItem(item);
+            base.RPC_PutItem(item);
         }
 
         private IHandAbilities GetActiveHand()
@@ -80,7 +80,7 @@ namespace Dev.Scripts.PlayerLogic
         {
             var sequence = DOTween.Sequence();
             _hands.ForEach(hand => sequence.Join(hand.AnimateThrow()));
-            LaunchItem();
+            RPC_LaunchItem();
         }
 
         public void ToggleActiveHand()
@@ -114,15 +114,15 @@ namespace Dev.Scripts.PlayerLogic
             {
                 if (AllHandsFree == false)
                 {
-                    GetOccupiedHand()?.DropItem();
+                    GetOccupiedHand()?.RPC_DropItem();
                 }
                 else if (!input.Buttons.IsSet(Buttons.AlternateHand))
                 {
-                    GetHandByType(HandType.Right).DropItem();
+                    GetHandByType(HandType.Right).RPC_DropItem();
                 }
                 else if (input.Buttons.IsSet(Buttons.AlternateHand))
                 {
-                    GetHandByType(HandType.Left).DropItem();
+                    GetHandByType(HandType.Left).RPC_DropItem();
                 }
             }
         }

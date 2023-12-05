@@ -62,7 +62,7 @@ namespace Dev.Scripts.PlayerLogic
                 {
                     if (TargetItem == null)
                     {
-                        _interactorView.ShowItem(item);
+                        _interactorView.ShowItem(item, _player);
 
                         TargetItem = item;
                     }
@@ -96,17 +96,17 @@ namespace Dev.Scripts.PlayerLogic
             if (TargetItem.ItemSizeType == ItemSizeType.TwoHanded
                 && wasPressed.IsSet(Buttons.PickItem))
             {
-                _hands.PutItem(TargetItem);
+                _hands.RPC_PutItem(TargetItem);
             }
             else if (wasPressed.IsSet(Buttons.PickItem)
                      && !input.Buttons.IsSet(Buttons.AlternateHand)
                      && _hands.GetHandByType(HandType.Right).IsFree)
             {
-                _hands.GetHandByType(HandType.Right).PutItem(TargetItem);
+                _hands.GetHandByType(HandType.Right).RPC_PutItem(TargetItem);
             }
             else if (wasPressed.IsSet(Buttons.PickItem))
             {
-                _hands.GetHandByType(HandType.Left).PutItem(TargetItem);
+                _hands.GetHandByType(HandType.Left).RPC_PutItem(TargetItem);
             }
 
         }
