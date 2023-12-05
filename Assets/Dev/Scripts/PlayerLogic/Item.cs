@@ -10,15 +10,14 @@ namespace Dev.Scripts.PlayerLogic
         [SerializeField] private HitboxRoot _hitboxRoot;
         [SerializeField] private NetworkRigidbody _rigidbody;
         [SerializeField] private Collider _collider;
-
         [SerializeField] private string _testName = "Good Item 12312";
-
-        [SerializeField] private HandType handType;
-
-        public HandType HandType => handType;
-        public string TestName => _testName;
+        [SerializeField] private ItemSizeType _itemSizeType;
 
         [Networked] private NetworkBool IsCarrying { get; set; }
+        
+        public ItemSizeType ItemSizeType => _itemSizeType;
+        public string TestName => _testName;
+        public NetworkRigidbody NetRigidbody => _rigidbody;
 
         protected override void CorrectState()
         {
@@ -29,7 +28,7 @@ namespace Dev.Scripts.PlayerLogic
         }
 
         [Rpc]
-        public virtual void RPC_OnPickup(bool isCarrying)
+        public virtual void RPC_ChangeState(bool isCarrying)
         {
             IsCarrying = isCarrying;
             SetItemState(isCarrying);

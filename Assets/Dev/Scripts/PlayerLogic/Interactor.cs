@@ -89,6 +89,8 @@ namespace Dev.Scripts.PlayerLogic
 
         private void ItemHandle()
         {
+            if (!_player) return;
+
             if (_player.InputService.PlayerInputs.Player.DropItem.WasPressedThisFrame())
             {
                 if (_player.InputService.PlayerInputs.Player.RightHand.IsPressed())
@@ -108,7 +110,7 @@ namespace Dev.Scripts.PlayerLogic
             if (TargetItem == null) return;
 
 
-            if (TargetItem.HandType == HandType.Center &&
+            if (TargetItem.ItemSizeType == ItemSizeType.TwoHanded &&
                 _player.InputService.PlayerInputs.Player.AnyHand.WasPressedThisFrame())
             {
                 _hands.PutItem(TargetItem);

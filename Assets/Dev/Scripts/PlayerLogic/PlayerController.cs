@@ -14,6 +14,8 @@ namespace Dev.PlayerLogic
         
         [SerializeField] private PlayerView _playerView;
         [SerializeField] private KCC _kcc;
+        [SerializeField] private Hands _hands;
+        
 
         [SerializeField] private Transform _cameraTransform;
 
@@ -56,7 +58,7 @@ namespace Dev.PlayerLogic
 
                 _playerView.RPC_OnInput(input.MoveDirection);
 
-                if (pressed.IsSet(Buttons.Jump))  
+                if (pressed.IsSet(Buttons.Jump))
                 {
                     _kcc.Jump(Vector3.up * _jumpModifier);
                 }
@@ -64,6 +66,19 @@ namespace Dev.PlayerLogic
                 if (input.Sprint)
                 {
                     _kcc.AddExternalVelocity(moveDirection * _sprintAcceleration);
+                }
+
+                if (pressed.IsSet(Buttons.Swing))
+                {
+                    _hands.ActiveHand.PrepareToSwing();
+                }
+                else if (released.IsSet(Buttons.Swing) && !released.IsSet(Buttons.Throw))
+                {
+                    _hands.ActiveHand.Swing();
+                }
+                else if (released.IsSet(Buttons.Throw))
+                {
+                    _hands.ActiveHand.Throw();
                 }
             }
         }

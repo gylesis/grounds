@@ -16,7 +16,9 @@ namespace Dev.Infrastructure
     
     enum Buttons {
         Jump = 0,
-        Sprint = 1
+        Sprint = 1,
+        Swing = 2,
+        Throw = 3,
     }
 
 }

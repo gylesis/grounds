@@ -361,9 +361,10 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _IsActive:
     _value: 1
-  handType: 1
-  _parent: {fileID: 2649448449979968153}
-  _CarryingItem: {fileID: 0}
+  _itemMountPoint: {fileID: 2649448449979968153}
+  _ContainingItem: {fileID: 0}
+  _handType: 1
+  _foreArmJoint: {fileID: 4099137132786339578}
 --- !u!1 &1068708981001118909
 GameObject:
   m_ObjectHideFlags: 0
@@ -849,9 +850,10 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _IsActive:
     _value: 1
-  handType: 0
-  _parent: {fileID: 5091040268904405783}
-  _CarryingItem: {fileID: 0}
+  _itemMountPoint: {fileID: 5091040268904405783}
+  _ContainingItem: {fileID: 0}
+  _handType: 0
+  _foreArmJoint: {fileID: 8916292967839868789}
 --- !u!1 &2122922072800034053
 GameObject:
   m_ObjectHideFlags: 0
@@ -1568,9 +1570,9 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _IsActive:
     _value: 1
-  _camera: {fileID: 5384968157959353973}
+  _itemMountPoint: {fileID: 3707793341912709865}
+  _ContainingItem: {fileID: 0}
   _hands:
-  - {fileID: 1749262853793814394}
   - {fileID: 1086429060926523364}
   - {fileID: 384047101695566126}
 --- !u!114 &2126260200385715225
@@ -1590,6 +1592,7 @@ MonoBehaviour:
     _value: 1
   _playerView: {fileID: 4925156170821849819}
   _kcc: {fileID: 8738784936676509605}
+  _hands: {fileID: 8256951257243662499}
   _cameraTransform: {fileID: 7152790470979342241}
   _jumpModifier: 5
   _sensivity: 6
@@ -1920,6 +1923,7 @@ GameObject:
   - component: {fileID: 6601312286269369772}
   - component: {fileID: 5556942274349129330}
   - component: {fileID: 4925156170821849819}
+  - component: {fileID: 4128722260976826700}
   - component: {fileID: 7333621857625742653}
   - component: {fileID: 7339092735656724895}
   m_Layer: 0
@@ -1970,6 +1974,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 4925156170821849819}
+  - {fileID: 4128722260976826700}
   - {fileID: 7333621857625742653}
   SimulationBehaviours: []
 --- !u!114 &4925156170821849819
@@ -1990,6 +1995,23 @@ MonoBehaviour:
   _armsTransform: {fileID: 8691674876951342374}
   _bodyTransform: {fileID: 5101487468817938199}
   _animator: {fileID: 7333621857625742653}
+--- !u!114 &4128722260976826700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4824382645645672551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af0db240a39f49eb951d0d8338c7b3c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  _IsActive:
+    _value: 1
+  _rightForeArmJoint: {fileID: 1153033024211538765}
+  _leftForeArmJoint: {fileID: 2886797314460648736}
 --- !u!114 &7333621857625742653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2348,7 +2370,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5224379064861444692}
   - component: {fileID: 3707793341912709865}
-  - component: {fileID: 1749262853793814394}
   m_Layer: 0
   m_Name: CenterHandInfoContainer
   m_TagString: Untagged
@@ -2392,27 +2413,8 @@ MonoBehaviour:
   NetworkGuid:
     RawGuidValue: 00000000000000000000000000000000
   NestedObjects: []
-  NetworkedBehaviours:
-  - {fileID: 1749262853793814394}
+  NetworkedBehaviours: []
   SimulationBehaviours: []
---- !u!114 &1749262853793814394
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5635151572450850662}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4fed9436cff4cf48d4fb5626c8ff82f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _interpolationDataSource: 0
-  _IsActive:
-    _value: 1
-  handType: 2
-  _parent: {fileID: 3707793341912709865}
-  _CarryingItem: {fileID: 0}
 --- !u!1 &5642992930283670624
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,15 +1,16 @@
 ﻿using System.Linq;
-using Dev.Infrastructure;
 using UnityEngine;
 
 namespace Dev.Scripts.PlayerLogic
 {
-    public class Hands : NetworkContext
+    public class Hands : ItemContainer
     {
-        [SerializeField] private Camera _camera;
         [SerializeField] private Hand[] _hands;
 
-        public bool IsFree => _hands.All(hand => hand.IsFree);
+        private Hand _activeHand => GetHandByType(HandType.Right);
+        public Hand ActiveHand => _activeHand;
+        
+        public new bool IsFree => _hands.All(hand => hand.IsFree);
         
         protected override void CorrectState()
         {
@@ -19,8 +20,8 @@ namespace Dev.Scripts.PlayerLogic
             {
                 if (hand.IsFree == false)
                 {
-                    hand.CarryingItem.RPC_SetParentAndSetZero(hand.Parent);
-                    Debug.Log($"Set parent for {hand.CarryingItem.name}", hand.CarryingItem);
+                    hand.ContainingItem.RPC_SetParentAndSetZero(hand.ItemMountPoint);
+                    Debug.Log($"Set parent for {hand.ContainingItem.name}", hand.ContainingItem);
                 }
             }
         }
@@ -30,15 +31,21 @@ namespace Dev.Scripts.PlayerLogic
             return _hands.First(hand => hand.HandType == handType);
         }
 
-        public Hand GetOccupiedHand()
+        public ItemContainer GetOccupiedHand()
         {
-            return _hands.FirstOrDefault(hand => hand.IsFree == false);
+            var firstHand = _hands.FirstOrDefault(hand => hand.IsFree == false);
+            if (firstHand == null && this.IsFree) return this;
+            
+            return firstHand;
         }
 
-        public void PutItem(Item item)
+        public override void PutItem(Item item)
         {
             if (IsFree == false) return;
-            GetHandByType(HandType.Center).PutItem(item);
+            
+            base.PutItem(item);
         }
+
+
     }
 }

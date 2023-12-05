@@ -1,51 +1,35 @@
-﻿
-using Dev.Infrastructure;
-using Fusion;
+﻿using DG.Tweening;
 using UnityEngine;
 
 namespace Dev.Scripts.PlayerLogic
 {
-    public class Hand : NetworkContext
+    public class Hand : ItemContainer
     {
-        [SerializeField] private HandType handType;
-        [SerializeField] private NetworkObject _parent;
-        
-        public HandType HandType => handType;
-        public NetworkObject Parent => _parent;
+        [SerializeField] private HandType _handType;
+        [SerializeField] private Transform _foreArmJoint;
 
-        [Networked] public Item CarryingItem { get; set; }
+        public HandType HandType => _handType;
 
-        public bool IsFree => CarryingItem == null;
+        private Tween _activeTween;
 
-        public void DropItem()
+        public void PrepareToSwing()
         {
-            if (IsFree == true) return;
-            
-            Item item = CarryingItem;
-            item.RPC_SetParent(null);
-            item.RPC_SetPos(item.transform.position + Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up) * 1.5f);
-            item.RPC_OnPickup(false);
-            RPC_SetItem(null);
+            _activeTween?.Complete();
+            _activeTween = _foreArmJoint.DOLocalRotate(_foreArmJoint.localEulerAngles - Vector3.right * 75, 0.5f);
         }
-        
-        public void PutItem(Item item)
+
+        public void Swing()
         {
-            if (IsFree == false);
-            
-            RPC_SetItem(item);
-            CarryingItem.RPC_OnPickup(true);
-            item.RPC_SetParent(Parent);
-            item.RPC_SetLocalPos(Vector3.zero);
-            item.RPC_SetLocalRotation(Vector3.zero);
+            _activeTween?.Complete();
+            _activeTween = _foreArmJoint.DOLocalRotate(_foreArmJoint.localEulerAngles + Vector3.right * 75, 0.5f);
+            //Spawn Damage Area
         }
-        
-        [Rpc]
-        public void RPC_SetItem(Item item)
+
+        public void Throw()
         {
-            CarryingItem = item;
+            _activeTween?.Complete();
+            _activeTween = _foreArmJoint.DOLocalRotate(_foreArmJoint.localEulerAngles + Vector3.right * 75, 0.1f);
+            LaunchItem();
         }
-        
     }
-    
-    
-}       
+}

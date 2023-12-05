@@ -22,6 +22,7 @@ namespace Dev.Infrastructure
         };
 
         private PlayerInputs _playerInputs;
+        private bool _throwState;
 
         public PlayerInputs PlayerInputs => _playerInputs;
 
@@ -44,6 +45,11 @@ namespace Dev.Infrastructure
         {
             bool jumpState = _playerInputs.Player.Jump.IsPressed();
             bool sprintState = _playerInputs.Player.Sprint.IsPressed();
+            
+            bool swingState = _playerInputs.Player.SwingItem.IsPressed();
+            _playerInputs.Player.ThrowItem.performed += _ => _throwState = true;
+            _playerInputs.Player.ThrowItem.canceled += _ => _throwState = false;
+
 
             Vector2 inputVector = _playerInputs.Player.Move.ReadValue<Vector2>();
             Vector2 lookVector = _playerInputs.Player.Look.ReadValue<Vector2>();
@@ -57,17 +63,8 @@ namespace Dev.Infrastructure
             playerInput.MoveDirection = keyBoardInput;
             playerInput.LookDirection = look;
             playerInput.Buttons.Set(Buttons.Jump, jumpState);
-            
-
-            /*for (int i = 0; i < _keyCodes.Length; i++)
-            {
-                if (Input.GetKeyDown(_keyCodes[i]))
-                {
-                    int numberPressed = i + 1;
-                    playerInput.WeaponNum = numberPressed;
-                }
-            }
-            */
+            playerInput.Buttons.Set(Buttons.Swing, swingState);
+            playerInput.Buttons.Set(Buttons.Throw, _throwState);
 
             input.Set(playerInput);
         }
