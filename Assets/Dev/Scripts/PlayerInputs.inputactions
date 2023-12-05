@@ -60,16 +60,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "DropItem",
-                    "type": "Button",
-                    "id": "d735b5af-7e2b-4916-a767-ffd52f0ec0ee",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Hold(duration=0.8,pressPoint=0.5)",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "LeftHand",
+                    "name": "AlternateHand",
                     "type": "Button",
                     "id": "959be239-c840-4c7f-b87e-df9421f45ab7",
                     "expectedControlType": "Button",
@@ -78,12 +69,21 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "RightHand",
+                    "name": "PickItem",
                     "type": "Button",
                     "id": "1fa058db-41fc-431d-bc39-92b31592f649",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "DropItem",
+                    "type": "Button",
+                    "id": "d735b5af-7e2b-4916-a767-ffd52f0ec0ee",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold(duration=0.5)",
                     "initialStateCheck": false
                 },
                 {
@@ -401,23 +401,12 @@
                 },
                 {
                     "name": "",
-                    "id": "9b2211e6-8044-45cf-8624-bb412c678602",
-                    "path": "<Keyboard>/v",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "DropItem",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "9da30f66-42ed-4e52-a431-2f7b5a7895d4",
                     "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "LeftHand",
+                    "action": "AlternateHand",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -428,7 +417,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "RightHand",
+                    "action": "PickItem",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -484,6 +473,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "AnyHand",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9b2211e6-8044-45cf-8624-bb412c678602",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DropItem",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

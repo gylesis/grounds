@@ -1,6 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using Dev.Infrastructure;
 using Dev.PlayerLogic;
+using Fusion;
 using UnityEngine;
 
 namespace Dev.Scripts.PlayerLogic
@@ -41,8 +42,6 @@ namespace Dev.Scripts.PlayerLogic
         public override void Render()
         {
             if (HasInputAuthority == false) return;
-
-            ItemHandle();
 
             if (Time.frameCount % 3 != 0) return;
 
@@ -87,41 +86,27 @@ namespace Dev.Scripts.PlayerLogic
             }
         }
 
-        private void ItemHandle()
+        public void ItemHandle(PlayerInput input, NetworkButtons wasPressed,NetworkButtons wasReleased)
         {
             if (!_player) return;
 
-            if (_player.InputService.PlayerInputs.Player.DropItem.WasPressedThisFrame())
-            {
-                if (_player.InputService.PlayerInputs.Player.RightHand.IsPressed())
-                {
-                    _hands.GetHandByType(HandType.Right).DropItem();
-                }
-                else if (_player.InputService.PlayerInputs.Player.LeftHand.IsPressed())
-                {
-                    _hands.GetHandByType(HandType.Left).DropItem();
-                }
-                else
-                {
-                    _hands.GetOccupiedHand()?.DropItem();
-                }
-            }
-
             if (TargetItem == null) return;
-
-
-            if (TargetItem.ItemSizeType == ItemSizeType.TwoHanded &&
-                _player.InputService.PlayerInputs.Player.AnyHand.WasPressedThisFrame())
+            if (_hands.IsFree is not true) return;
+            
+            if (TargetItem.ItemSizeType == ItemSizeType.TwoHanded
+                && wasPressed.IsSet(Buttons.PickItem))
             {
                 _hands.PutItem(TargetItem);
             }
-            else if (_player.InputService.PlayerInputs.Player.LeftHand.WasPressedThisFrame())
-            {
-                _hands.GetHandByType(HandType.Left).PutItem(TargetItem);
-            }
-            else if (_player.InputService.PlayerInputs.Player.RightHand.WasPressedThisFrame())
+            else if (wasPressed.IsSet(Buttons.PickItem)
+                     && !input.Buttons.IsSet(Buttons.AlternateHand)
+                     && _hands.GetHandByType(HandType.Right).IsFree)
             {
                 _hands.GetHandByType(HandType.Right).PutItem(TargetItem);
+            }
+            else if (wasPressed.IsSet(Buttons.PickItem))
+            {
+                _hands.GetHandByType(HandType.Left).PutItem(TargetItem);
             }
 
         }

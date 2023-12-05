@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Dev.Scripts.PlayerLogic
 {
-    public class Hand : ItemContainer
+    public class Hand : ItemContainer, IHandAbilities
     {
         [SerializeField] private HandType _handType;
         [SerializeField] private Transform _foreArmJoint;
@@ -15,21 +15,36 @@ namespace Dev.Scripts.PlayerLogic
         public void PrepareToSwing()
         {
             _activeTween?.Complete();
-            _activeTween = _foreArmJoint.DOLocalRotate(_foreArmJoint.localEulerAngles - Vector3.right * 75, 0.5f);
+            _activeTween = AnimatePrepare();
         }
 
         public void Swing()
         {
             _activeTween?.Complete();
-            _activeTween = _foreArmJoint.DOLocalRotate(_foreArmJoint.localEulerAngles + Vector3.right * 75, 0.5f);
-            //Spawn Damage Area
+            _activeTween = AnimateSwing();
+            //SpawnDamageArea
         }
 
         public void Throw()
         {
             _activeTween?.Complete();
-            _activeTween = _foreArmJoint.DOLocalRotate(_foreArmJoint.localEulerAngles + Vector3.right * 75, 0.1f);
+            _activeTween = AnimateThrow();
             LaunchItem();
+        }
+
+        public Tween AnimatePrepare()
+        {
+            return _foreArmJoint.DOLocalRotate(_foreArmJoint.localEulerAngles - Vector3.right * 75, 0.5f);
+        }
+
+        public Tween AnimateSwing()
+        {
+            return _foreArmJoint.DOLocalRotate(_foreArmJoint.localEulerAngles + Vector3.right * 75, 0.5f);
+        }
+
+        public Tween AnimateThrow()
+        {
+            return _foreArmJoint.DOLocalRotate(_foreArmJoint.localEulerAngles + Vector3.right * 75, 0.1f);
         }
     }
 }

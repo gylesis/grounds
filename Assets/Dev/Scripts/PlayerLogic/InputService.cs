@@ -23,6 +23,7 @@ namespace Dev.Infrastructure
 
         private PlayerInputs _playerInputs;
         private bool _throwState;
+        private bool _dropItemState;
 
         public PlayerInputs PlayerInputs => _playerInputs;
 
@@ -45,11 +46,15 @@ namespace Dev.Infrastructure
         {
             bool jumpState = _playerInputs.Player.Jump.IsPressed();
             bool sprintState = _playerInputs.Player.Sprint.IsPressed();
-            
             bool swingState = _playerInputs.Player.SwingItem.IsPressed();
+            bool pickUpState = _playerInputs.Player.PickItem.IsPressed();
+            bool alternateHand = _playerInputs.Player.AlternateHand.IsPressed();
+            
             _playerInputs.Player.ThrowItem.performed += _ => _throwState = true;
             _playerInputs.Player.ThrowItem.canceled += _ => _throwState = false;
 
+            _playerInputs.Player.DropItem.performed += _ => _dropItemState = true;
+            _playerInputs.Player.DropItem.canceled += _ => _dropItemState = false;
 
             Vector2 inputVector = _playerInputs.Player.Move.ReadValue<Vector2>();
             Vector2 lookVector = _playerInputs.Player.Look.ReadValue<Vector2>();
@@ -65,6 +70,9 @@ namespace Dev.Infrastructure
             playerInput.Buttons.Set(Buttons.Jump, jumpState);
             playerInput.Buttons.Set(Buttons.Swing, swingState);
             playerInput.Buttons.Set(Buttons.Throw, _throwState);
+            playerInput.Buttons.Set(Buttons.PickItem, pickUpState);
+            playerInput.Buttons.Set(Buttons.AlternateHand, alternateHand);
+            playerInput.Buttons.Set(Buttons.DropItem, _dropItemState);
 
             input.Set(playerInput);
         }

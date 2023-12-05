@@ -15,7 +15,7 @@ namespace Dev.PlayerLogic
         [SerializeField] private PlayerView _playerView;
         [SerializeField] private KCC _kcc;
         [SerializeField] private Hands _hands;
-        
+        [SerializeField] private Interactor _interactor;
 
         [SerializeField] private Transform _cameraTransform;
 
@@ -44,8 +44,8 @@ namespace Dev.PlayerLogic
         {
             if (GetInput<PlayerInput>(out var input))
             {
-                var pressed = input.Buttons.GetPressed(_buttonsPrevious);
-                var released = input.Buttons.GetReleased(_buttonsPrevious);
+                var wasPressed = input.Buttons.GetPressed(_buttonsPrevious);
+                var wasReleased = input.Buttons.GetReleased(_buttonsPrevious);
 
                 _buttonsPrevious = input.Buttons;
                 
@@ -58,7 +58,7 @@ namespace Dev.PlayerLogic
 
                 _playerView.RPC_OnInput(input.MoveDirection);
 
-                if (pressed.IsSet(Buttons.Jump))
+                if (wasPressed.IsSet(Buttons.Jump))
                 {
                     _kcc.Jump(Vector3.up * _jumpModifier);
                 }
@@ -67,19 +67,10 @@ namespace Dev.PlayerLogic
                 {
                     _kcc.AddExternalVelocity(moveDirection * _sprintAcceleration);
                 }
-
-                if (pressed.IsSet(Buttons.Swing))
-                {
-                    _hands.ActiveHand.PrepareToSwing();
-                }
-                else if (released.IsSet(Buttons.Swing) && !released.IsSet(Buttons.Throw))
-                {
-                    _hands.ActiveHand.Swing();
-                }
-                else if (released.IsSet(Buttons.Throw))
-                {
-                    _hands.ActiveHand.Throw();
-                }
+                
+                _hands.OnInput(input, wasPressed, wasReleased);
+                
+                _interactor.ItemHandle(input, wasPressed, wasReleased);
             }
         }
 

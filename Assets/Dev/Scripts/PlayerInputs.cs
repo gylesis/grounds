@@ -82,16 +82,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""DropItem"",
-                    ""type"": ""Button"",
-                    ""id"": ""d735b5af-7e2b-4916-a767-ffd52f0ec0ee"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Hold(duration=0.8,pressPoint=0.5)"",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""LeftHand"",
+                    ""name"": ""AlternateHand"",
                     ""type"": ""Button"",
                     ""id"": ""959be239-c840-4c7f-b87e-df9421f45ab7"",
                     ""expectedControlType"": ""Button"",
@@ -100,12 +91,21 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""RightHand"",
+                    ""name"": ""PickItem"",
                     ""type"": ""Button"",
                     ""id"": ""1fa058db-41fc-431d-bc39-92b31592f649"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DropItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""d735b5af-7e2b-4916-a767-ffd52f0ec0ee"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(duration=0.5)"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -423,23 +423,12 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""9b2211e6-8044-45cf-8624-bb412c678602"",
-                    ""path"": ""<Keyboard>/v"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""DropItem"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""9da30f66-42ed-4e52-a431-2f7b5a7895d4"",
                     ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""LeftHand"",
+                    ""action"": ""AlternateHand"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -450,7 +439,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""RightHand"",
+                    ""action"": ""PickItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -506,6 +495,17 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""AnyHand"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9b2211e6-8044-45cf-8624-bb412c678602"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DropItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1099,9 +1099,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
+        m_Player_AlternateHand = m_Player.FindAction("AlternateHand", throwIfNotFound: true);
+        m_Player_PickItem = m_Player.FindAction("PickItem", throwIfNotFound: true);
         m_Player_DropItem = m_Player.FindAction("DropItem", throwIfNotFound: true);
-        m_Player_LeftHand = m_Player.FindAction("LeftHand", throwIfNotFound: true);
-        m_Player_RightHand = m_Player.FindAction("RightHand", throwIfNotFound: true);
         m_Player_AnyHand = m_Player.FindAction("AnyHand", throwIfNotFound: true);
         m_Player_SwingItem = m_Player.FindAction("SwingItem", throwIfNotFound: true);
         m_Player_ThrowItem = m_Player.FindAction("ThrowItem", throwIfNotFound: true);
@@ -1185,9 +1185,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Interaction;
+    private readonly InputAction m_Player_AlternateHand;
+    private readonly InputAction m_Player_PickItem;
     private readonly InputAction m_Player_DropItem;
-    private readonly InputAction m_Player_LeftHand;
-    private readonly InputAction m_Player_RightHand;
     private readonly InputAction m_Player_AnyHand;
     private readonly InputAction m_Player_SwingItem;
     private readonly InputAction m_Player_ThrowItem;
@@ -1202,9 +1202,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
+        public InputAction @AlternateHand => m_Wrapper.m_Player_AlternateHand;
+        public InputAction @PickItem => m_Wrapper.m_Player_PickItem;
         public InputAction @DropItem => m_Wrapper.m_Player_DropItem;
-        public InputAction @LeftHand => m_Wrapper.m_Player_LeftHand;
-        public InputAction @RightHand => m_Wrapper.m_Player_RightHand;
         public InputAction @AnyHand => m_Wrapper.m_Player_AnyHand;
         public InputAction @SwingItem => m_Wrapper.m_Player_SwingItem;
         public InputAction @ThrowItem => m_Wrapper.m_Player_ThrowItem;
@@ -1236,15 +1236,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Interaction.started += instance.OnInteraction;
             @Interaction.performed += instance.OnInteraction;
             @Interaction.canceled += instance.OnInteraction;
+            @AlternateHand.started += instance.OnAlternateHand;
+            @AlternateHand.performed += instance.OnAlternateHand;
+            @AlternateHand.canceled += instance.OnAlternateHand;
+            @PickItem.started += instance.OnPickItem;
+            @PickItem.performed += instance.OnPickItem;
+            @PickItem.canceled += instance.OnPickItem;
             @DropItem.started += instance.OnDropItem;
             @DropItem.performed += instance.OnDropItem;
             @DropItem.canceled += instance.OnDropItem;
-            @LeftHand.started += instance.OnLeftHand;
-            @LeftHand.performed += instance.OnLeftHand;
-            @LeftHand.canceled += instance.OnLeftHand;
-            @RightHand.started += instance.OnRightHand;
-            @RightHand.performed += instance.OnRightHand;
-            @RightHand.canceled += instance.OnRightHand;
             @AnyHand.started += instance.OnAnyHand;
             @AnyHand.performed += instance.OnAnyHand;
             @AnyHand.canceled += instance.OnAnyHand;
@@ -1279,15 +1279,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Interaction.started -= instance.OnInteraction;
             @Interaction.performed -= instance.OnInteraction;
             @Interaction.canceled -= instance.OnInteraction;
+            @AlternateHand.started -= instance.OnAlternateHand;
+            @AlternateHand.performed -= instance.OnAlternateHand;
+            @AlternateHand.canceled -= instance.OnAlternateHand;
+            @PickItem.started -= instance.OnPickItem;
+            @PickItem.performed -= instance.OnPickItem;
+            @PickItem.canceled -= instance.OnPickItem;
             @DropItem.started -= instance.OnDropItem;
             @DropItem.performed -= instance.OnDropItem;
             @DropItem.canceled -= instance.OnDropItem;
-            @LeftHand.started -= instance.OnLeftHand;
-            @LeftHand.performed -= instance.OnLeftHand;
-            @LeftHand.canceled -= instance.OnLeftHand;
-            @RightHand.started -= instance.OnRightHand;
-            @RightHand.performed -= instance.OnRightHand;
-            @RightHand.canceled -= instance.OnRightHand;
             @AnyHand.started -= instance.OnAnyHand;
             @AnyHand.performed -= instance.OnAnyHand;
             @AnyHand.canceled -= instance.OnAnyHand;
@@ -1488,9 +1488,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnInteraction(InputAction.CallbackContext context);
+        void OnAlternateHand(InputAction.CallbackContext context);
+        void OnPickItem(InputAction.CallbackContext context);
         void OnDropItem(InputAction.CallbackContext context);
-        void OnLeftHand(InputAction.CallbackContext context);
-        void OnRightHand(InputAction.CallbackContext context);
         void OnAnyHand(InputAction.CallbackContext context);
         void OnSwingItem(InputAction.CallbackContext context);
         void OnThrowItem(InputAction.CallbackContext context);

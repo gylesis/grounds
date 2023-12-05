@@ -1593,6 +1593,7 @@ MonoBehaviour:
   _playerView: {fileID: 4925156170821849819}
   _kcc: {fileID: 8738784936676509605}
   _hands: {fileID: 8256951257243662499}
+  _interactor: {fileID: 7211773567437665188}
   _cameraTransform: {fileID: 7152790470979342241}
   _jumpModifier: 5
   _sensivity: 6

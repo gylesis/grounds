@@ -19,6 +19,9 @@ namespace Dev.Infrastructure
         Sprint = 1,
         Swing = 2,
         Throw = 3,
+        AlternateHand = 4,
+        PickItem = 5,
+        DropItem = 6
     }
 
 }
