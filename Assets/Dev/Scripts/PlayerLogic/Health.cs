@@ -1,9 +1,11 @@
-﻿using Zenject;
+﻿using Dev.Infrastructure;
 
 namespace Dev.Scripts.PlayerLogic
 {
-    public class Health : 
+    public class Health : NetworkContext
     {
+        private float _health;
+        
         
     }
 }
