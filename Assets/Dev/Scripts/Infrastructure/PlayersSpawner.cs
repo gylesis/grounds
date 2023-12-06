@@ -19,8 +19,14 @@ namespace Dev.Infrastructure
         
         public int PlayersCount => PlayersList.Count;
         
-        public PlayerCharacter SpawnPlayer(PlayerRef playerRef, bool firstSpawn = true)
+        public void SpawnPlayer(PlayerRef playerRef, bool firstSpawn = true)
         {
+            if (PlayersList.ContainsKey(playerRef))
+            {
+                Debug.Log($"This player already has character!!");
+                return;
+            }
+            
             PlayerCharacter playerCharacterPrefab = _playerCharacterPrefab;
 
             Vector3 spawnPos = _spawnPoint.position;
@@ -46,8 +52,6 @@ namespace Dev.Infrastructure
             RPC_OnPlayerSpawnedInvoke(playerCharacter);
 
             //LoadWeapon(player);
-
-            return playerCharacter;
         }
 
         public void DespawnPlayer(PlayerRef playerRef)
