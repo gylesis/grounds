@@ -40,7 +40,8 @@ namespace Dev.Infrastructure
             PlayersGameData.PutPlayerInQueue(playerCharacter.Object.InputAuthority);
             OnReadyPlayersUpdate();
         }
-
+        
+        
         private async void OnReadyPlayersUpdate()
         {
             if(Runner.IsServer == false) return;
@@ -49,32 +50,38 @@ namespace Dev.Infrastructure
             {
                 Debug.Log($"Enough players are connected, starting game");
 
-                if (_networkRunner.State == NetworkRunner.States.Running)
-                {
-                    await _networkRunner.Shutdown(false, ShutdownReason.GameClosed);
-
-                    await UniTask.DelayFrame(5);
-                }
-                
-                var startGameArgs = new StartGameArgs();
-                startGameArgs.GameMode = GameMode.AutoHostOrClient;
-                startGameArgs.SceneManager = _sceneLoader;
-                startGameArgs.Scene = SceneManager.GetSceneByName("MainScene").buildIndex;
-
-                StartGameResult gameResult = await _networkRunner.StartGame(startGameArgs);
-
-                if (gameResult.Ok)
-                {
-                    _sceneLoader.LoadScene("MainScene");
-                    Debug.Log($"Game started, loading main level");
-                }
-                else
-                {
-                    Debug.LogError($"Game not started {gameResult.ErrorMessage}");
-                }
-                
+                RPC_StartNewGame();
             }
         }
+
+        [Rpc]
+        private async void RPC_StartNewGame()
+        {
+            if (_networkRunner.State == NetworkRunner.States.Running)
+            {
+                await _networkRunner.Shutdown(false, ShutdownReason.GameClosed);
+
+                await UniTask.DelayFrame(5);
+            }
+                
+            var startGameArgs = new StartGameArgs();
+            startGameArgs.GameMode = GameMode.AutoHostOrClient;
+            startGameArgs.SceneManager = _sceneLoader;
+            startGameArgs.Scene = SceneManager.GetSceneByName("MainScene").buildIndex;
+
+            StartGameResult gameResult = await _networkRunner.StartGame(startGameArgs);
+
+            if (gameResult.Ok)
+            {
+                _sceneLoader.LoadScene("MainScene");
+                Debug.Log($"Game started, loading main level");
+            }
+            else
+            {
+                Debug.LogError($"Game not started {gameResult.ErrorMessage}");
+            }
+        }
+        
         
         public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
         {
