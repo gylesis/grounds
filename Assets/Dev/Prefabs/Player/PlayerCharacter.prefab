@@ -1395,6 +1395,7 @@ GameObject:
   - component: {fileID: 8256951257243662499}
   - component: {fileID: 2126260200385715225}
   - component: {fileID: 5652419671481334003}
+  - component: {fileID: 5596677390300365247}
   - component: {fileID: 6597301466496107700}
   m_Layer: 0
   m_Name: PlayerCharacter
@@ -1454,6 +1455,7 @@ MonoBehaviour:
   - {fileID: 8256951257243662499}
   - {fileID: 2126260200385715225}
   - {fileID: 5652419671481334003}
+  - {fileID: 5596677390300365247}
   SimulationBehaviours: []
 --- !u!54 &8693975321453458857
 Rigidbody:
@@ -1614,6 +1616,22 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _IsActive:
     _value: 1
+--- !u!114 &5596677390300365247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3706882407202003477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c85ed8110a1543ab9e1e747e432314db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  _IsActive:
+    _value: 1
+  _health: 100
 --- !u!136 &6597301466496107700
 CapsuleCollider:
   m_ObjectHideFlags: 0

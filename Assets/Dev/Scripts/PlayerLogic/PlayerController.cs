@@ -36,7 +36,7 @@ namespace Dev.PlayerLogic
         {
             if (HasInputAuthority == false)
             {
-                GetComponentInChildren<Camera>().gameObject.SetActive(false);
+                GetComponentInChildren<Camera>(true).gameObject.SetActive(false);
             }
         }
 

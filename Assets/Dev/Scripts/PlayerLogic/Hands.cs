@@ -105,7 +105,8 @@ namespace Dev.Scripts.PlayerLogic
                 ActiveHand.Throw();
             }
 
-            if (wasPressed.IsSet(Buttons.AlternateHand) || wasReleased.IsSet(Buttons.AlternateHand))
+            if ((wasPressed.IsSet(Buttons.AlternateHand) || wasReleased.IsSet(Buttons.AlternateHand))
+                && !input.Buttons.IsSet(Buttons.Swing))
             {
                 ToggleActiveHand();
             }
