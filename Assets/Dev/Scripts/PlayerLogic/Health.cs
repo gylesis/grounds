@@ -1,18 +1,17 @@
 ﻿using System;
 using Dev.Infrastructure;
-using Fusion;
 using UnityEngine;
 
 namespace Dev.Scripts.PlayerLogic
 {
-    public class Health : NetworkContext
+    public class Health : NetworkContext, IDamageInflictor, IDamageVictim
     {
         [SerializeField] private float _health = 100;
         [SerializeField] private Rigidbody _rigidbody;
-     
-        
-        
+
         public Action HealthDepleted;
+
+        public GameObject GameObject => gameObject;
 
         private void Awake()
         {
@@ -30,20 +29,21 @@ namespace Dev.Scripts.PlayerLogic
                 var damage = speed * mass;
                 
                 Debug.Log($"Damage: {damage} Mass: {_rigidbody.mass} Speed: {_rigidbody.velocity.magnitude}");
-                health.DecreaseHealth(damage, this);
+                health.TakeDamage(damage, this);
             }
         }
 
-        public void DecreaseHealth(float value, Health damageInflictor)
+        public void TakeDamage(float value, IDamageInflictor damageInflictor)
         {
             _health -= value;
-            Debug.Log($"{transform.name} was damaged by {damageInflictor.name}. Health: {_health}");
+            Debug.Log($"{transform.name} was damaged by {damageInflictor.GameObject.name}. Health: {_health}");
             if (_health <= 0)
             {
                 HealthDepleted?.Invoke();
             }
         }
-        
-        
+
+
+
     }
 }
