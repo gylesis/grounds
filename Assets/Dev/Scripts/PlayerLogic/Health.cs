@@ -1,12 +1,13 @@
 ﻿using System;
 using Dev.Infrastructure;
+using Fusion;
 using UnityEngine;
 
 namespace Dev.Scripts.PlayerLogic
 {
     public class Health : NetworkContext, IDamageInflictor, IDamageVictim
     {
-        [SerializeField] private float _health = 100;
+        [Networked] [SerializeField] private float _health { get; set; } = 100;
         [SerializeField] private Rigidbody _rigidbody;
 
         public Action HealthDepleted;
@@ -42,8 +43,5 @@ namespace Dev.Scripts.PlayerLogic
                 HealthDepleted?.Invoke();
             }
         }
-
-
-
     }
 }

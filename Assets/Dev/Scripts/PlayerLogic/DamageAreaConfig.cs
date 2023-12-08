@@ -17,8 +17,6 @@ namespace Dev.Scripts.PlayerLogic
 
         [SerializeField] private LayerMask _affectMask;
         
-        
-
         public DamageArea Prefab => _prefab;
 
         public float Duration => _duration;

@@ -1,4 +1,6 @@
-﻿using DG.Tweening;
+﻿using System;
+using Dev.Infrastructure;
+using DG.Tweening;
 using UnityEngine;
 
 namespace Dev.Scripts.PlayerLogic
@@ -8,10 +10,18 @@ namespace Dev.Scripts.PlayerLogic
         [SerializeField] private HandType _handType;
         [SerializeField] private Transform _foreArmJoint;
 
+        private DamageAreaSpawner _damageAreaSpawner;
+        
         public HandType HandType => _handType;
 
         private Tween _activeTween;
 
+        
+        private void Start()
+        {
+            _damageAreaSpawner = DependenciesContainer.Instance.GetDependency<DamageAreaSpawner>();
+        }
+        
         public void PrepareToSwing()
         {
             _activeTween?.Complete();
@@ -22,7 +32,7 @@ namespace Dev.Scripts.PlayerLogic
         {
             _activeTween?.Complete();
             _activeTween = AnimateSwing();
-            //SpawnDamageArea
+            // _damageAreaSpawner.Spawn();
         }
 
         public void Throw()

@@ -5,17 +5,11 @@ namespace Dev.Scripts.PlayerLogic
 {
     public class DamageAreaSpawner : NetworkBehaviour
     {
-        [SerializeField] private Vector3 _pointToSpawn;
-        
-        public void Spawn(DamageAreaConfig damageAreaConfig)
+        public void Spawn(DamageAreaConfig damageAreaConfig, Vector3 point)
         {
-            var damageArea = Instantiate(damageAreaConfig.Prefab, _pointToSpawn, Quaternion.identity);
+            var damageArea = Runner.Spawn(damageAreaConfig.Prefab, point, Quaternion.identity);
             damageArea.Setup(damageAreaConfig);
         }
-
-        private void OnDrawGizmosSelected()
-        {
-            Gizmos.DrawSphere(transform.position + _pointToSpawn, 0.25f);
-        }
+        
     }
 }

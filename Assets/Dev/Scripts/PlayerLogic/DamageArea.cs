@@ -47,7 +47,7 @@ namespace Dev.Scripts.PlayerLogic
             }
             else
             {
-                _active = false;
+                Disable();
             }
         }
 

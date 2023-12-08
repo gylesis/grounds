@@ -4,6 +4,7 @@ using DG.Tweening;
 using Fusion;
 using Sirenix.Utilities;
 using UnityEngine;
+using Zenject;
 
 namespace Dev.Scripts.PlayerLogic
 {
