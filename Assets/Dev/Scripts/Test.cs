@@ -4,6 +4,7 @@ using Dev.Infrastructure;
 using Fusion;
 using Fusion.Sockets;
 using UnityEngine;
+using NetAddress = Fusion.Sockets.NetAddress;
 
 namespace Dev.Scripts
 {
