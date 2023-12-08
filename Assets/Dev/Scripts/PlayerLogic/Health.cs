@@ -8,7 +8,7 @@ namespace Dev.Scripts.PlayerLogic
     public class Health : NetworkContext
     {
         [SerializeField] private float _health = 100;
-        [SerializeField] private NetworkRigidbody _networkRigidbody;
+        [SerializeField] private Rigidbody _rigidbody;
      
         
         
@@ -16,21 +16,20 @@ namespace Dev.Scripts.PlayerLogic
 
         private void Awake()
         {
-            if (_networkRigidbody == null) _networkRigidbody = GetComponent<NetworkRigidbody>();
+            if (_rigidbody == null) _rigidbody = GetComponent<Rigidbody>();
         }
 
         private void OnCollisionEnter(Collision other)
         {
             if(other.transform.TryGetComponent(out Health health))
             {
-                var mass = _networkRigidbody.Rigidbody.mass;
-                var speed = _networkRigidbody.Rigidbody.velocity.magnitude;
+                var mass = _rigidbody.mass;
+                var speed = _rigidbody.velocity.magnitude;
                 if (speed < 1) return;
                 
                 var damage = speed * mass;
                 
-                
-                Debug.Log($"Damage: {damage} Mass: {_networkRigidbody.Rigidbody.mass} Speed: {_networkRigidbody.Rigidbody.velocity.magnitude}");
+                Debug.Log($"Damage: {damage} Mass: {_rigidbody.mass} Speed: {_rigidbody.velocity.magnitude}");
                 health.DecreaseHealth(damage, this);
             }
         }
