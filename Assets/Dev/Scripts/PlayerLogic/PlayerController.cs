@@ -26,6 +26,8 @@ namespace Dev.PlayerLogic
         
         private PopUpService _popUpService;
 
+        [Networked] public NetworkBool ForbidToMove { get; set; } 
+        
         private void Awake()
         {
             Cursor.visible = false;
@@ -44,6 +46,8 @@ namespace Dev.PlayerLogic
         {
             if (GetInput<PlayerInput>(out var input))
             {
+                if(ForbidToMove) return;
+                
                 var wasPressed = input.Buttons.GetPressed(_buttonsPrevious);
                 var wasReleased = input.Buttons.GetReleased(_buttonsPrevious);
 

@@ -23,7 +23,6 @@ namespace Dev.Scripts.PlayerLogic
         {
             base.CorrectState();
 
-            Debug.Log($"Set item state");
             SetItemState(IsCarrying);
         }
 

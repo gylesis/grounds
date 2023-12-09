@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Dev.Scripts
 {
-    public class SteamConnection : MonoBehaviour
+    public class SteamConnectionManager : MonoBehaviour
     {
         [SerializeField] private string _lobbyName = "TestingS";
     
@@ -24,9 +24,7 @@ namespace Dev.Scripts
                 return;
             }
             
-            
             SteamMatchmaking.CreateLobbyAsync(3);
-
         }
 
         private void OnEnable()
@@ -47,6 +45,14 @@ namespace Dev.Scripts
             SteamClient.Shutdown();
         }
 
+        public string GetNickname()
+        {
+            if (SteamClient.IsLoggedOn == false) return "Player";
+            
+            return SteamClient.Name;
+        }
+        
+        
         private void OnLobbyInvited(Friend friend, Lobby lobby)
         {
             Debug.Log($"Friend {friend.Name} invited to lobby {lobby.GetData(Constants.Steam.LobbyNameKey)}");
@@ -80,4 +86,7 @@ namespace Dev.Scripts
             
         }
     }
+
+   
+    
 }

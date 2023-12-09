@@ -19,7 +19,7 @@ namespace Dev.Scripts.PlayerLogic
         
         private void Start()
         {
-            _damageAreaSpawner = DependenciesContainer.Instance.GetDependency<DamageAreaSpawner>();
+           // _damageAreaSpawner = DependenciesContainer.Instance.GetDependency<DamageAreaSpawner>();
         }
         
         public void PrepareToSwing()
