@@ -1508,6 +1508,7 @@ MonoBehaviour:
   _interactor: {fileID: 7211773567437665188}
   _cameraController: {fileID: 6263212912454288206}
   _inputService: {fileID: 5652419671481334003}
+  _gameInventory: {fileID: 0}
 --- !u!114 &8738784936676509605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1600,10 +1601,13 @@ MonoBehaviour:
   _kcc: {fileID: 8738784936676509605}
   _hands: {fileID: 8256951257243662499}
   _interactor: {fileID: 7211773567437665188}
+  _gameInventory: {fileID: 0}
   _cameraTransform: {fileID: 7152790470979342241}
   _jumpModifier: 5
   _sensivity: 6
   _sprintAcceleration: 4.5
+  _ForbidToMove:
+    _value: 0
 --- !u!114 &5652419671481334003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1634,7 +1638,7 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _IsActive:
     _value: 1
-  _health: 100
+  __health: 100
   _rigidbody: {fileID: 0}
 --- !u!136 &6597301466496107700
 CapsuleCollider:

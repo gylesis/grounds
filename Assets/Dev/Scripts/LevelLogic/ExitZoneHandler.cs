@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using Dev.Infrastructure;
 using Dev.PlayerLogic;
+using Dev.Scripts.PlayerLogic.InventoryLogic;
 using Dev.UI.PopUpsAndMenus;
 using Fusion;
 using UniRx;
@@ -24,10 +26,12 @@ namespace Dev.Levels.Interactions
         private MarkersHandler _markersHandler;
         private PopUpService _popUpService;
         private SceneCameraController _sceneCameraController;
+        private GameInventory _gameInventory;
 
         [Inject]
-        private void Init(MarkersHandler markersHandler, PopUpService popUpService, SceneCameraController sceneCameraController)
+        private void Init(MarkersHandler markersHandler, PopUpService popUpService, SceneCameraController sceneCameraController, GameInventory gameInventory)
         {
+            _gameInventory = gameInventory;
             _sceneCameraController = sceneCameraController;
             _popUpService = popUpService;
             _markersHandler = markersHandler;
@@ -63,24 +67,27 @@ namespace Dev.Levels.Interactions
         {
             PlayerRef playerRef = playerCharacter.Object.InputAuthority;
 
-            RPC_OnPlayerExit(playerRef, playerCharacter);
+            InventoryData inventoryData = _gameInventory.GetInventoryData(playerRef);
+
+            RPC_OnPlayerExit(playerRef, playerCharacter, inventoryData);
         }
     
         [Rpc]
-        private void RPC_OnPlayerExit([RpcTarget] PlayerRef playerRef, PlayerCharacter playerCharacter)
+        private void RPC_OnPlayerExit([RpcTarget] PlayerRef playerRef, PlayerCharacter playerCharacter,
+            InventoryData inventoryData)
         {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            
             _sceneCameraController.Camera.gameObject.SetActive(true); 
             playerCharacter.CameraController.CharacterCamera.gameObject.SetActive(false);
             
-            _popUpService.ShowPopUp<WinPopUp>();
-            
-            /*var tryGetPopUp = _popUpService.TryGetPopUp<WinPopUp>(out var winPopUp);
+            var tryGetPopUp = _popUpService.TryGetPopUp<WinPopUp>(out var winPopUp);
 
             if (tryGetPopUp)
             {
-                //winPopUp.RPC_Setup(playerRef);
-                winPopUp.Show();
-            }*/
+                winPopUp.RPC_Setup(playerRef,inventoryData.Items.ToList());
+            }
         }
         
         public override void FixedUpdateNetwork()

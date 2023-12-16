@@ -1,18 +1,20 @@
 ﻿using System.Linq;
 using Dev.Infrastructure;
+using Dev.PlayerLogic;
+using Dev.Scripts.PlayerLogic.InventoryLogic;
 using DG.Tweening;
 using Fusion;
 using Sirenix.Utilities;
 using UnityEngine;
-using Zenject;
 
 namespace Dev.Scripts.PlayerLogic
 {
-    public class Hands : ItemContainer, IHandAbilities
+    public class Hands : ItemContainer, IHandAbilities, IInputListener
     {
         [SerializeField] private Hand[] _hands;
 
         private Hand _activeHand;
+        private GameInventory _gameInventory;
         public IHandAbilities ActiveHand => GetActiveHand();
 
         //Там подразумевалось, что в случае, если предмет ложится в обе руки, каждая будет иметь ссылку на этот предмет, но это пока не так, что может вызвать некоторые логические конфликты
@@ -22,6 +24,16 @@ namespace Dev.Scripts.PlayerLogic
         private void Awake()
         {
             _activeHand = GetHandByType(HandType.Right);
+
+            _gameInventory = DependenciesContainer.Instance.GetDependency<GameInventory>();
+        }
+
+        public override void Spawned()
+        {
+            if (HasStateAuthority)
+            {
+                _gameInventory.RPC_OnPlayerSpawned(Object.InputAuthority);
+            }
         }
 
         protected override void CorrectState()
@@ -41,6 +53,11 @@ namespace Dev.Scripts.PlayerLogic
         public Hand GetHandByType(HandType handType)
         {
             return _hands.First(hand => hand.HandType == handType);
+        }
+
+        public bool IsHandFree(HandType handType)
+        {
+            return _hands.First(x => x.HandType == handType).IsFree;
         }
 
         public ItemContainer GetOccupiedHand()
@@ -91,8 +108,46 @@ namespace Dev.Scripts.PlayerLogic
             else if (_activeHand.HandType == HandType.Right) _activeHand = GetHandByType(HandType.Left);
         }
 
+
+        private void RequestToPutItemInInventory()
+        {
+            Hand leftHand = GetHandByType(HandType.Left);
+
+            PlayerRef playerRef = Object.InputAuthority;
+            Item item = leftHand.ContainingItem;
+            
+            var itemData = new ItemData(item.TestName);
+
+            Debug.Log($"client put item to inv {playerRef}");
+            RPC_PutItemInInventory(itemData, playerRef);
+            
+            leftHand.RPC_DropItem();
+            item.RPC_SetActive(false);
+        }
+
+        [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+        private void RPC_PutItemInInventory(ItemData itemData, PlayerRef playerRef)
+        {
+            Debug.Log($"RPC put item to inv {playerRef}");
+            //itemData.ItemName = leftHand.ContainingItem.TestName;
+            _gameInventory.PutItemInInventory(itemData, playerRef);
+        }
+        
         public void OnInput(PlayerInput input, NetworkButtons wasPressed, NetworkButtons wasReleased)
         {
+            if (wasPressed.IsSet(Buttons.PutItemToInventory))
+            {
+                if (AllHandsFree == false)
+                {
+                    Hand leftHand = GetHandByType(HandType.Left);
+
+                    if (leftHand.IsFree == false)
+                    {
+                        RequestToPutItemInInventory();
+                    }
+                }
+            }
+            
             if (wasPressed.IsSet(Buttons.Swing))
             {
                 ActiveHand.PrepareToSwing();
@@ -129,4 +184,5 @@ namespace Dev.Scripts.PlayerLogic
             }
         }
     }
+    
 }

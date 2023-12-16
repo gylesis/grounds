@@ -15,7 +15,7 @@ namespace Dev.Infrastructure
     {
         [SerializeField] private NetworkRunner _networkRunner;
         [SerializeField] private Transform _testSpawner;
-        
+
         private PopUpService _popUpService;
         private PlayersSpawner _playersSpawner;
         private SceneCameraController _sceneCameraController;
@@ -39,7 +39,7 @@ namespace Dev.Infrastructure
         private async void TryAutoConnect()
         {
             _networkRunner.gameObject.SetActive(false);
-            
+
             NetworkRunner networkRunner = FindObjectOfType<NetworkRunner>();
 
             if (networkRunner == null)
@@ -47,7 +47,7 @@ namespace Dev.Infrastructure
                 _networkRunner.gameObject.SetActive(true);
                 networkRunner = _networkRunner;
             }
-            
+
             if (networkRunner.State == NetworkRunner.States.Running)
             {
                 _testSpawner.gameObject.SetActive(false);
@@ -62,7 +62,7 @@ namespace Dev.Infrastructure
                 _networkRunner.AddCallbacks(this);
 
                 return;
-                
+
                 var startGameArgs = new StartGameArgs();
 
                 startGameArgs.GameMode = GameMode.AutoHostOrClient;
@@ -89,9 +89,9 @@ namespace Dev.Infrastructure
             _sceneCameraController = sceneCameraController;
             _playersSpawner = playersSpawner;
         }
-        
+
         // for new player after lobby started. invokes if game starts from Lobby
-        public async void OnPlayerJoined(NetworkRunner runner, PlayerRef player) 
+        public async void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
         {
             if (runner.IsServer)
             {
@@ -115,11 +115,6 @@ namespace Dev.Infrastructure
 
         public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
 
-        public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
-        {
-            Debug.Log($"On Shutdown: {shutdownReason}");
-        }
-
         public async void OnConnectedToServer(NetworkRunner runner) { }
 
         public void OnDisconnectedFromServer(NetworkRunner runner) { }
@@ -135,18 +130,97 @@ namespace Dev.Infrastructure
 
         public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }
 
-        public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
+        public async void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
         {
+            Debug.Log($"Starting host migration");
+            
+            // Step 2.1
+            // Shutdown the current Runner, this will not be used anymore. Perform any prior setup and tear down of the old Runner
+
+            // The new "ShutdownReason.HostMigration" can be used here to inform why it's being shut down in the "OnShutdown" callback
+            await runner.Shutdown(shutdownReason: ShutdownReason.HostMigration);
+
+            // Step 2.2
+            // Create a new Runner.
+            var newRunner = new GameObject("NetworkRunner", typeof(NetworkRunner)).GetComponent<NetworkRunner>();
+
+            // setup the new runner...
+
+            // Start the new Runner using the "HostMigrationToken" and pass a callback ref in "HostMigrationResume".
+            StartGameResult result = await newRunner.StartGame(new StartGameArgs()
+            {
+                // SessionName = SessionName,              // ignored, peer never disconnects from the Photon Cloud
+                // GameMode = gameMode,                    // ignored, Game Mode comes with the HostMigrationToken
+                HostMigrationToken = hostMigrationToken, // contains all necessary info to restart the Runner
+                HostMigrationResume = HostMigrationResume, // this will be invoked to resume the simulation
+                // other args
+            });
+
+
+
+            // Check StartGameResult as usual
+            if (result.Ok == false)
+            {
+                Debug.LogWarning(result.ShutdownReason);
+            }
+            else
+            {
+                Debug.Log("Done");
+            }
         }
+
+        public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
+        {
+            Debug.Log($"On Shutdown: {shutdownReason}");
+
+            // Can check if the Runner is being shutdown because of the Host Migration
+            if (shutdownReason == ShutdownReason.HostMigration)
+            {
+                // ...
+            }
+            else
+            {
+                // Or a normal Shutdown
+            }
+        }
+
+        void HostMigrationResume(NetworkRunner runner)
+        {
+            // Get a temporary reference for each NO from the old Host
+            foreach (var resumeNO in runner.GetResumeSnapshotNetworkObjects())
+
+                if (
+                    // Extract any NetworkBehavior used to represent the position/rotation of the NetworkObject
+                    // this can be either a NetworkTransform or a NetworkRigidBody, for example
+                    resumeNO.TryGetBehaviour<NetworkPositionRotation>(out var posRot))
+                {
+                    runner.Spawn(resumeNO, position: posRot.ReadPosition(), rotation: posRot.ReadRotation(),
+                        onBeforeSpawned: (runner, newNO) =>
+                        {
+                            // One key aspects of the Host Migration is to have a simple way of restoring the old NetworkObjects state
+                            // If all state of the old NetworkObject is all what is necessary, just call the NetworkObject.CopyStateFrom
+                            newNO.CopyStateFrom(resumeNO);
+
+                            // and/or
+
+                            // If only partial State is necessary, it is possible to copy it only from specific NetworkBehaviours
+                            if (resumeNO.TryGetBehaviour<NetworkBehaviour>(out var myCustomNetworkBehaviour))
+                            {
+                                newNO.GetComponent<NetworkBehaviour>().CopyStateFrom(myCustomNetworkBehaviour);
+                            }
+                        });
+                }
+        }
+
 
         public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ArraySegment<byte> data) { }
 
         public async void OnSceneLoadDone(NetworkRunner runner)
         {
             await UniTask.Delay(TimeSpan.FromSeconds(1));
-            
+
             _sceneCameraController.Camera.gameObject.SetActive(false);
-            
+
             Debug.Log($"OnSceneLoadDone");
 
             if (runner.IsServer)
