@@ -21,7 +21,9 @@ namespace Dev.Infrastructure
         Throw = 3,
         AlternateHand = 4,
         PickItem = 5,
-        DropItem = 6
+        DropItem = 6,
+        ToggleInventory,
+        PutItemToInventory
     }
 
 }

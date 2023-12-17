@@ -1,5 +1,7 @@
-﻿using Dev.Infrastructure;
+﻿using System;
+using Dev.Infrastructure;
 using Dev.Scripts.PlayerLogic;
+using Dev.Scripts.PlayerLogic.InventoryLogic;
 using Dev.UI.PopUpsAndMenus;
 using Fusion;
 using Fusion.KCC;
@@ -16,7 +18,7 @@ namespace Dev.PlayerLogic
         [SerializeField] private KCC _kcc;
         [SerializeField] private Hands _hands;
         [SerializeField] private Interactor _interactor;
-
+        
         [SerializeField] private Transform _cameraTransform;
 
         [SerializeField] private float _jumpModifier = 2;
@@ -25,13 +27,22 @@ namespace Dev.PlayerLogic
         [SerializeField] private float _sprintAcceleration = 4.5f;
         
         private PopUpService _popUpService;
-
+        private GameInventory _gameInventory;
+        
         [Networked] public NetworkBool ForbidToMove { get; set; } 
+        
+        private bool _invOpened = false;
+        
         
         private void Awake()
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
+        }
+
+        private void Start()
+        {
+            _gameInventory = DependenciesContainer.Instance.GetDependency<GameInventory>();
         }
 
         public override void Spawned()
@@ -72,8 +83,25 @@ namespace Dev.PlayerLogic
                     _kcc.AddExternalVelocity(moveDirection * _sprintAcceleration);
                 }
                 
-                _hands.OnInput(input, wasPressed, wasReleased);
+                var toOpenInventory = wasPressed.IsSet(Buttons.ToggleInventory);
+
+                if (toOpenInventory)
+                {
+                    Debug.Log($"Show inv {_invOpened}");
                 
+                    if (_invOpened)
+                    {
+                        _gameInventory.Hide();
+                    }
+                    else
+                    {
+                        _gameInventory.ShowInventory(Object.InputAuthority);
+                    }
+                
+                    _invOpened = !_invOpened;
+                }
+                
+                _hands.OnInput(input, wasPressed, wasReleased);
                 _interactor.ItemHandle(input, wasPressed, wasReleased);
             }
         }

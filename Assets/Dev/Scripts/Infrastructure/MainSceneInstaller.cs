@@ -1,5 +1,6 @@
 ﻿using Dev.Levels.Interactions;
 using Dev.Scripts.PlayerLogic;
+using Dev.Scripts.PlayerLogic.InventoryLogic;
 using Dev.UI.PopUpsAndMenus;
 using UnityEngine;
 using Zenject;
@@ -14,9 +15,11 @@ namespace Dev.Infrastructure
        [SerializeField] private DamageAreaSpawner _damageAreaSpawner;
         [SerializeField] private MarkersHandler _markersHandler;
         [SerializeField] private PopUpService _popUpService;
-            
+        [SerializeField] private GameInventory _gameInventory;
+        
         public override void InstallBindings()
         {
+            Container.Bind<GameInventory>().FromInstance(_gameInventory).AsSingle();
             Container.Bind<SceneCameraController>().FromInstance(_mainSceneSceneCameraController).AsSingle();
             Container.Bind<PopUpService>().FromInstance(_popUpService).AsSingle();
             Container.Bind<MarkersHandler>().FromInstance(_markersHandler).AsSingle();

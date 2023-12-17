@@ -143,6 +143,24 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleInventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""8b146512-c444-4bb9-bd2f-14224c17e5e0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PutItemInInventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""5f2075bf-616c-48cb-bee3-fc0fcbd19183"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -506,6 +524,28 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""DropItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3a75c26b-b186-411c-87cc-95d6e5a636c6"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""89846091-bf80-43c5-b139-83e03fd74139"",
+                    ""path"": ""<Keyboard>/#(G)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PutItemInInventory"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1106,6 +1146,8 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Player_SwingItem = m_Player.FindAction("SwingItem", throwIfNotFound: true);
         m_Player_ThrowItem = m_Player.FindAction("ThrowItem", throwIfNotFound: true);
         m_Player_UseItem = m_Player.FindAction("UseItem", throwIfNotFound: true);
+        m_Player_ToggleInventory = m_Player.FindAction("ToggleInventory", throwIfNotFound: true);
+        m_Player_PutItemInInventory = m_Player.FindAction("PutItemInInventory", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1192,6 +1234,8 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_SwingItem;
     private readonly InputAction m_Player_ThrowItem;
     private readonly InputAction m_Player_UseItem;
+    private readonly InputAction m_Player_ToggleInventory;
+    private readonly InputAction m_Player_PutItemInInventory;
     public struct PlayerActions
     {
         private @PlayerInputs m_Wrapper;
@@ -1209,6 +1253,8 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @SwingItem => m_Wrapper.m_Player_SwingItem;
         public InputAction @ThrowItem => m_Wrapper.m_Player_ThrowItem;
         public InputAction @UseItem => m_Wrapper.m_Player_UseItem;
+        public InputAction @ToggleInventory => m_Wrapper.m_Player_ToggleInventory;
+        public InputAction @PutItemInInventory => m_Wrapper.m_Player_PutItemInInventory;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1257,6 +1303,12 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @UseItem.started += instance.OnUseItem;
             @UseItem.performed += instance.OnUseItem;
             @UseItem.canceled += instance.OnUseItem;
+            @ToggleInventory.started += instance.OnToggleInventory;
+            @ToggleInventory.performed += instance.OnToggleInventory;
+            @ToggleInventory.canceled += instance.OnToggleInventory;
+            @PutItemInInventory.started += instance.OnPutItemInInventory;
+            @PutItemInInventory.performed += instance.OnPutItemInInventory;
+            @PutItemInInventory.canceled += instance.OnPutItemInInventory;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1300,6 +1352,12 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @UseItem.started -= instance.OnUseItem;
             @UseItem.performed -= instance.OnUseItem;
             @UseItem.canceled -= instance.OnUseItem;
+            @ToggleInventory.started -= instance.OnToggleInventory;
+            @ToggleInventory.performed -= instance.OnToggleInventory;
+            @ToggleInventory.canceled -= instance.OnToggleInventory;
+            @PutItemInInventory.started -= instance.OnPutItemInInventory;
+            @PutItemInInventory.performed -= instance.OnPutItemInInventory;
+            @PutItemInInventory.canceled -= instance.OnPutItemInInventory;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1495,6 +1553,8 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         void OnSwingItem(InputAction.CallbackContext context);
         void OnThrowItem(InputAction.CallbackContext context);
         void OnUseItem(InputAction.CallbackContext context);
+        void OnToggleInventory(InputAction.CallbackContext context);
+        void OnPutItemInInventory(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

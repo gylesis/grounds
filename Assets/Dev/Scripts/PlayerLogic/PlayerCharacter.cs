@@ -1,5 +1,6 @@
 ﻿using Dev.Infrastructure;
 using Dev.Scripts.PlayerLogic;
+using Dev.Scripts.PlayerLogic.InventoryLogic;
 using Fusion.KCC;
 using UnityEngine;
 
