@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace Dev.Scripts.PlayerLogic
 {
     [CreateAssetMenu(fileName = "DamageAreaConfig", menuName = "GameConfigs/DamageAreaConfig", order = 0)]
-    public class DamageAreaConfig : ScriptableObject
+    public class DamageAreaConfig : SerializedScriptableObject
     {
         [SerializeField] private DamageArea _prefab;
 

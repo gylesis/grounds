@@ -87,6 +87,7 @@ MonoBehaviour:
   _collider: {fileID: 104402805518434976}
   _testName: Good Item 12312
   _itemSizeType: 0
+  _itemEnumeration: 2
 --- !u!114 &2844729881576192006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -215,7 +216,8 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _IsActive:
     _value: 1
-  _hitbox: {fileID: 0}
+  __health: 100
+  _rigidbody: {fileID: 0}
 --- !u!1 &4229241885023498973
 GameObject:
   m_ObjectHideFlags: 0

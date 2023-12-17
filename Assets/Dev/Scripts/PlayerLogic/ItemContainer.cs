@@ -1,10 +1,7 @@
-﻿using System;
-using Cysharp.Threading.Tasks;
-using Dev.Infrastructure;
+﻿using Dev.Infrastructure;
 using Dev.PlayerLogic;
 using Fusion;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Dev.Scripts.PlayerLogic
 {
@@ -38,9 +35,10 @@ namespace Dev.Scripts.PlayerLogic
             }*/
         }
 
-        [Rpc]
+        [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         public virtual void RPC_PutItem(Item item)
         {
+            Debug.Log("PutItem");
             if (IsFree == false) return;
             
             RPC_SetItem(item);
@@ -50,9 +48,10 @@ namespace Dev.Scripts.PlayerLogic
             ContainingItem.RPC_SetLocalRotation(Vector3.zero);
         }
         
-        [Rpc]
+        [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         public void RPC_DropItem()
         {
+            Debug.Log("DropItem");
             if (IsFree == true) return;
 
             ContainingItem.RPC_SetParent(null);
@@ -62,9 +61,10 @@ namespace Dev.Scripts.PlayerLogic
             RPC_SetItem(null);
         }
 
-        [Rpc]
+        [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         public void RPC_LaunchItem()
         {
+            Debug.Log("LaunchItem");
             if (IsFree == true) return;
             
             ContainingItem.RPC_SetParent(null);
@@ -79,7 +79,7 @@ namespace Dev.Scripts.PlayerLogic
             RPC_SetItem(null);
         }
         
-        [Rpc]
+        [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         private void RPC_SetItem(Item item)
         {
             ContainingItem = item;

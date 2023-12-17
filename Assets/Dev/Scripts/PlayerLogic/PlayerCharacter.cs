@@ -13,6 +13,8 @@ namespace Dev.PlayerLogic
         [SerializeField] private Interactor _interactor;
         [SerializeField] private CameraController _cameraController;
         [SerializeField] private InputService _inputService;
+        [SerializeField] private Health _health;
+        
 
         public InputService InputService => _inputService;
 
@@ -22,5 +24,6 @@ namespace Dev.PlayerLogic
         public Interactor Interactor => _interactor;
         public KCC Kcc => _kcc;
         public PlayerView Animator => _playerView;
+        public Health Health => _health;
     }
 }

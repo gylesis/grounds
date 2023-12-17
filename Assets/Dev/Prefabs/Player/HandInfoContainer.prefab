@@ -72,6 +72,8 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _IsActive:
     _value: 1
+  _itemMountPoint: {fileID: 0}
+  _ContainingItem: {fileID: 0}
   _handType: 2
-  _parent: {fileID: 1603291413085181045}
-  _CarryingItem: {fileID: 0}
+  _foreArmJoint: {fileID: 0}
+  _damageConfig: {fileID: 0}

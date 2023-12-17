@@ -108,7 +108,6 @@ namespace Dev.Scripts.PlayerLogic
             {
                 _hands.GetHandByType(HandType.Left).RPC_PutItem(TargetItem);
             }
-
         }
     }
 }

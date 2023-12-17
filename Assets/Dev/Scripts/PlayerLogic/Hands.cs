@@ -4,7 +4,6 @@ using DG.Tweening;
 using Fusion;
 using Sirenix.Utilities;
 using UnityEngine;
-using Zenject;
 
 namespace Dev.Scripts.PlayerLogic
 {
@@ -93,6 +92,8 @@ namespace Dev.Scripts.PlayerLogic
 
         public void OnInput(PlayerInput input, NetworkButtons wasPressed, NetworkButtons wasReleased)
         {
+            if(Runner.IsResimulation) return;
+            
             if (wasPressed.IsSet(Buttons.Swing))
             {
                 ActiveHand.PrepareToSwing();

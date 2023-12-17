@@ -17,8 +17,8 @@ namespace Dev.Scripts.PlayerLogic
         private LayerMask _affectMask;
         private IDamageInflictor _damageInflictor;
 
-        private List<LagCompensatedHit> _hits;
-        private Dictionary<IDamageVictim, float> _periodTimerForEveryVictim;
+        private readonly List<LagCompensatedHit> _hits = new();
+        private readonly Dictionary<IDamageVictim, float> _periodTimerForEveryVictim = new();
 
         public void Setup(DamageAreaConfig config, IDamageInflictor damageInflictor = null)
         {
@@ -102,6 +102,7 @@ namespace Dev.Scripts.PlayerLogic
         private void Disable()
         {
             _active = false;
+            Destroy(gameObject);
         }
     }
 }

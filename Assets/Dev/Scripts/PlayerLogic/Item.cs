@@ -12,12 +12,15 @@ namespace Dev.Scripts.PlayerLogic
         [SerializeField] private Collider _collider;
         [SerializeField] private string _testName = "Good Item 12312";
         [SerializeField] private ItemSizeType _itemSizeType;
+        [SerializeField] private ItemEnumeration _itemEnumeration;
+        
 
         [Networked] private NetworkBool IsCarrying { get; set; }
         
         public ItemSizeType ItemSizeType => _itemSizeType;
         public string TestName => _testName;
         public NetworkRigidbody NetRigidbody => _rigidbody;
+        public ItemEnumeration ItemEnumeration => _itemEnumeration;
 
         protected override void CorrectState()
         {

@@ -384,6 +384,80 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &88691109
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 88691110}
+  - component: {fileID: 88691112}
+  - component: {fileID: 88691111}
+  m_Layer: 0
+  m_Name: DamageAreaSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &88691110
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 88691109}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1869068788}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &88691111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 88691109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectInterest: 1
+  DefaultInterestGroups: []
+  DestroyWhenStateAuthorityLeaves: 0
+  AllowStateAuthorityOverride: 1
+  AoiPositionSource: {fileID: 0}
+  Flags: 2561
+  NetworkGuid:
+    RawGuidValue: 60403c67a77d4feab6bdba10e5859411
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 88691112}
+  SimulationBehaviours: []
+--- !u!114 &88691112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 88691109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e062032c4a5d4e619bad219cea3fb6d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  _IsActive:
+    _value: 1
+  _damageConfigLibrary: {fileID: 11400000, guid: 69f97b6dcdc89fd47ba58873391c271f,
+    type: 2}
 --- !u!4 &130827767 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6101761598462081519, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
@@ -1881,6 +1955,12 @@ PrefabInstance:
       propertyPath: _testName
       value: "\u0410\u0440\u0431\u0443\u0437"
       objectReference: {fileID: 0}
+    - target: {fileID: 4499176733960800270, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
+        type: 3}
+      propertyPath: _damageAreaConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: 65eaec015a0010f47ab2c7d31b6ec335,
+        type: 2}
     m_RemovedComponents:
     - {fileID: 104402805518434976, guid: 6cfe8c4945c041d4f89d26bd16a1fc11, type: 3}
     m_RemovedGameObjects:
@@ -2768,6 +2848,17 @@ PrefabInstance:
       propertyPath: _testName
       value: Plank
       objectReference: {fileID: 0}
+    - target: {fileID: 4499176733960800270, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
+        type: 3}
+      propertyPath: _itemEnumeration
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4499176733960800270, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
+        type: 3}
+      propertyPath: _damageAreaConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: fb348bd06f1f3e841a90e310b60ef51b,
+        type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 6069363072241411150, guid: 6cfe8c4945c041d4f89d26bd16a1fc11, type: 3}
@@ -4635,6 +4726,12 @@ PrefabInstance:
       propertyPath: _testName
       value: "\u0410\u0440\u0431\u0443\u0437"
       objectReference: {fileID: 0}
+    - target: {fileID: 4499176733960800270, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
+        type: 3}
+      propertyPath: _damageAreaConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: 65eaec015a0010f47ab2c7d31b6ec335,
+        type: 2}
     m_RemovedComponents:
     - {fileID: 104402805518434976, guid: 6cfe8c4945c041d4f89d26bd16a1fc11, type: 3}
     m_RemovedGameObjects:
@@ -5092,6 +5189,12 @@ PrefabInstance:
       propertyPath: _testName
       value: "\u0410\u0440\u0431\u0443\u0437"
       objectReference: {fileID: 0}
+    - target: {fileID: 4499176733960800270, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
+        type: 3}
+      propertyPath: _damageAreaConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: 65eaec015a0010f47ab2c7d31b6ec335,
+        type: 2}
     m_RemovedComponents:
     - {fileID: 104402805518434976, guid: 6cfe8c4945c041d4f89d26bd16a1fc11, type: 3}
     m_RemovedGameObjects:
@@ -6136,6 +6239,12 @@ PrefabInstance:
       propertyPath: _testName
       value: "\u0410\u0440\u0431\u0443\u0437"
       objectReference: {fileID: 0}
+    - target: {fileID: 4499176733960800270, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
+        type: 3}
+      propertyPath: _damageAreaConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: 65eaec015a0010f47ab2c7d31b6ec335,
+        type: 2}
     m_RemovedComponents:
     - {fileID: 104402805518434976, guid: 6cfe8c4945c041d4f89d26bd16a1fc11, type: 3}
     m_RemovedGameObjects:
@@ -7782,6 +7891,7 @@ MonoBehaviour:
   _mainSceneSceneCameraController: {fileID: 1007995123}
   _interactorView: {fileID: 1911225731}
   _playersSpawner: {fileID: 4278620854861172869}
+  _damageAreaSpawner: {fileID: 88691112}
   _markersHandler: {fileID: 1598154089}
   _popUpService: {fileID: 513459703}
 --- !u!114 &1869068787
@@ -7828,7 +7938,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 88691110}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1905021924
