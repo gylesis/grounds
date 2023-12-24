@@ -9,6 +9,7 @@ using UnityEngine;
 
 namespace Dev.Scripts.PlayerLogic
 {
+    
     public class Hands : ItemContainer, IHandAbilities, IInputListener
     {
         [SerializeField] private Hand[] _hands;
@@ -109,18 +110,18 @@ namespace Dev.Scripts.PlayerLogic
         }
 
 
-        private void RequestToPutItemInInventory()
+        private void RequestToPutItemInInventory(HandType handType)
         {
-            Hand leftHand = GetHandByType(HandType.Left);
+            Hand leftHand = GetHandByType(handType);
 
             PlayerRef playerRef = Object.InputAuthority;
             Item item = leftHand.ContainingItem;
-            
-            var itemData = new ItemData(item.TestName);
+
+            var itemData = new ItemData(item.ItemStaticData.ItemName);
 
             Debug.Log($"client put item to inv {playerRef}");
             RPC_PutItemInInventory(itemData, playerRef);
-            
+
             leftHand.RPC_DropItem();
             item.RPC_SetActive(false);
         }
@@ -132,25 +133,27 @@ namespace Dev.Scripts.PlayerLogic
             //itemData.ItemName = leftHand.ContainingItem.TestName;
             _gameInventory.PutItemInInventory(itemData, playerRef);
         }
-        
+
         public void OnInput(PlayerInput input, NetworkButtons wasPressed, NetworkButtons wasReleased)
         {
-
-            if(Runner.IsResimulation) return;
+            if (Runner.IsResimulation) return;
 
             if (wasPressed.IsSet(Buttons.PutItemToInventory))
             {
-                if (AllHandsFree == false)
+                Debug.Log($"Put item event");
+                Hand leftHand = GetHandByType(HandType.Left);
+                Hand rightHand = GetHandByType(HandType.Right);
+    
+                if (leftHand.IsFree == false)
                 {
-                    Hand leftHand = GetHandByType(HandType.Left);
-
-                    if (leftHand.IsFree == false)
-                    {
-                        RequestToPutItemInInventory();
-                    }
+                    RequestToPutItemInInventory(HandType.Left);
+                }
+                else if (rightHand.IsFree == false)
+                {
+                    RequestToPutItemInInventory(HandType.Right);
                 }
             }
-            
+
             if (wasPressed.IsSet(Buttons.Swing))
             {
                 ActiveHand.PrepareToSwing();
@@ -187,5 +190,4 @@ namespace Dev.Scripts.PlayerLogic
             }
         }
     }
-    
 }

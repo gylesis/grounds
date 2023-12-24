@@ -1957,6 +1957,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4499176733960800270, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
         type: 3}
+      propertyPath: _itemStaticData
+      value: 
+      objectReference: {fileID: 11400000, guid: d88727e11e23c3843a11c9fc9fff70d5,
+        type: 2}
+    - target: {fileID: 4499176733960800270, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
+        type: 3}
       propertyPath: _damageAreaConfig
       value: 
       objectReference: {fileID: 11400000, guid: 65eaec015a0010f47ab2c7d31b6ec335,
@@ -2856,6 +2862,12 @@ PrefabInstance:
       propertyPath: _testName
       value: Plank
       objectReference: {fileID: 0}
+    - target: {fileID: 4499176733960800270, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
+        type: 3}
+      propertyPath: _itemStaticData
+      value: 
+      objectReference: {fileID: 11400000, guid: 6fe3ae163998527478b6ceba6bf93247,
+        type: 2}
     - target: {fileID: 4499176733960800270, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
         type: 3}
       propertyPath: _itemEnumeration
@@ -4808,6 +4820,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4499176733960800270, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
         type: 3}
+      propertyPath: _itemStaticData
+      value: 
+      objectReference: {fileID: 11400000, guid: d88727e11e23c3843a11c9fc9fff70d5,
+        type: 2}
+    - target: {fileID: 4499176733960800270, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
+        type: 3}
       propertyPath: _damageAreaConfig
       value: 
       objectReference: {fileID: 11400000, guid: 65eaec015a0010f47ab2c7d31b6ec335,
@@ -5269,6 +5287,12 @@ PrefabInstance:
       propertyPath: _testName
       value: "\u0410\u0440\u0431\u0443\u0437"
       objectReference: {fileID: 0}
+    - target: {fileID: 4499176733960800270, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
+        type: 3}
+      propertyPath: _itemStaticData
+      value: 
+      objectReference: {fileID: 11400000, guid: d88727e11e23c3843a11c9fc9fff70d5,
+        type: 2}
     - target: {fileID: 4499176733960800270, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
         type: 3}
       propertyPath: _damageAreaConfig
@@ -5919,7 +5943,7 @@ PrefabInstance:
     - target: {fileID: 1241582994512653147, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
         type: 3}
       propertyPath: Flags
-      value: 2561
+      value: 133633
       objectReference: {fileID: 0}
     - target: {fileID: 1241582994512653147, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
         type: 3}
@@ -5985,6 +6009,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BarrelItem
+      objectReference: {fileID: 0}
+    - target: {fileID: 2668510485030120432, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4499176733960800270, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
         type: 3}
@@ -6131,6 +6160,12 @@ PrefabInstance:
       propertyPath: _testName
       value: "\u0411\u0430\u043D\u0430\u043D"
       objectReference: {fileID: 0}
+    - target: {fileID: 4499176733960800270, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
+        type: 3}
+      propertyPath: _itemStaticData
+      value: 
+      objectReference: {fileID: 11400000, guid: 6632f95e035a2ab43958a2923252314c,
+        type: 2}
     m_RemovedComponents:
     - {fileID: 104402805518434976, guid: 6cfe8c4945c041d4f89d26bd16a1fc11, type: 3}
     m_RemovedGameObjects:
@@ -6319,6 +6354,12 @@ PrefabInstance:
       propertyPath: _testName
       value: "\u0410\u0440\u0431\u0443\u0437"
       objectReference: {fileID: 0}
+    - target: {fileID: 4499176733960800270, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
+        type: 3}
+      propertyPath: _itemStaticData
+      value: 
+      objectReference: {fileID: 11400000, guid: d88727e11e23c3843a11c9fc9fff70d5,
+        type: 2}
     - target: {fileID: 4499176733960800270, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
         type: 3}
       propertyPath: _damageAreaConfig
@@ -6572,7 +6613,7 @@ PrefabInstance:
     - target: {fileID: 1241582994512653147, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
         type: 3}
       propertyPath: Flags
-      value: 2561
+      value: 133633
       objectReference: {fileID: 0}
     - target: {fileID: 1241582994512653147, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
         type: 3}
@@ -6638,6 +6679,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ChestItem
+      objectReference: {fileID: 0}
+    - target: {fileID: 2668510485030120432, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4499176733960800270, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
         type: 3}
@@ -9182,16 +9228,6 @@ PrefabInstance:
       propertyPath: m_Alpha
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7053313600718214607, guid: 53179284bcb40d14da527dfde5f7725b,
-        type: 3}
-      propertyPath: m_Interactable
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7053313600718214607, guid: 53179284bcb40d14da527dfde5f7725b,
-        type: 3}
-      propertyPath: m_BlocksRaycasts
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9205,6 +9241,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 513459702}
     m_Modifications:
+    - target: {fileID: 508928933513673568, guid: 0e6a93d4d4f63954dbe594fbdaa87ddb,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -31.400024
+      objectReference: {fileID: 0}
+    - target: {fileID: 4810431788644437555, guid: 0e6a93d4d4f63954dbe594fbdaa87ddb,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -31.400024
+      objectReference: {fileID: 0}
     - target: {fileID: 5199531925110324017, guid: 0e6a93d4d4f63954dbe594fbdaa87ddb,
         type: 3}
       propertyPath: m_Pivot.x
@@ -9471,7 +9517,7 @@ PrefabInstance:
     - target: {fileID: 1241582994512653147, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
         type: 3}
       propertyPath: Flags
-      value: 2561
+      value: 133633
       objectReference: {fileID: 0}
     - target: {fileID: 1241582994512653147, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
         type: 3}
@@ -9537,6 +9583,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Taburet
+      objectReference: {fileID: 0}
+    - target: {fileID: 2668510485030120432, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4499176733960800270, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
         type: 3}

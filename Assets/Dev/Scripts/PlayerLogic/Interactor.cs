@@ -45,8 +45,6 @@ namespace Dev.Scripts.PlayerLogic
             
             if (_player == null) return; // TEMP
 
-            if (Time.frameCount % 3 != 0) return;
-
             var center = new Vector2(Screen.width / 2, Screen.height / 2);
 
             Ray ray = _player.CameraController.CharacterCamera.ScreenPointToRay(center);
@@ -62,6 +60,8 @@ namespace Dev.Scripts.PlayerLogic
                 {
                     if (TargetItem == null)
                     {
+                        _hadItemInPrevFrame = true;
+
                         _interactorView.ShowItem(item, _player);
 
                         TargetItem = item;
@@ -74,15 +74,20 @@ namespace Dev.Scripts.PlayerLogic
                         }
                     }
                 }
+                else
+                {
+                    _hadItemInPrevFrame = false;
+                }
             }
             else
             {
-                if (_hadItemInPrevFrame)
-                {
-                    TargetItem = null;
-                    _hadItemInPrevFrame = false;
-                    _interactorView.Hide();
-                }
+                _hadItemInPrevFrame = false;
+            }
+            
+            if (_hadItemInPrevFrame == false)
+            {
+                TargetItem = null;
+                _interactorView.Hide();
             }
         }
 

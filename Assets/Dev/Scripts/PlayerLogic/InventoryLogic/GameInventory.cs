@@ -14,6 +14,8 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         private List<InventoryData> _playersInventoryDatas = new List<InventoryData>();
         private bool _invOpened = false;
 
+
+       
         private void Start()
         {
             _popUpService = DependenciesContainer.Instance.GetDependency<PopUpService>();
@@ -24,7 +26,6 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         {
             var inventoryData = new InventoryData(playerRef);
 
-            Debug.Log($"Added player inv data {playerRef}");
             _playersInventoryDatas.Add(inventoryData);
         }
 
@@ -63,6 +64,9 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         [Rpc]
         private void RPC_ShowInventory([RpcTarget] PlayerRef playerRef, InventoryData inventoryData)
         {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            
             Debug.Log($"[Client] Show inventory request completed");
             var itemDatas = inventoryData.Items.ToList();
             
@@ -75,6 +79,9 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         
         public void Hide()
         {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            
             _popUpService.HidePopUp<InventoryUIMenu>();
         }
     }

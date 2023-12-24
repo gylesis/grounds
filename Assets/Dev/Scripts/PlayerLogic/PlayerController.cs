@@ -1,4 +1,5 @@
 ﻿using System;
+using Cysharp.Threading.Tasks;
 using Dev.Infrastructure;
 using Dev.Scripts.PlayerLogic;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
@@ -13,27 +14,27 @@ namespace Dev.PlayerLogic
     public class PlayerController : NetworkContext
     {
         [Networked] private NetworkButtons _buttonsPrevious { get; set; }
-        
+
         [SerializeField] private PlayerView _playerView;
         [SerializeField] private KCC _kcc;
         [SerializeField] private Hands _hands;
         [SerializeField] private Interactor _interactor;
-        
+
         [SerializeField] private Transform _cameraTransform;
 
         [SerializeField] private float _jumpModifier = 2;
         [SerializeField] private float _sensivity = 2;
 
         [SerializeField] private float _sprintAcceleration = 4.5f;
-        
+
         private PopUpService _popUpService;
         private GameInventory _gameInventory;
-        
-        [Networked] public NetworkBool ForbidToMove { get; set; } 
-        
+
+        [Networked] public NetworkBool ForbidToMove { get; set; }
+
         private bool _invOpened = false;
-        
-        
+
+
         private void Awake()
         {
             Cursor.visible = false;
@@ -57,12 +58,12 @@ namespace Dev.PlayerLogic
         {
             if (GetInput<PlayerInput>(out var input))
             {
-                if(ForbidToMove) return;
-                
                 var wasPressed = input.Buttons.GetPressed(_buttonsPrevious);
                 var wasReleased = input.Buttons.GetReleased(_buttonsPrevious);
 
                 _buttonsPrevious = input.Buttons;
+
+                if (ForbidToMove) return;
                 
                 _kcc.AddLookRotation(input.LookDirection * _sensivity * Runner.DeltaTime);
 
@@ -80,15 +81,16 @@ namespace Dev.PlayerLogic
 
                 if (input.Sprint)
                 {
-                    _kcc.AddExternalVelocity(moveDirection * _sprintAcceleration);
+                    if (_kcc.FixedData.IsGrounded)
+                        _kcc.AddExternalVelocity(moveDirection * _sprintAcceleration);
                 }
-                
+
                 var toOpenInventory = wasPressed.IsSet(Buttons.ToggleInventory);
 
                 if (toOpenInventory)
                 {
                     Debug.Log($"Show inv {_invOpened}");
-                
+
                     if (_invOpened)
                     {
                         _gameInventory.Hide();
@@ -97,10 +99,12 @@ namespace Dev.PlayerLogic
                     {
                         _gameInventory.ShowInventory(Object.InputAuthority);
                     }
-                
+
                     _invOpened = !_invOpened;
                 }
-                
+
+                if(_invOpened) return;
+
                 _hands.OnInput(input, wasPressed, wasReleased);
                 _interactor.ItemHandle(input, wasPressed, wasReleased);
             }
