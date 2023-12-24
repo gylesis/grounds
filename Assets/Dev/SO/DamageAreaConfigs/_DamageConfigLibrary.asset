@@ -13,21 +13,99 @@ MonoBehaviour:
   m_Name: _DamageConfigLibrary
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
-    SerializedBytes: 0101120000005f0063006f006e006600690067007300440069006300740069006f006e006100720079002f0000000001a9000000530079007300740065006d002e0043006f006c006c0065006300740069006f006e0073002e00470065006e0065007200690063002e00440069006300740069006f006e00610072007900600032005b005b004400650076002e0053006300720069007000740073002e0050006c0061007900650072004c006f006700690063002e004900740065006d0045006e0075006d00650072006100740069006f006e002c00200041007300730065006d0062006c0079002d004300530068006100720070005d002c005b004400650076002e0053006300720069007000740073002e0050006c0061007900650072004c006f006700690063002e00440061006d00610067006500410072006500610043006f006e006600690067002c00200041007300730065006d0062006c0079002d004300530068006100720070005d005d002c0020006d00730063006f0072006c00690062000000000001010800000063006f006d00700061007200650072002f010000000177000000530079007300740065006d002e0043006f006c006c0065006300740069006f006e0073002e00470065006e0065007200690063002e0045006e0075006d0045007100750061006c0069007400790043006f006d0070006100720065007200600031005b005b004400650076002e0053006300720069007000740073002e0050006c0061007900650072004c006f006700690063002e004900740065006d0045006e0075006d00650072006100740069006f006e002c00200041007300730065006d0062006c0079002d004300530068006100720070005d005d002c0020006d00730063006f0072006c0069006200010000000600000000000000000705060300000000000000042e1d010200000024006b0001000000000000000b0102000000240076000000000005042e1d010200000024006b0002000000000000000b0102000000240076000100000005042e1d010200000024006b0000000000000000000b01020000002400760002000000050705
+    SerializedFormat: 2
+    SerializedBytes: 
     ReferencedUnityObjects:
-    - {fileID: 11400000, guid: fb348bd06f1f3e841a90e310b60ef51b, type: 2}
-    - {fileID: 11400000, guid: 65eaec015a0010f47ab2c7d31b6ec335, type: 2}
-    - {fileID: 11400000, guid: 21b353ebec3a93f4abffde3cd69ba8ab, type: 2}
+    - {fileID: 11400000, guid: 68537295c4b18aa4685bf00c47d24d66, type: 2}
+    - {fileID: 11400000, guid: 70e1f0be197f23346ab5e5eb64d6a1ed, type: 2}
+    - {fileID: 11400000, guid: 643717f499410064195092e8733876a3, type: 2}
+    - {fileID: 11400000, guid: 05544e410fd8eeb4fa76ddbc8943229a, type: 2}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: _configsDictionary
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[Dev.Scripts.PlayerLogic.ItemEnumeration,
+        Assembly-CSharp],[Dev.Scripts.PlayerLogic.DamageAreaConfig, Assembly-CSharp]],
+        mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[Dev.Scripts.PlayerLogic.ItemEnumeration,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 4
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 1
+    - Name: $v
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 10
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 3
+    - Name: $v
+      Entry: 10
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   _configs:
   - ItemEnumeration: 1
-    DamageAreaConfig: {fileID: 11400000, guid: fb348bd06f1f3e841a90e310b60ef51b, type: 2}
+    DamageAreaConfig: {fileID: 11400000, guid: 68537295c4b18aa4685bf00c47d24d66, type: 2}
   - ItemEnumeration: 2
-    DamageAreaConfig: {fileID: 11400000, guid: 65eaec015a0010f47ab2c7d31b6ec335, type: 2}
+    DamageAreaConfig: {fileID: 11400000, guid: 70e1f0be197f23346ab5e5eb64d6a1ed, type: 2}
   - ItemEnumeration: 0
-    DamageAreaConfig: {fileID: 11400000, guid: 21b353ebec3a93f4abffde3cd69ba8ab, type: 2}
+    DamageAreaConfig: {fileID: 11400000, guid: 643717f499410064195092e8733876a3, type: 2}
+  - ItemEnumeration: 3
+    DamageAreaConfig: {fileID: 11400000, guid: 05544e410fd8eeb4fa76ddbc8943229a, type: 2}

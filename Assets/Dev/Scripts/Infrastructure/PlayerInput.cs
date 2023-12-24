@@ -22,6 +22,7 @@ namespace Dev.Infrastructure
         AlternateHand = 4,
         PickItem = 5,
         DropItem = 6,
+        UseItem,
         ToggleInventory,
         PutItemToInventory
     }

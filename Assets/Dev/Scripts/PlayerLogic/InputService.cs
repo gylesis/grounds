@@ -51,6 +51,7 @@ namespace Dev.Infrastructure
             bool alternateHand = _playerInputs.Player.AlternateHand.IsPressed();
             bool toggleInventory = _playerInputs.Player.ToggleInventory.IsPressed();
             bool putItemInInventory = _playerInputs.Player.PutItemInInventory.IsPressed();
+            bool useItem = _playerInputs.Player.UseItem.IsPressed();
 
             _playerInputs.Player.ThrowItem.performed += _ => _throwState = true;
             _playerInputs.Player.ThrowItem.canceled += _ => _throwState = false;
@@ -77,6 +78,7 @@ namespace Dev.Infrastructure
             playerInput.Buttons.Set(Buttons.DropItem, _dropItemState);
             playerInput.Buttons.Set(Buttons.ToggleInventory, toggleInventory);
             playerInput.Buttons.Set(Buttons.PutItemToInventory, putItemInInventory);
+            playerInput.Buttons.Set(Buttons.UseItem, useItem);
 
             input.Set(playerInput);
         }

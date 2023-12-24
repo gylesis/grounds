@@ -12,10 +12,12 @@ namespace Dev.Infrastructure
         [SerializeField] private SceneCameraController _mainSceneSceneCameraController;
         [SerializeField] private InteractorView _interactorView;
         [SerializeField] private PlayersSpawner _playersSpawner;
-       [SerializeField] private DamageAreaSpawner _damageAreaSpawner;
+        [SerializeField] private DamageAreaSpawner _damageAreaSpawner;
         [SerializeField] private MarkersHandler _markersHandler;
         [SerializeField] private PopUpService _popUpService;
         [SerializeField] private GameInventory _gameInventory;
+        [SerializeField] private ImpactApplier _impactApplier;
+        
         
         public override void InstallBindings()
         {
@@ -26,7 +28,8 @@ namespace Dev.Infrastructure
             Container.Bind<DependenciesContainer>().AsSingle().NonLazy();
             Container.Bind<InteractorView>().FromInstance(_interactorView).AsSingle();
             Container.Bind<PlayersSpawner>().FromInstance(_playersSpawner).AsSingle();
-           Container.Bind<DamageAreaSpawner>().FromInstance(_damageAreaSpawner).AsSingle();
+            Container.Bind<DamageAreaSpawner>().FromInstance(_damageAreaSpawner).AsSingle();
+            Container.Bind<ImpactApplier>().FromInstance(_impactApplier).AsSingle();
         }
     }
 }

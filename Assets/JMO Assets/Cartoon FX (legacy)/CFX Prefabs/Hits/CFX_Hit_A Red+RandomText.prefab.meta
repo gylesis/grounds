@@ -1,3 +1,8 @@
-﻿fileFormatVersion: 2
-guid: 03b4616dc6e9473e9a493d34bb923a26
-timeCreated: 1703435915
+fileFormatVersion: 2
+guid: f95ff734540a0d749be6571b6cb5b37f
+labels:
+- cartoonfx
+- hit
+- particles
+- text
+- toon

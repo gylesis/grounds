@@ -1,3 +1,11 @@
-﻿fileFormatVersion: 2
-guid: c75eea20237340a6bc57951dd080f3e0
-timeCreated: 1703435935
+fileFormatVersion: 2
+guid: 1ca16f2a31fb6a548ad8954bed1d321f
+labels:
+- CartoonFX
+- Toon
+- Particles
+- Hit
+- Electric
+- Ground
+NativeFormatImporter:
+  userData: 

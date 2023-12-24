@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed459ecb86dd408b94b899f3b2d6376f, type: 3}
-  m_Name: Banana
+  m_Script: {fileID: 11500000, guid: 905ad723b46b3344fa61d5732774c9a2, type: 3}
+  m_Name: MelonDamageAreaConfig
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -21,11 +21,10 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  _prefab: {fileID: 190401792590343845, guid: 1e9e2e80d006d3843a8b4f1c4b6ecfdc, type: 3}
-  _duration: 0
+  _duration: 0.5
   _damagePeriod: 0
-  _extents: {x: 0, y: 0, z: 0}
-  _damage: 0
+  _damage: 15
   _affectMask:
     serializedVersion: 2
     m_Bits: 63
+  _extents: {x: 1, y: 1, z: 1}

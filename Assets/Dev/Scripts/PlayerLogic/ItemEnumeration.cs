@@ -5,5 +5,6 @@
         EmptyHand,
         Plank,
         Melon,
+        DynamiteExplosion
     }
 }

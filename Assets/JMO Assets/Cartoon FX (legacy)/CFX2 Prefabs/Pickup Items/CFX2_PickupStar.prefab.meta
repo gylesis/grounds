@@ -1,3 +1,8 @@
-﻿fileFormatVersion: 2
-guid: 0d91a3ac2421486281c2cfd01b6cfcfe
-timeCreated: 1703435912
+fileFormatVersion: 2
+guid: 8fc06027b01064e4f885fd8dd2929310
+labels:
+- cartoonfx
+- particles
+- pickup
+- symbol
+- toon

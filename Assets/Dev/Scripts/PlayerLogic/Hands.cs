@@ -102,6 +102,11 @@ namespace Dev.Scripts.PlayerLogic
             RPC_LaunchItem();
         }
 
+        public void UseItem()
+        {
+            ContainingItem.Use();
+        }
+
         public void ToggleActiveHand()
         {
             if (_activeHand == null || _activeHand.HandType == HandType.Left)
@@ -154,6 +159,10 @@ namespace Dev.Scripts.PlayerLogic
                 }
             }
 
+            if (wasPressed.IsSet(Buttons.UseItem))
+            {
+                ActiveHand.UseItem();
+            }
             if (wasPressed.IsSet(Buttons.Swing))
             {
                 ActiveHand.PrepareToSwing();

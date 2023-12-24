@@ -7,5 +7,7 @@
         public void Swing();
 
         public void Throw();
+
+        public void UseItem();
     }
 }

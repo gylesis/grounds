@@ -37,7 +37,7 @@ namespace Dev.Scripts.PlayerLogic
         public void TakeDamage(float value, IDamageInflictor damageInflictor)
         {
             _health -= value;
-            Debug.Log($"{transform.name} was damaged by {damageInflictor.GameObject.name}. Health: {_health}");
+            Debug.Log($"<color=green>{transform.name}</color> was damaged by <color=yellow>{value}</color> by <color=red>{damageInflictor.GameObject.name}</color>. Health: {_health}");
             if (_health <= 0)
             {
                 HealthDepleted?.Invoke();

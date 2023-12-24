@@ -85,9 +85,11 @@ MonoBehaviour:
   _hitboxRoot: {fileID: 7336066033515248255}
   _rigidbody: {fileID: 985134276059957871}
   _collider: {fileID: 104402805518434976}
+  _health: {fileID: 6696930812127544858}
   _testName: Good Item 12312
   _itemSizeType: 0
   _itemEnumeration: 2
+  _itemStaticData: {fileID: 11400000, guid: 6632f95e035a2ab43958a2923252314c, type: 2}
 --- !u!114 &2844729881576192006
 MonoBehaviour:
   m_ObjectHideFlags: 0

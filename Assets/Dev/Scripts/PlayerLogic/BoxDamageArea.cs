@@ -28,6 +28,7 @@ namespace Dev.Scripts.PlayerLogic
 
         private void OnDrawGizmos()
         {
+            Gizmos.color = Color.red;
             Gizmos.DrawWireCube(transform.position,_extents);
         }
     }

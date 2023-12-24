@@ -48,11 +48,6 @@ namespace Dev.Scripts.PlayerLogic
             SpawnSphere(config, point, owner);
         }
         
-        [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-        public void RPC_SpawnSphere(SphereDamageAreaConfig boxDamageAreaConfig, Vector3 point, Health owner)
-        {
-            SpawnSphere(boxDamageAreaConfig, point, owner);
-        }
 
         private void SpawnSphere(SphereDamageAreaConfig sphereDamageAreaConfig ,Vector3 point, Health owner)
         {

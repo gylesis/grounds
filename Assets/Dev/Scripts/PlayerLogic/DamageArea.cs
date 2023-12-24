@@ -19,7 +19,7 @@ namespace Dev.Scripts.PlayerLogic
         protected readonly List<LagCompensatedHit> _hits = new();
         private readonly Dictionary<IDamageVictim, float> _periodTimerForEveryVictim = new();
 
-        public virtual void Setup(DamageAreaConfig config, IDamageInflictor damageInflictor = null)
+        public void Setup(DamageAreaConfig config, IDamageInflictor damageInflictor = null)
         {
             _damage = config.Damage;
             _timer = config.Duration;

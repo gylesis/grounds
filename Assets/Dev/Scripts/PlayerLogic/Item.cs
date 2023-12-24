@@ -1,4 +1,5 @@
 ﻿using Dev.Infrastructure;
+using Dev.Scripts.PlayerLogic.InventoryLogic;
 using Fusion;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ namespace Dev.Scripts.PlayerLogic
         [SerializeField] private string _testName = "Good Item 12312";
         [SerializeField] private ItemSizeType _itemSizeType;
         [SerializeField] private ItemEnumeration _itemEnumeration;
-        
+        [SerializeField] private ItemStaticData _itemStaticData;
 
         [Networked] private NetworkBool IsCarrying { get; set; }
         
@@ -23,6 +24,8 @@ namespace Dev.Scripts.PlayerLogic
         public NetworkRigidbody NetRigidbody => _rigidbody;
         public ItemEnumeration ItemEnumeration => _itemEnumeration;
         public Health Health => _health;
+        public ItemStaticData ItemStaticData => _itemStaticData;
+
 
         protected override void CorrectState()
         {
