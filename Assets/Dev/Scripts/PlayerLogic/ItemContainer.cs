@@ -21,18 +21,6 @@ namespace Dev.Scripts.PlayerLogic
             base.Spawned();
 
             _playerCharacter = FindObjectOfType<PlayerCharacter>();
-
-            
-            /*await UniTask.DelayFrame(15);
-            
-            if (SceneManager.GetActiveScene().buildIndex == SceneManager.GetSceneByName("MainScene").buildIndex)
-            {
-                _playerCharacter = DependenciesContainer.Instance.GetDependency<PlayersSpawner>().GetPlayer(Object.InputAuthority);
-            }
-            else
-            {
-                _playerCharacter = FindObjectOfType<PlayerCharacter>();
-            }*/
         }
 
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
@@ -70,7 +58,7 @@ namespace Dev.Scripts.PlayerLogic
             ContainingItem.RPC_SetParent(null);
             ContainingItem.RPC_ChangeState(false);
             
-            Camera camera = _playerCharacter.CameraController.CharacterCamera;
+            Camera camera = _playerCharacter.CameraController.CharacterCamera;  
             
             bool raycastSuccess = Physics.Raycast(camera.ScreenPointToRay(new Vector3((float)Screen.width / 2, (float)Screen.height / 2)), out var hit);
             

@@ -41,7 +41,7 @@ namespace Dev.Scripts.PlayerLogic
             var itemEnumeration = ContainingItem == null ? this._itemEnumeration : ContainingItem.ItemEnumeration;
             var point = _camera.transform.position + _camera.transform.forward * 4f;
             
-            _damageAreaSpawner.RPC_Spawn(itemEnumeration, point, _player.Health);
+            _damageAreaSpawner.RPC_SpawnBox(itemEnumeration, point, _player.Health);
         }
 
         public void Throw()
@@ -49,6 +49,16 @@ namespace Dev.Scripts.PlayerLogic
             _activeTween?.Kill();
             _activeTween = AnimateThrow();
             RPC_LaunchItem();
+        }
+
+        public void UseItem()
+        {
+            if (ContainingItem == null)
+            {
+                Debug.Log("Нельзя сотворить здесь");
+                return;
+            } 
+            ContainingItem.Use();   
         }
 
         public Tween AnimatePrepare()
