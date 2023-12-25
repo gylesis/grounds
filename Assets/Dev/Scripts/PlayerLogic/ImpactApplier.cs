@@ -18,7 +18,8 @@ namespace Dev.Scripts.PlayerLogic
             {
                 if (_hits[i].Hitbox.TryGetComponent(out NetworkRigidbody netRigidbody))
                 {
-                    netRigidbody.Rigidbody.AddExplosionForce(force, center, radius);
+                    netRigidbody.Rigidbody.AddForce(Vector3.up * force, ForceMode.Impulse);
+                   // netRigidbody.Rigidbody.AddExplosionForce(force, center, radius);
                 }
             }
         }
