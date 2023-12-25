@@ -1,5 +1,6 @@
 ﻿using Dev.Infrastructure;
 using DG.Tweening;
+using Fusion;
 using UnityEngine;
 
 namespace Dev.Scripts.PlayerLogic
@@ -11,7 +12,6 @@ namespace Dev.Scripts.PlayerLogic
         [SerializeField] private ParticleSystem _explosion;
         [SerializeField] private GameObject _view;
                 
-        
         [Header("Options")] 
         [SerializeField] private float _detonationTime;
 
@@ -32,13 +32,19 @@ namespace Dev.Scripts.PlayerLogic
 
         private void Explode()
         {
-            _explosion.Play();
-            _view.SetActive(false);
+            RPC_ExplodeVisuals();
             DamageAreaSpawner.Instance.RPC_SpawnSphere(ItemEnumeration.DynamiteExplosion, transform.position, _correspondingItem.ItemDynamicData.LastOwner);
-            _impactApplier.RPC_ApplyInSphere(transform.position, 4, 2);
+            _impactApplier.RPC_ApplyInSphere(transform.position, 4, 200);
             DOTween.Sequence().AppendInterval(2).OnComplete(() =>  Runner.Despawn(Object));
         }
 
+        [Rpc]
+        private void RPC_ExplodeVisuals()
+        {
+            _explosion.Play();
+            _view.SetActive(false); 
+        }
+        
         private void OnDestroy()
         {
             _correspondingItem.Health.HealthDepleted -= Explode;
