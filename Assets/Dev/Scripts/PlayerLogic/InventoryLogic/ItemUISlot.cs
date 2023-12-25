@@ -15,6 +15,12 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         public Transform ItemUiViewParent => _itemUiViewParent;
 
         private ItemUISlotData _slotData;
+        private InventoryItemUIView _itemUIView;
+
+        public InventoryItemUIView ItemUIView => _itemUIView;
+
+
+        public ItemUISlotData SlotData => _slotData;
 
         public string ItemName => _slotData.ItemName;
         public string ItemDescription => _slotData.ItemDescription;
@@ -22,8 +28,9 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 
         public bool IsFree { get; private set; } = true;
         
-        public void AssignItem(ItemUISlotData slotData)
+        public void AssignItem(ItemUISlotData slotData, InventoryItemUIView itemUIView)
         {
+            _itemUIView = itemUIView;
             _slotData = slotData;
             _itemImg.sprite = slotData.Sprite;
             _itemName.text = $"{slotData.ItemName}";
@@ -33,6 +40,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 
         public void FreeSlot()
         {
+            _itemUIView = null;
             IsFree = true;
             _slotData.ItemName = String.Empty;
             _itemName.text = "-";
