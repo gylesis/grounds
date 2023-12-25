@@ -24,7 +24,8 @@ namespace Dev.Infrastructure
         DropItem = 6,
         UseItem,
         ToggleInventory,
-        PutItemToInventory
+        PutItemToInventory,
+        ReloadWeapon
     }
 
 }

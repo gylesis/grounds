@@ -24,7 +24,7 @@ namespace Dev.Scripts.PlayerLogic
             _damage = config.Damage;
             _timer = config.Duration;
             _damagePeriod = config.DamagePeriod;
-            _damageInflictor = damageInflictor;
+            _damageInflictor = damageInflictor ?? World.world;
             _active = true;
             _affectMask = config.AffectMask;
         }
@@ -66,7 +66,7 @@ namespace Dev.Scripts.PlayerLogic
 
         protected void TryDealDamage(IDamageVictim victim)
         {
-            if (_damageInflictor.GameObject == victim.GameObject) return;
+            if (_damageInflictor.GameObjectName == victim.GameObjectName) return;
             
             if (_damagePeriod == 0)
             {

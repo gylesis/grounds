@@ -161,6 +161,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ReloadWeapon"",
+                    ""type"": ""Button"",
+                    ""id"": ""903d4d3c-e771-425a-9513-3a386cfbb13c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -541,11 +550,22 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""89846091-bf80-43c5-b139-83e03fd74139"",
-                    ""path"": ""<Keyboard>/#(G)"",
+                    ""path"": ""<Keyboard>/g"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""PutItemInInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""acb8344e-851e-4010-81d1-65f0428106c7"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ReloadWeapon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1148,6 +1168,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Player_UseItem = m_Player.FindAction("UseItem", throwIfNotFound: true);
         m_Player_ToggleInventory = m_Player.FindAction("ToggleInventory", throwIfNotFound: true);
         m_Player_PutItemInInventory = m_Player.FindAction("PutItemInInventory", throwIfNotFound: true);
+        m_Player_ReloadWeapon = m_Player.FindAction("ReloadWeapon", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1236,6 +1257,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_UseItem;
     private readonly InputAction m_Player_ToggleInventory;
     private readonly InputAction m_Player_PutItemInInventory;
+    private readonly InputAction m_Player_ReloadWeapon;
     public struct PlayerActions
     {
         private @PlayerInputs m_Wrapper;
@@ -1255,6 +1277,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @UseItem => m_Wrapper.m_Player_UseItem;
         public InputAction @ToggleInventory => m_Wrapper.m_Player_ToggleInventory;
         public InputAction @PutItemInInventory => m_Wrapper.m_Player_PutItemInInventory;
+        public InputAction @ReloadWeapon => m_Wrapper.m_Player_ReloadWeapon;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1309,6 +1332,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @PutItemInInventory.started += instance.OnPutItemInInventory;
             @PutItemInInventory.performed += instance.OnPutItemInInventory;
             @PutItemInInventory.canceled += instance.OnPutItemInInventory;
+            @ReloadWeapon.started += instance.OnReloadWeapon;
+            @ReloadWeapon.performed += instance.OnReloadWeapon;
+            @ReloadWeapon.canceled += instance.OnReloadWeapon;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1358,6 +1384,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @PutItemInInventory.started -= instance.OnPutItemInInventory;
             @PutItemInInventory.performed -= instance.OnPutItemInInventory;
             @PutItemInInventory.canceled -= instance.OnPutItemInInventory;
+            @ReloadWeapon.started -= instance.OnReloadWeapon;
+            @ReloadWeapon.performed -= instance.OnReloadWeapon;
+            @ReloadWeapon.canceled -= instance.OnReloadWeapon;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1555,6 +1584,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         void OnUseItem(InputAction.CallbackContext context);
         void OnToggleInventory(InputAction.CallbackContext context);
         void OnPutItemInInventory(InputAction.CallbackContext context);
+        void OnReloadWeapon(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

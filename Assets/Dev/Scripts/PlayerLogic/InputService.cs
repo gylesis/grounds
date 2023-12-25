@@ -52,6 +52,7 @@ namespace Dev.Infrastructure
             bool toggleInventory = _playerInputs.Player.ToggleInventory.IsPressed();
             bool putItemInInventory = _playerInputs.Player.PutItemInInventory.IsPressed();
             bool useItem = _playerInputs.Player.UseItem.IsPressed();
+            bool reload = _playerInputs.Player.ReloadWeapon.IsPressed();
 
             _playerInputs.Player.ThrowItem.performed += _ => _throwState = true;
             _playerInputs.Player.ThrowItem.canceled += _ => _throwState = false;
@@ -79,6 +80,7 @@ namespace Dev.Infrastructure
             playerInput.Buttons.Set(Buttons.ToggleInventory, toggleInventory);
             playerInput.Buttons.Set(Buttons.PutItemToInventory, putItemInInventory);
             playerInput.Buttons.Set(Buttons.UseItem, useItem);
+            playerInput.Buttons.Set(Buttons.ReloadWeapon, reload);
 
             input.Set(playerInput);
         }

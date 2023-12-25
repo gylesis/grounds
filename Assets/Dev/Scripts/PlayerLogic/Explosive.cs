@@ -4,8 +4,9 @@ using UnityEngine;
 
 namespace Dev.Scripts.PlayerLogic
 {
-    public class ExplosiveItem : Item
+    public class Explosive : NetworkContext
     {
+        [SerializeField] private Item _correspondingItem;
         [SerializeField] private ParticleSystem _sparkles;
         [SerializeField] private ParticleSystem _explosion;
         [SerializeField] private GameObject _view;
@@ -18,13 +19,9 @@ namespace Dev.Scripts.PlayerLogic
         
         private void Start()
         {
-            Health.HealthDepleted += Explode;
+            _correspondingItem.Health.HealthDepleted += Explode;
             _impactApplier = DependenciesContainer.Instance.GetDependency<ImpactApplier>();
-        }
-
-        public override void Use()
-        {
-            StartDetonation();
+            _correspondingItem.UpdateUseAction(StartDetonation);
         }
 
         private void StartDetonation()
@@ -37,14 +34,14 @@ namespace Dev.Scripts.PlayerLogic
         {
             _explosion.Play();
             _view.SetActive(false);
-            DamageAreaSpawner.Instance.RPC_SpawnSphere(ItemEnumeration.DynamiteExplosion, transform.position, Health);
+            DamageAreaSpawner.Instance.RPC_SpawnSphere(ItemEnumeration.DynamiteExplosion, transform.position, _correspondingItem.ItemDynamicData.LastOwner);
             _impactApplier.RPC_ApplyInSphere(transform.position, 4, 2);
-            Destroy(gameObject,2);
+            DOTween.Sequence().AppendInterval(2).OnComplete(() =>  Runner.Despawn(Object));
         }
 
         private void OnDestroy()
         {
-            Health.HealthDepleted -= Explode;
+            _correspondingItem.Health.HealthDepleted -= Explode;
         }
     }
 }

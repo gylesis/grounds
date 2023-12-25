@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using Dev.Infrastructure;
-using Dev.PlayerLogic;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
 using DG.Tweening;
+using ExitGames.Client.Photon.StructWrapping;
 using Fusion;
 using Sirenix.Utilities;
 using UnityEngine;
@@ -10,13 +10,14 @@ using UnityEngine;
 namespace Dev.Scripts.PlayerLogic
 {
     
-    public class Hands : ItemContainer, IHandAbilities, IInputListener
+    public class Hands : HandAbilities, IInputListener
     {
         [SerializeField] private Hand[] _hands;
 
         private Hand _activeHand;
         private GameInventory _gameInventory;
-        public IHandAbilities ActiveHand => GetActiveHand();
+
+        public HandAbilities ActiveHand => GetActiveHand();
 
         //Там подразумевалось, что в случае, если предмет ложится в обе руки, каждая будет иметь ссылку на этот предмет, но это пока не так, что может вызвать некоторые логические конфликты
         private bool AllHandsFree => _hands.All(hand => hand.IsFree);
@@ -61,7 +62,7 @@ namespace Dev.Scripts.PlayerLogic
             return _hands.First(x => x.HandType == handType).IsFree;
         }
 
-        public ItemContainer GetOccupiedHand()
+        public HandAbilities GetOccupiedHand()
         {
             var firstHand = _hands.FirstOrDefault(hand => hand.IsFree == false);
             if (firstHand == null && this.AllHandsFree) return this;
@@ -76,35 +77,30 @@ namespace Dev.Scripts.PlayerLogic
             base.RPC_PutItem(item);
         }
 
-        private IHandAbilities GetActiveHand()
+        private HandAbilities GetActiveHand()
         {
             if (this.IsFree is false) return this;
 
             return _activeHand;
         }
 
-        public void PrepareToSwing()
+        public override void PrepareToSwing()
         {
             var sequence = DOTween.Sequence();
             _hands.ForEach(hand => sequence.Join(hand.AnimatePrepare()));
         }
 
-        public void Swing()
+        public override void Swing()
         {
             var sequence = DOTween.Sequence();
             _hands.ForEach(hand => sequence.Join(hand.AnimateSwing()));
         }
 
-        public void Throw()
+        public override void Throw()
         {
             var sequence = DOTween.Sequence();
             _hands.ForEach(hand => sequence.Join(hand.AnimateThrow()));
             RPC_LaunchItem();
-        }
-
-        public void UseItem()
-        {
-            ContainingItem.Use();
         }
 
         public void ToggleActiveHand()
@@ -138,6 +134,7 @@ namespace Dev.Scripts.PlayerLogic
             //itemData.ItemName = leftHand.ContainingItem.TestName;
             _gameInventory.PutItemInInventory(itemData, playerRef);
         }
+        
 
         public void OnInput(PlayerInput input, NetworkButtons wasPressed, NetworkButtons wasReleased)
         {
@@ -196,6 +193,22 @@ namespace Dev.Scripts.PlayerLogic
                 {
                     GetHandByType(HandType.Left).RPC_DropItem();
                 }
+            }
+
+            if (wasPressed.IsSet(Buttons.ReloadWeapon))
+            {
+                _hands.ForEach(hand =>
+                {
+                    if (hand.TryGetFirearm(out var firearm))
+                    {
+                        var oppositeHand = _hands.First(otherHand => otherHand != hand);
+                        bool reloadSuccessful = firearm.ReloadWith(oppositeHand.ContainingItem);
+                        if (reloadSuccessful)
+                        {
+                            oppositeHand.RPC_SetEmpty();
+                        }
+                    }
+                });
             }
         }
     }

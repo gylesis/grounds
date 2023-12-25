@@ -27,32 +27,32 @@ namespace Dev.Scripts.PlayerLogic
         }
 
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-        public void RPC_SpawnBox(ItemEnumeration itemEnumeration, Vector3 point, Health owner)
+        public void RPC_SpawnBox(ItemEnumeration itemEnumeration, Vector3 point, Health inflictor)
         {
             var config = (BoxDamageAreaConfig) _damageConfigLibrary.GetConfig(itemEnumeration);
-            SpawnBox(config, point, owner);
+            SpawnBox(config, point, inflictor);
         }
 
-        private void SpawnBox(BoxDamageAreaConfig boxDamageAreaConfig ,Vector3 point, Health owner)
+        private void SpawnBox(BoxDamageAreaConfig boxDamageAreaConfig ,Vector3 point, Health inflictor)
         {
             BoxDamageArea damageArea = Runner.Spawn(_boxDamageAreaPrefab, point, Quaternion.identity);
-            damageArea.Setup(boxDamageAreaConfig, owner);
+            damageArea.Setup(boxDamageAreaConfig, inflictor);
         }
         
         
         
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-        public void RPC_SpawnSphere(ItemEnumeration itemEnumeration, Vector3 point, Health owner)
+        public void RPC_SpawnSphere(ItemEnumeration itemEnumeration, Vector3 point, Health inflictor)
         {
             var config = (SphereDamageAreaConfig)_damageConfigLibrary.GetConfig(itemEnumeration);
-            SpawnSphere(config, point, owner);
+            SpawnSphere(config, point, inflictor);
         }
         
 
-        private void SpawnSphere(SphereDamageAreaConfig sphereDamageAreaConfig ,Vector3 point, Health owner)
+        private void SpawnSphere(SphereDamageAreaConfig sphereDamageAreaConfig ,Vector3 point, Health inflictor)
         {
             SphereDamageArea damageArea = Runner.Spawn(_sphereDamageAreaPrefab, point, Quaternion.identity);
-            damageArea.Setup(sphereDamageAreaConfig, owner);
+            damageArea.Setup(sphereDamageAreaConfig, inflictor);
         }
     }
 }

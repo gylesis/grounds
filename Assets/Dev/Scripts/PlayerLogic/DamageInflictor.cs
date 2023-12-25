@@ -4,6 +4,6 @@ namespace Dev.Scripts.PlayerLogic
 {
     public interface IDamageInflictor
     {
-        public GameObject GameObject { get;}
+        public string GameObjectName { get;}
     }
 }

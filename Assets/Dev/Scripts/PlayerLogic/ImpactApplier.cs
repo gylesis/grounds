@@ -7,14 +7,13 @@ namespace Dev.Scripts.PlayerLogic
 {
     public class ImpactApplier : NetworkContext
     {
-        private List<LagCompensatedHit> _hits;
+        private List<LagCompensatedHit> _hits = new();
 
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         public void RPC_ApplyInSphere(Vector3 center, float radius, float force)
         {
-            int hitCount = Runner.LagCompensation.OverlapSphere(transform.position, radius, Object.InputAuthority, _hits);            
+            int hitCount = Runner.LagCompensation.OverlapSphere(center, radius, Runner.LocalPlayer, _hits);            
 
-            Debug.Log($"Found {hitCount} objects to impact .............");
             for (var i = 0; i < hitCount; i++)
             {
                 if (_hits[i].Hitbox.TryGetComponent(out NetworkRigidbody netRigidbody))

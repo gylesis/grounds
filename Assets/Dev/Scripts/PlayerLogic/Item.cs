@@ -1,10 +1,15 @@
-﻿using Dev.Infrastructure;
+﻿using System;
+using Dev.Infrastructure;
+using Dev.PlayerLogic;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
 using Fusion;
+using Sirenix.OdinInspector;
+using UniRx;
 using UnityEngine;
 
 namespace Dev.Scripts.PlayerLogic
 {
+    [SelectionBase]
     [OrderAfter(typeof(Hands))]
     public class Item : NetworkContext
     {
@@ -16,17 +21,22 @@ namespace Dev.Scripts.PlayerLogic
         [SerializeField] private ItemSizeType _itemSizeType;
         [SerializeField] private ItemEnumeration _itemEnumeration;
         [SerializeField] private ItemStaticData _itemStaticData;
-
-        [Networked] private NetworkBool IsCarrying { get; set; }
         
+        [Networked] private NetworkBool IsCarrying { get; set; }
+
+        private Subject<Unit> _useAction = new();
+        private ItemDynamicData _itemDynamicData = new();
+        private IDisposable _disposable;
+
         public ItemSizeType ItemSizeType => _itemSizeType;
         public string TestName => _testName;
         public NetworkRigidbody NetRigidbody => _rigidbody;
         public ItemEnumeration ItemEnumeration => _itemEnumeration;
         public Health Health => _health;
         public ItemStaticData ItemStaticData => _itemStaticData;
+        public ItemDynamicData ItemDynamicData => _itemDynamicData;
 
-
+        
         protected override void CorrectState()
         {
             base.CorrectState();
@@ -35,13 +45,27 @@ namespace Dev.Scripts.PlayerLogic
         }
 
         [Rpc]
-        public virtual void RPC_ChangeState(bool isCarrying)
+        public virtual void RPC_ChangeState(bool isCarrying) 
         {
             IsCarrying = isCarrying;
             SetItemState(isCarrying);
         }
 
-        public virtual void Use() { }
+        public void Use()
+        {
+            _useAction.OnNext(Unit.Default);
+        }
+
+        public void UpdateUseAction(Action action)
+        {
+            _disposable?.Dispose();
+            _disposable = _useAction.Subscribe(unit => action.Invoke());
+        }
+
+        public void SetLastOwner(PlayerCharacter owner)
+        {
+            _itemDynamicData.UpdateOwner(owner);
+        }
 
         private void SetItemState(bool isCarrying)
         {
@@ -61,5 +85,13 @@ namespace Dev.Scripts.PlayerLogic
             _hitboxRoot.enabled = !isCarrying;
         }
 
+        [Button]
+        private void UpdatePositionDataInHand()
+        {
+            _itemStaticData.PositionInHand = transform.localPosition;
+            _itemStaticData.RotationInHand = transform.localRotation.eulerAngles;
+        }
     }
+    
+    
 }

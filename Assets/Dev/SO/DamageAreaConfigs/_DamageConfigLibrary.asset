@@ -20,6 +20,8 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 70e1f0be197f23346ab5e5eb64d6a1ed, type: 2}
     - {fileID: 11400000, guid: 643717f499410064195092e8733876a3, type: 2}
     - {fileID: 11400000, guid: 05544e410fd8eeb4fa76ddbc8943229a, type: 2}
+    - {fileID: 11400000, guid: bd8ce8c7e1ad97a49ae4e75fe3b9fdba, type: 2}
+    - {fileID: 11400000, guid: 66df505ca4334a146b6b14178ced6b56, type: 2}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -45,41 +47,65 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
+      Data: 6
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 1
+    - Name: $v
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 10
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 4
+    - Name: $v
+      Entry: 10
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 5
+    - Name: $v
+      Entry: 10
       Data: 4
     - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 1
-    - Name: $v
-      Entry: 10
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 2
-    - Name: $v
-      Entry: 10
-      Data: 1
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 0
-    - Name: $v
-      Entry: 10
-      Data: 2
-    - Name: 
       Entry: 8
       Data: 
     - Name: 
@@ -90,7 +116,7 @@ MonoBehaviour:
       Data: 3
     - Name: $v
       Entry: 10
-      Data: 3
+      Data: 5
     - Name: 
       Entry: 8
       Data: 
@@ -107,5 +133,9 @@ MonoBehaviour:
     DamageAreaConfig: {fileID: 11400000, guid: 70e1f0be197f23346ab5e5eb64d6a1ed, type: 2}
   - ItemEnumeration: 0
     DamageAreaConfig: {fileID: 11400000, guid: 643717f499410064195092e8733876a3, type: 2}
-  - ItemEnumeration: 3
+  - ItemEnumeration: 4
     DamageAreaConfig: {fileID: 11400000, guid: 05544e410fd8eeb4fa76ddbc8943229a, type: 2}
+  - ItemEnumeration: 5
+    DamageAreaConfig: {fileID: 11400000, guid: bd8ce8c7e1ad97a49ae4e75fe3b9fdba, type: 2}
+  - ItemEnumeration: 3
+    DamageAreaConfig: {fileID: 11400000, guid: 66df505ca4334a146b6b14178ced6b56, type: 2}
