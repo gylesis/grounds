@@ -52,8 +52,8 @@ namespace Dev.Scripts.PlayerLogic
         {
             base.RPC_PutItem(item);
             item.SetLastOwner(_player);
-            ContainingItem.RPC_SetLocalPos(item.ItemStaticData.PositionInHand);
-            ContainingItem.RPC_SetLocalRotation(item.ItemStaticData.RotationInHand);
+            item.RPC_SetLocalPos(item.ItemStaticData.PositionInHand);
+            item.RPC_SetLocalRotation(item.ItemStaticData.RotationInHand);
         }
 
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]

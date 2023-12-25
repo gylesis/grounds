@@ -133,7 +133,7 @@ MonoBehaviour:
     DamageAreaConfig: {fileID: 11400000, guid: 70e1f0be197f23346ab5e5eb64d6a1ed, type: 2}
   - ItemEnumeration: 0
     DamageAreaConfig: {fileID: 11400000, guid: 643717f499410064195092e8733876a3, type: 2}
-  - ItemEnumeration: 4
+  - ItemEnumeration: 6
     DamageAreaConfig: {fileID: 11400000, guid: 05544e410fd8eeb4fa76ddbc8943229a, type: 2}
   - ItemEnumeration: 5
     DamageAreaConfig: {fileID: 11400000, guid: bd8ce8c7e1ad97a49ae4e75fe3b9fdba, type: 2}
