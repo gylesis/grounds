@@ -1,4 +1,5 @@
 ﻿using Dev.Levels.Interactions;
+using Dev.Scripts.Items;
 using Dev.Scripts.PlayerLogic;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
 using Dev.UI.PopUpsAndMenus;
@@ -17,10 +18,11 @@ namespace Dev.Infrastructure
         [SerializeField] private PopUpService _popUpService;
         [SerializeField] private GameInventory _gameInventory;
         [SerializeField] private ImpactApplier _impactApplier;
-        
+        [SerializeField] private InventoryView _inventoryView;
         
         public override void InstallBindings()
         {
+            Container.Bind<InventoryView>().FromInstance(_inventoryView).AsSingle();
             Container.Bind<GameInventory>().FromInstance(_gameInventory).AsSingle();
             Container.Bind<SceneCameraController>().FromInstance(_mainSceneSceneCameraController).AsSingle();
             Container.Bind<PopUpService>().FromInstance(_popUpService).AsSingle();

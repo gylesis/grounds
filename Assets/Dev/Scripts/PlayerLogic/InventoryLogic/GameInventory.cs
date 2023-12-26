@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Dev.Infrastructure;
-using Dev.UI.PopUpsAndMenus;
+using Dev.Scripts.Items;
 using Fusion;
 using UnityEngine;
 
@@ -9,16 +9,13 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 {
     public class GameInventory : NetworkContext
     {
-        private PopUpService _popUpService;
-
         private List<InventoryData> _playersInventoryDatas = new List<InventoryData>();
         private bool _invOpened = false;
+        private InventoryView _inventoryView;
 
-
-       
         private void Start()
         {
-            _popUpService = DependenciesContainer.Instance.GetDependency<PopUpService>();
+            _inventoryView = DependenciesContainer.Instance.GetDependency<InventoryView>();
         }
 
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
@@ -70,11 +67,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             Debug.Log($"[Client] Show inventory request completed");
             var itemDatas = inventoryData.Items.ToList();
             
-            _popUpService.TryGetPopUp<InventoryUIMenu>(out var inventoryUIMenu);
-
-            inventoryUIMenu.UpdateItemsData(itemDatas);
-            
-            _popUpService.ShowPopUp<InventoryUIMenu>();
+            _inventoryView.Show();
         }   
         
         public void Hide()
@@ -82,7 +75,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             
-            _popUpService.HidePopUp<InventoryUIMenu>();
+            _inventoryView.Hide();
         }
     }
 }
