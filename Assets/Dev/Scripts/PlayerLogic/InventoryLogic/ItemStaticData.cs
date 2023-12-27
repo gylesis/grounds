@@ -1,11 +1,17 @@
-﻿using UnityEngine;
+﻿using Dev.Scripts.Items;
+using UnityEngine;
 
 namespace Dev.Scripts.PlayerLogic.InventoryLogic
 {
     [CreateAssetMenu(menuName = "StaticData/ItemStaticData", fileName = "ItemStaticData", order = 0)]
     public class ItemStaticData : ScriptableObject
     {
-        public string ItemName;
+        [SerializeField] private ItemNameTag _itemNameTag;
+
+        public ItemNameTag ItemNameTag => _itemNameTag;
+
+        public string ItemName => _itemNameTag.ItemName;
+        
         public string ItemDescription;
 
         public ItemWorldData WorldData;

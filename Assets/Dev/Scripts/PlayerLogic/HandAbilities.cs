@@ -64,7 +64,8 @@ namespace Dev.Scripts.PlayerLogic
             base.RPC_PutItem(item);
             item.SetLastOwner(_player);
 
-            ItemStaticData itemStaticData = _itemsDataService.GetItemStaticData(item.ItemName);
+            string itemName = item.ItemName;
+            ItemStaticData itemStaticData = _itemsDataService.GetItemStaticData(itemName);
 
             item.RPC_SetLocalPos(itemStaticData.PositionInHand);
             item.RPC_SetLocalRotation(itemStaticData.RotationInHand);

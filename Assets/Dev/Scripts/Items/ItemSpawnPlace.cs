@@ -8,26 +8,26 @@ using UnityEditor;
 
 namespace Dev.Scripts.Items
 {
+    [SelectionBase]
     public class ItemSpawnPlace : MonoBehaviour
     {
-        [SerializeField] private ItemNameTag[] _itemsToSpawn;
-        
-        private ItemsDataService _itemsDataService;
         [SerializeField] private ItemStaticDataContainer _itemStaticDataContainer;
+        [SerializeField] private ItemNameTag[] _itemsToSpawn;
 
+        private ItemsDataService _itemsDataService;
+       
         private void Awake()
         {
             _itemsDataService = DependenciesContainer.Instance.GetDependency<ItemsDataService>();
-          //  _itemStaticDataContainer = DependenciesContainer.Instance.GetDependency<ItemStaticDataContainer>();
         }
 
-        #if UNITY_EDITOR
-        /*private void OnValidate()
+        public string GetRandomItemNameToSpawn()
         {
-            if(_itemStaticDataContainer == null)
-                _itemStaticDataContainer = Resources.Load<ItemStaticDataContainer>("Assets/Dev/SO/Items/ItemStaticDataContainer.asset");
-        }*/
-
+            return _itemsToSpawn[Random.Range(0, _itemsToSpawn.Length)].ItemName;
+        }
+        
+        #if UNITY_EDITOR
+       
         private void OnDrawGizmos()
         {
             for (var index = 0; index < _itemsToSpawn.Length; index++)
@@ -45,7 +45,12 @@ namespace Dev.Scripts.Items
                     guiStyle.richText = true;
                     guiStyle.fontStyle = FontStyle.Bold;
 
-                    Handles.Label(transform.position + Vector3.up * (1.5f * index + 1.5f), $"{itemName}", guiStyle);
+                    Vector3 pos = transform.position + Vector3.up * (1.2f * index + 1.5f);
+
+                    Gizmos.color = Color.green;
+                    Gizmos.DrawWireSphere(pos, 0.4f);
+                    
+                    Handles.Label(pos, $"{itemName}", guiStyle);
                 }
             }
         }

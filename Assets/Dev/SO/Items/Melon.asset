@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48f1a8b3798047bc887b54dbd6eb253b, type: 3}
   m_Name: Melon
   m_EditorClassIdentifier: 
-  ItemName: Watermelon
+  _itemNameTag: {fileID: 11400000, guid: bdc401ee9132fca499ea65f2389c3714, type: 2}
   ItemDescription: Mmm... yummy watermelon
   WorldData:
     Prefab: {fileID: 1241037220062071716, guid: 23a58642c77cb144989356ca785b6ad2,

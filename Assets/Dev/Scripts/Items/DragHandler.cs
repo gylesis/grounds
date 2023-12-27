@@ -22,6 +22,8 @@ namespace Dev.Scripts.Items
         private Vector2 _lastMouseDelta;
         private bool _isActive;
 
+        private Vector3 _raycastHitPoint;
+        
         private void Awake()
         {
             SetActive(false);
@@ -52,6 +54,7 @@ namespace Dev.Scripts.Items
                 
                 if (isDraggableObject)
                 {
+                    _raycastHitPoint = hit.point;
                     _tagetDragObj = draggableObject;
                 }
             }
@@ -69,6 +72,7 @@ namespace Dev.Scripts.Items
                 _tagetDragObj.Rigidbody.useGravity = false;
                 _tagetDragObj.Rigidbody.angularVelocity = Vector3.zero;
                 _tagetDragObj.Rigidbody.velocity = Vector3.zero;
+                _tagetDragObj.Rigidbody.centerOfMass = _raycastHitPoint;
             }
 
             bool toDragObj = Input.GetMouseButton(0);
@@ -77,7 +81,7 @@ namespace Dev.Scripts.Items
             {
                 Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
                 var raycast = Physics.Raycast(ray, out var hit, float.MaxValue, _groundLayer);
-
+   
                 _isDragging = true;
 
                 Vector3 pos = hit.point;
@@ -91,8 +95,10 @@ namespace Dev.Scripts.Items
 
             if (Input.GetMouseButtonUp(0))
             {
+                _tagetDragObj.Rigidbody.centerOfMass = Vector3.zero;
                 _tagetDragObj.Rigidbody.useGravity = true;
                 _tagetDragObj.Rigidbody.velocity += new Vector3(_lastMouseDelta.x, 0, _lastMouseDelta.y);
+               
                 _isDragging = false;
                 _tagetDragObj = null;
             }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48f1a8b3798047bc887b54dbd6eb253b, type: 3}
   m_Name: Banana
   m_EditorClassIdentifier: 
-  ItemName: Banana
+  _itemNameTag: {fileID: 11400000, guid: 8dcca7102c523534496282392bf7e4a3, type: 2}
   ItemDescription: Yellow thing
   WorldData:
     Prefab: {fileID: 8066373768087005516, guid: dbb855dcf59c89f4cbbe0a0ded80a167,

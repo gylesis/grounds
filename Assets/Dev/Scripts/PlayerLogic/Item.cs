@@ -20,8 +20,7 @@ namespace Dev.Scripts.PlayerLogic
         [SerializeField] private Health _health;
         [SerializeField] private ItemSizeType _itemSizeType;
         [SerializeField] private ItemEnumeration _itemEnumeration;
-        
-        [ReadOnly, SerializeField] private string _itemName;
+        [SerializeField] private ItemNameTag _itemNameTag;
 
         private Subject<Unit> _useAction = new();
         private ItemDynamicData _itemDynamicData = new();
@@ -35,7 +34,7 @@ namespace Dev.Scripts.PlayerLogic
         public Health Health => _health;
         public ItemDynamicData ItemDynamicData => _itemDynamicData;
 
-        public string ItemName => _itemName;
+        public string ItemName => _itemNameTag.ItemName;
 
         private void Start()
         {
@@ -50,9 +49,9 @@ namespace Dev.Scripts.PlayerLogic
             SetItemState(IsCarrying);
         }
 
-        public void Setup(string itemName)
+        public void Setup(ItemNameTag itemNameTag)
         {
-            _itemName = itemName;
+            _itemNameTag = itemNameTag;
         }
         
         [Rpc]
@@ -97,7 +96,7 @@ namespace Dev.Scripts.PlayerLogic
         [Button]
         private void UpdatePositionDataInHand()
         {
-            ItemStaticData itemStaticData = _itemsDataService.GetItemStaticData(_itemName);
+            ItemStaticData itemStaticData = _itemsDataService.GetItemStaticData(ItemName);
             
             itemStaticData.PositionInHand = transform.localPosition;
             itemStaticData.RotationInHand = transform.localRotation.eulerAngles;
