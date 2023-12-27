@@ -15,3 +15,8 @@ MonoBehaviour:
   ItemName: Plank
   ItemDescription: Just plank
   UIIcon: {fileID: 21300000, guid: 599b837b172ae7543bdb31ffb8d5b5c4, type: 3}
+  InventoryData:
+    Prefab: {fileID: 2413673151452817282, guid: 7cb84f687e0711f43ad3a07e6d4b173c,
+      type: 3}
+  PositionInHand: {x: 0, y: 0, z: 0}
+  RotationInHand: {x: 0, y: 0, z: 0}

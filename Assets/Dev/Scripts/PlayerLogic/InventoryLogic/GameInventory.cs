@@ -3,6 +3,7 @@ using System.Linq;
 using Dev.Infrastructure;
 using Dev.Scripts.Items;
 using Fusion;
+using UniRx;
 using UnityEngine;
 
 namespace Dev.Scripts.PlayerLogic.InventoryLogic
@@ -16,6 +17,25 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         private void Start()
         {
             _inventoryView = DependenciesContainer.Instance.GetDependency<InventoryView>();
+            _inventoryView.ToRemoveItemFromInventory.TakeUntilDestroy(this).Subscribe((OnRemoveItemFromInventoryClient));
+        }
+
+        private void OnRemoveItemFromInventoryClient(string itemName)
+        {
+            RPC_RemoveItemFromInventory(Runner.LocalPlayer, itemName);
+        }
+    
+        [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+        private void RPC_RemoveItemFromInventory(PlayerRef itemOwner, NetworkString<_16> itemName)
+        {
+            InventoryData inventoryData = _playersInventoryDatas.First(x => x.Player == itemOwner);
+            ItemData itemData = inventoryData.Items.First(x => x.ItemName.Value == itemName);
+           
+            var indexOf = _playersInventoryDatas.IndexOf(inventoryData);
+
+            inventoryData.Items.Remove(itemData);
+
+            _playersInventoryDatas[indexOf] = inventoryData;
         }
 
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
@@ -65,9 +85,9 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             Cursor.lockState = CursorLockMode.None;
             
             Debug.Log($"[Client] Show inventory request completed");
-            var itemDatas = inventoryData.Items.ToList();
+            var items = inventoryData.Items.ToList();
             
-            _inventoryView.Show();
+            _inventoryView.Show(items.ToArray());
         }   
         
         public void Hide()

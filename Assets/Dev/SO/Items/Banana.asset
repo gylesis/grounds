@@ -15,3 +15,8 @@ MonoBehaviour:
   ItemName: Banana
   ItemDescription: Yellow thing
   UIIcon: {fileID: 21300000, guid: 87061bc00977a314b8feec88a06ec2e4, type: 3}
+  InventoryData:
+    Prefab: {fileID: 1277177530619193525, guid: 0e732c88de80fb241bca4263a1912650,
+      type: 3}
+  PositionInHand: {x: 0, y: 0, z: 0}
+  RotationInHand: {x: 0, y: 0, z: 0}

@@ -12,8 +12,8 @@ namespace Dev.Scripts.Items
         [SerializeField] private LayerMask _groundLayer;
         [SerializeField] private float _itemFollowCursorSpeed = 1.5f;
         [SerializeField] private Transform _ground;
-        [SerializeField] private float _maxThrowSpeed = 5f;
-        
+        [SerializeField] private float _maxThrowSpeed = 15f;
+        [SerializeField] private float _minThrowSpeed = 5f;
         public Camera Camera => _camera;
 
         private DraggableObject _tagetDragObj;
@@ -86,7 +86,7 @@ namespace Dev.Scripts.Items
                 Vector3 position = Vector3.Lerp(_tagetDragObj.Rigidbody.position, pos, Time.deltaTime * _itemFollowCursorSpeed);
                 _tagetDragObj.Rigidbody.MovePosition(position);
 
-                _lastMouseDelta = Vector2.ClampMagnitude(Mouse.current.delta.value, _maxThrowSpeed);
+                _lastMouseDelta = Vector2.ClampMagnitude(Mouse.current.delta.value * _minThrowSpeed, _maxThrowSpeed);
             }
 
             if (Input.GetMouseButtonUp(0))

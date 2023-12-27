@@ -8,6 +8,9 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         public string ItemName;
         public string ItemDescription;
         public Sprite UIIcon;
+
+        public ItemInventoryStaticData InventoryData;
+        
         public Vector3 PositionInHand;
         public Vector3 RotationInHand;
     }

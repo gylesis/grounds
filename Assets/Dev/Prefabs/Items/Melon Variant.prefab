@@ -95,6 +95,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4499176733960800270, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
         type: 3}
+      propertyPath: _itemStaticData
+      value: 
+      objectReference: {fileID: 11400000, guid: d88727e11e23c3843a11c9fc9fff70d5,
+        type: 2}
+    - target: {fileID: 4499176733960800270, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
+        type: 3}
       propertyPath: _damageAreaConfig
       value: 
       objectReference: {fileID: 11400000, guid: 65eaec015a0010f47ab2c7d31b6ec335,
