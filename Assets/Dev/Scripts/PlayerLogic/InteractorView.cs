@@ -19,7 +19,7 @@ namespace Dev.Scripts.PlayerLogic
             _camera = playerCharacter.CameraController.CharacterCamera; // TODO temp
             _targetItem = item;
             
-            _itemName.text = item.ItemStaticData.ItemName;
+            _itemName.text = item.ItemName;
             _canvasGroup.alpha = 1;
         }
 

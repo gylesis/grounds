@@ -14,6 +14,18 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 
             return itemStaticData != null;
         }
+
+        public void Find(Item itemInstance)
+        {
+            int hashCode = itemInstance.GetHashCode();
+
+            Debug.Log($"Target item hash {hashCode}");
+                
+            foreach (ItemStaticData data in _items)
+            {
+                Debug.Log($"Data {data.ItemName} hash {data.WorldData.Prefab.GetHashCode()}");
+            }
+        }
         
-    }
+    }   
 }

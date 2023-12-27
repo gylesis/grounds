@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemName: Watermelon
   ItemDescription: Mmm... yummy watermelon
-  UIIcon: {fileID: 21300000, guid: e6cb9353f2bddc74fad522a36e8ff4eb, type: 3}
+  WorldData:
+    Prefab: {fileID: 1241037220062071716, guid: 23a58642c77cb144989356ca785b6ad2,
+      type: 3}
   InventoryData:
     Prefab: {fileID: 6020915580630496152, guid: 23544eb44c2ada244a4249af24820733,
       type: 3}

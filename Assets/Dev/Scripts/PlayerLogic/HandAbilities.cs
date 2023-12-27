@@ -1,4 +1,8 @@
-﻿using Dev.PlayerLogic;
+﻿using System;
+using Dev.Infrastructure;
+using Dev.PlayerLogic;
+using Dev.Scripts.Items;
+using Dev.Scripts.PlayerLogic.InventoryLogic;
 using DG.Tweening;
 using Fusion;
 using UnityEngine;
@@ -11,6 +15,13 @@ namespace Dev.Scripts.PlayerLogic
 
         private Camera _camera;
         protected Tween _activeTween;
+        private ItemsDataService _itemsDataService;
+
+
+        private void Start()
+        {
+            _itemsDataService = DependenciesContainer.Instance.GetDependency<ItemsDataService>();
+        }
 
         public override void Spawned()
         {
@@ -52,8 +63,11 @@ namespace Dev.Scripts.PlayerLogic
         {
             base.RPC_PutItem(item);
             item.SetLastOwner(_player);
-            item.RPC_SetLocalPos(item.ItemStaticData.PositionInHand);
-            item.RPC_SetLocalRotation(item.ItemStaticData.RotationInHand);
+
+            ItemStaticData itemStaticData = _itemsDataService.GetItemStaticData(item.ItemName);
+
+            item.RPC_SetLocalPos(itemStaticData.PositionInHand);
+            item.RPC_SetLocalRotation(itemStaticData.RotationInHand);
         }
 
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]

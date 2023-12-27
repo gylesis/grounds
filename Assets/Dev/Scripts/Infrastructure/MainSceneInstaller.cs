@@ -20,12 +20,13 @@ namespace Dev.Infrastructure
         [SerializeField] private ImpactApplier _impactApplier;
         [SerializeField] private InventoryView _inventoryView;
         [SerializeField] private CraftStation _craftStation;
-        
+        [SerializeField] private ItemsDataService _itemsDataService;
         public override void InstallBindings()
         {
             Container.Bind<CraftStation>().FromInstance(_craftStation).AsSingle();
             Container.Bind<InventoryView>().FromInstance(_inventoryView).AsSingle();
             Container.Bind<GameInventory>().FromInstance(_gameInventory).AsSingle();
+            Container.Bind<ItemsDataService>().FromInstance(_itemsDataService).AsSingle();
             
             Container.Bind<SceneCameraController>().FromInstance(_mainSceneSceneCameraController).AsSingle();
             Container.Bind<PopUpService>().FromInstance(_popUpService).AsSingle();

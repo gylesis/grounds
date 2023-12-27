@@ -118,7 +118,7 @@ namespace Dev.Scripts.PlayerLogic
             PlayerRef playerRef = Object.InputAuthority;
             Item item = leftHand.ContainingItem;
 
-            var itemData = new ItemData(item.ItemStaticData.ItemName, item.Object.Id);
+            var itemData = new ItemData(item.ItemName, item.Object.Id);
 
             Debug.Log($"client put item to inv {playerRef}");
             RPC_PutItemInInventory(itemData, playerRef);

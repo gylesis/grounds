@@ -1,6 +1,7 @@
 ﻿using System;
 using Dev.Infrastructure;
 using Dev.PlayerLogic;
+using Dev.Scripts.Items;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
 using Fusion;
 using Sirenix.OdinInspector;
@@ -17,25 +18,30 @@ namespace Dev.Scripts.PlayerLogic
         [SerializeField] private NetworkRigidbody _rigidbody;
         [SerializeField] private Collider _collider;
         [SerializeField] private Health _health;
-        [SerializeField] private string _testName = "Good Item 12312";
         [SerializeField] private ItemSizeType _itemSizeType;
         [SerializeField] private ItemEnumeration _itemEnumeration;
-        [SerializeField] private ItemStaticData _itemStaticData;
         
-        [Networked] private NetworkBool IsCarrying { get; set; }
+        [ReadOnly, SerializeField] private string _itemName;
 
         private Subject<Unit> _useAction = new();
         private ItemDynamicData _itemDynamicData = new();
         private IDisposable _disposable;
+        private ItemsDataService _itemsDataService;
+        [Networked] private NetworkBool IsCarrying { get; set; }
 
         public ItemSizeType ItemSizeType => _itemSizeType;
-        public string TestName => _testName;
         public NetworkRigidbody NetRigidbody => _rigidbody;
         public ItemEnumeration ItemEnumeration => _itemEnumeration;
         public Health Health => _health;
-        public ItemStaticData ItemStaticData => _itemStaticData;
         public ItemDynamicData ItemDynamicData => _itemDynamicData;
 
+        public string ItemName => _itemName;
+
+        private void Start()
+        {
+            _itemsDataService = DependenciesContainer.Instance.GetDependency<ItemsDataService>();
+            _itemsDataService.RegisterItem(this);
+        }
         
         protected override void CorrectState()
         {
@@ -44,8 +50,13 @@ namespace Dev.Scripts.PlayerLogic
             SetItemState(IsCarrying);
         }
 
+        public void Setup(string itemName)
+        {
+            _itemName = itemName;
+        }
+        
         [Rpc]
-        public virtual void RPC_ChangeState(bool isCarrying) 
+        public virtual void RPC_ChangeState(bool isCarrying)
         {
             IsCarrying = isCarrying;
             SetItemState(isCarrying);
@@ -75,9 +86,7 @@ namespace Dev.Scripts.PlayerLogic
                 transform.localPosition = Vector3.zero;
                 transform.localRotation = Quaternion.identity;
             }
-            else
-            {
-            }
+            else { }
 
             _rigidbody.Rigidbody.isKinematic = isCarrying;
             _rigidbody.enabled = !isCarrying;
@@ -88,10 +97,10 @@ namespace Dev.Scripts.PlayerLogic
         [Button]
         private void UpdatePositionDataInHand()
         {
-            _itemStaticData.PositionInHand = transform.localPosition;
-            _itemStaticData.RotationInHand = transform.localRotation.eulerAngles;
+            ItemStaticData itemStaticData = _itemsDataService.GetItemStaticData(_itemName);
+            
+            itemStaticData.PositionInHand = transform.localPosition;
+            itemStaticData.RotationInHand = transform.localRotation.eulerAngles;
         }
     }
-    
-    
 }

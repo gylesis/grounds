@@ -7,8 +7,8 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
     {
         public string ItemName;
         public string ItemDescription;
-        public Sprite UIIcon;
 
+        public ItemWorldData WorldData;
         public ItemInventoryStaticData InventoryData;
         
         public Vector3 PositionInHand;
