@@ -15,12 +15,14 @@ namespace Dev.Scripts.Items
 {
     public class InventoryView : MonoBehaviour
     {
+        [SerializeField] private InventoryItemInfoView _inventoryItemInfoView;
         [SerializeField] private CanvasGroup _curtain;  
         [SerializeField] private DragHandler _dragHandler;
         [SerializeField] private Transform _itemsParent;
         [SerializeField] private TriggerZone _craftTriggerZone;
         [SerializeField] private TriggerZone _dropItemZone;
-
+        [SerializeField] private TriggerZone _itemInfoPiedestalZone;
+    
         [SerializeField] private BoxCollider _spawnBox;
                 
         private CraftStation _craftStation;
@@ -35,9 +37,11 @@ namespace Dev.Scripts.Items
         {
             _craftTriggerZone.TriggerEntered.TakeUntilDestroy(this).Subscribe((OnCraftZoneEntered));
             _dropItemZone.TriggerEntered.TakeUntilDestroy(this).Subscribe((OnDropItemZoneEntered));
+            _itemInfoPiedestalZone.TriggerEntered.TakeUntilDestroy(this).Subscribe((OnItemPiedestalEntered));
+            _itemInfoPiedestalZone.TriggerExit.TakeUntilDestroy(this).Subscribe((OnItemPiedestalExit));
+            
         }
-
-      
+        
         private void Start()
         {
             _craftStation = DependenciesContainer.Instance.GetDependency<CraftStation>();
@@ -105,6 +109,8 @@ namespace Dev.Scripts.Items
             _itemViews.ForEach(x => Destroy(x.gameObject));
             _itemViews.Clear();
             _items.Clear();
+            
+            _inventoryItemInfoView.Hide();
         }
 
         private void OnDropItemZoneEntered(Collider collider)
@@ -141,7 +147,6 @@ namespace Dev.Scripts.Items
             item.RPC_ChangeState(false);
         }
         
-        
         private void OnCraftZoneEntered(Collider collider)
         {
             if (collider.TryGetComponent<InventoryItemView>(out var itemView))
@@ -149,5 +154,25 @@ namespace Dev.Scripts.Items
                 _craftStation.AddToCraftingTable(itemView.ItemName);
             }
         }
+
+        private void OnItemPiedestalEntered(Collider collider)
+        {
+            if (collider.TryGetComponent<InventoryItemView>(out var itemView))
+            {
+                _itemStaticDataContainer.TryGetItemStaticDataByName(itemView.ItemName, out var itemStaticData);
+                
+                string itemInfo = $"{itemView.ItemName}\n{itemStaticData.ItemDescription}";
+                _inventoryItemInfoView.Show(itemInfo);
+            }
+        }
+
+        private void OnItemPiedestalExit(Collider collider)
+        {
+            if (collider.TryGetComponent<InventoryItemView>(out var itemView))
+            {
+                _inventoryItemInfoView.Hide();
+            }
+        }
+        
     }
 }

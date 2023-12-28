@@ -32,8 +32,13 @@ namespace Dev.Scripts.Items
         public void SetActive(bool isActive)
         {
             _isActive = isActive;
-
             _camera.gameObject.SetActive(isActive);
+
+            if (isActive == false)
+            {
+                _tagetDragObj = null;
+            }
+            
         }
         
         private void Update()
