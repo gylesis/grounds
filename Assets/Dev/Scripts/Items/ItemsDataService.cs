@@ -38,8 +38,11 @@ namespace Dev.Scripts.Items
         public override void Spawned()
         {
             base.Spawned();
-            
-            SpawnItemsOnSpawnPlaces();
+
+            if (HasStateAuthority)
+            {
+                SpawnItemsOnSpawnPlaces();
+            }
         }
 
         private void SpawnItemsOnSpawnPlaces()
@@ -71,7 +74,7 @@ namespace Dev.Scripts.Items
 
             Item item = Runner.Spawn(itemStaticData.WorldData.Prefab, pos, Quaternion.identity);
 
-            item.Setup(itemStaticData.ItemNameTag);
+            item.Setup(itemStaticData.ItemNameTag.ItemName);
         }
 
         public ItemStaticData GetItemStaticData(string itemName)

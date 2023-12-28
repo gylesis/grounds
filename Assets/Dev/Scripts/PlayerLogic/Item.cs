@@ -21,7 +21,10 @@ namespace Dev.Scripts.PlayerLogic
         [SerializeField] private ItemSizeType _itemSizeType;
         [SerializeField] private ItemEnumeration _itemEnumeration;
         [SerializeField] private ItemNameTag _itemNameTag;
-
+        
+        [Networked]
+        private NetworkString<_16> itemName { get; set; }
+        
         private Subject<Unit> _useAction = new();
         private ItemDynamicData _itemDynamicData = new();
         private IDisposable _disposable;
@@ -34,7 +37,8 @@ namespace Dev.Scripts.PlayerLogic
         public Health Health => _health;
         public ItemDynamicData ItemDynamicData => _itemDynamicData;
 
-        public string ItemName => _itemNameTag.ItemName;
+       // public string ItemName => _itemNameTag.ItemName;
+        public string ItemName => itemName.Value;
 
         private void Start()
         {
@@ -53,6 +57,12 @@ namespace Dev.Scripts.PlayerLogic
         {
             _itemNameTag = itemNameTag;
         }
+        
+        public void Setup(string itemName)
+        {
+            this.itemName = itemName;
+        }
+        
         
         [Rpc]
         public virtual void RPC_ChangeState(bool isCarrying)
