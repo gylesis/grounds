@@ -29,11 +29,11 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         private void RPC_RemoveItemFromInventory(PlayerRef itemOwner, NetworkString<_16> itemName)
         {
             InventoryData inventoryData = _playersInventoryDatas.First(x => x.Player == itemOwner);
-            ItemData itemData = inventoryData.Items.First(x => x.ItemName.Value == itemName);
+            ItemData itemData = inventoryData.InventoryItems.First(x => x.ItemName.Value == itemName);
            
             var indexOf = _playersInventoryDatas.IndexOf(inventoryData);
 
-            inventoryData.Items.Remove(itemData);
+            inventoryData.InventoryItems.Remove(itemData);
 
             _playersInventoryDatas[indexOf] = inventoryData;
         }
@@ -57,7 +57,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             InventoryData data = _playersInventoryDatas.First(x => x.Player == playerRef);
 
             var indexOf = _playersInventoryDatas.IndexOf(data);
-            data.Items.Add(itemData);
+            data.InventoryItems.Add(itemData);
 
             _playersInventoryDatas[indexOf] = data;
             
@@ -75,7 +75,11 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         private void RPC_RequestShowInventory(PlayerRef playerRef)
         {
             Debug.Log($"[Server] Requested to show inventory for player {playerRef}");
-            RPC_ShowInventory(playerRef, _playersInventoryDatas.First(x => x.Player == playerRef));
+            InventoryData inventoryData = _playersInventoryDatas.First(x => x.Player == playerRef);
+            
+            
+            
+            RPC_ShowInventory(playerRef, inventoryData);
         }
     
         [Rpc]
@@ -85,7 +89,9 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             Cursor.lockState = CursorLockMode.None;
             
             Debug.Log($"[Client] Show inventory request completed");
-            var items = inventoryData.Items.ToList();
+            var items = inventoryData.InventoryItems.ToList();
+            
+            
             
             _inventoryView.Show(items.ToArray());
         }   

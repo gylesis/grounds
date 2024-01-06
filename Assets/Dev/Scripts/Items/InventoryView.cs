@@ -10,6 +10,7 @@ using Fusion;
 using Fusion.KCC;
 using UniRx;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Dev.Scripts.Items
 {
@@ -17,19 +18,21 @@ namespace Dev.Scripts.Items
     {
         [SerializeField] private InventoryItemInfoView _inventoryItemInfoView;
         [SerializeField] private CanvasGroup _curtain;  
-        [SerializeField] private DragHandler _dragHandler;
+        [FormerlySerializedAs("_dragHandler")] [SerializeField] private InventoryItemsDragHandler _inventoryItemsDragHandler;
         [SerializeField] private Transform _itemsParent;
         [SerializeField] private TriggerZone _craftTriggerZone;
         [SerializeField] private TriggerZone _dropItemZone;
         [SerializeField] private TriggerZone _itemInfoPiedestalZone;
-    
+        [SerializeField] private InventoryHandView _leftHandView;
+        [SerializeField] private InventoryHandView _rightHandView;
+            
         [SerializeField] private BoxCollider _spawnBox;
                 
         private CraftStation _craftStation;
         private ItemStaticDataContainer _itemStaticDataContainer;
 
         private List<InventoryItemView> _itemViews = new List<InventoryItemView>();
-        private ItemData[] _items;
+        private List<ItemData> _items = new List<ItemData>();
 
         public Subject<string> ToRemoveItemFromInventory { get; } = new Subject<string>();
 
@@ -39,7 +42,6 @@ namespace Dev.Scripts.Items
             _dropItemZone.TriggerEntered.TakeUntilDestroy(this).Subscribe((OnDropItemZoneEntered));
             _itemInfoPiedestalZone.TriggerEntered.TakeUntilDestroy(this).Subscribe((OnItemPiedestalEntered));
             _itemInfoPiedestalZone.TriggerExit.TakeUntilDestroy(this).Subscribe((OnItemPiedestalExit));
-            
         }
         
         private void Start()
@@ -74,7 +76,8 @@ namespace Dev.Scripts.Items
 
         public void Show(ItemData[] items)
         {
-            _items = items;
+            _items = items.ToList();
+            
             foreach (ItemData itemData in items)
             {
                 string itemName = itemData.ItemName.Value;
@@ -90,7 +93,7 @@ namespace Dev.Scripts.Items
             
             _curtain.alpha = 1;
             _curtain.DOFade(0, 0.2f);
-            _dragHandler.SetActive(true);
+            _inventoryItemsDragHandler.SetActive(true);
         }
 
         public void SendItemBack(InventoryItemView itemView)
@@ -104,7 +107,7 @@ namespace Dev.Scripts.Items
         {
             _curtain.alpha = 1;
             _curtain.DOFade(0, 0.2f);
-            _dragHandler.SetActive(false);
+            _inventoryItemsDragHandler.SetActive(false);
             
             _itemViews.ForEach(x => Destroy(x.gameObject));
             _itemViews.Clear();

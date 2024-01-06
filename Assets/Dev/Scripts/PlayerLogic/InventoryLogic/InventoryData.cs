@@ -7,8 +7,9 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         [Networked]
         public PlayerRef Player { get; set; }
 
-        [Networked, Capacity(20)] public NetworkLinkedList<ItemData> Items => default;
-
+        [Networked, Capacity(20)] public NetworkLinkedList<ItemData> InventoryItems => default;
+        [Networked, Capacity(2)] public NetworkLinkedList<ItemData> HandItems => default;
+        
         public InventoryData(PlayerRef playerRef)
         {
             Player = playerRef;

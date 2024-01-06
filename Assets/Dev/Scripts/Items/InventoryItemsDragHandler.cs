@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using UniRx;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Dev.Scripts.Items
 {
-    public class DragHandler : MonoBehaviour
+    public class InventoryItemsDragHandler : MonoBehaviour
     {
         [SerializeField] private Camera _camera;
         [SerializeField] private float _spherecastRadius = 0.05f;
@@ -14,7 +15,6 @@ namespace Dev.Scripts.Items
         [SerializeField] private Transform _ground;
         [SerializeField] private float _maxThrowSpeed = 15f;
         [SerializeField] private float _minThrowSpeed = 5f;
-        public Camera Camera => _camera;
 
         private DraggableObject _tagetDragObj;
         private float _dragHeight;
@@ -23,7 +23,13 @@ namespace Dev.Scripts.Items
         private bool _isActive;
 
         private Vector3 _raycastHitPoint;
+
+        public bool IsDragging { get; private set; }
+        public DraggableObject FocusedObject => _tagetDragObj;
         
+        public Subject<DraggableObject> DraggableObjectUp { get; } = new Subject<DraggableObject>();
+        public Subject<DraggableObject> DraggableObjectDown { get; } = new Subject<DraggableObject>();
+
         private void Awake()
         {
             SetActive(false);
@@ -69,15 +75,16 @@ namespace Dev.Scripts.Items
         {
             if(_tagetDragObj == null) return;
             
-            bool toStartDrag = Input.GetMouseButtonDown(0);
+            bool toStartDrag = Input.GetMouseButtonDown(0); // TODO get input from input service
 
             if (toStartDrag)
             {
+                IsDragging = true;
+                        
                 _dragHeight = _ground.transform.position.y + _dragObjHeight;
-                _tagetDragObj.Rigidbody.useGravity = false;
-                _tagetDragObj.Rigidbody.angularVelocity = Vector3.zero;
-                _tagetDragObj.Rigidbody.velocity = Vector3.zero;
-                _tagetDragObj.Rigidbody.centerOfMass = _raycastHitPoint;
+                
+                _tagetDragObj.PrepareToDrag();
+                DraggableObjectDown.OnNext(_tagetDragObj);
             }
 
             bool toDragObj = Input.GetMouseButton(0);
@@ -100,10 +107,13 @@ namespace Dev.Scripts.Items
 
             if (Input.GetMouseButtonUp(0))
             {
-                _tagetDragObj.Rigidbody.centerOfMass = Vector3.zero;
-                _tagetDragObj.Rigidbody.useGravity = true;
-                _tagetDragObj.Rigidbody.velocity += new Vector3(_lastMouseDelta.x, 0, _lastMouseDelta.y);
-               
+                IsDragging = false;
+
+                var throwVelocity = new Vector3(_lastMouseDelta.x, 0, _lastMouseDelta.y);
+                _tagetDragObj.MakeFree(throwVelocity);
+
+                DraggableObjectUp.OnNext(_tagetDragObj);
+
                 _isDragging = false;
                 _tagetDragObj = null;
             }

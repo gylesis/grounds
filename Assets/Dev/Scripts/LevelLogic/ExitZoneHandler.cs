@@ -86,7 +86,7 @@ namespace Dev.Levels.Interactions
 
             if (tryGetPopUp)
             {
-                winPopUp.RPC_Setup(playerRef,inventoryData.Items.ToList());
+                winPopUp.RPC_Setup(playerRef,inventoryData.InventoryItems.ToList());
             }
         }
         

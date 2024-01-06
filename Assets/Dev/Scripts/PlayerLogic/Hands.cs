@@ -5,6 +5,7 @@ using DG.Tweening;
 using ExitGames.Client.Photon.StructWrapping;
 using Fusion;
 using Sirenix.Utilities;
+using UniRx;
 using UnityEngine;
 
 namespace Dev.Scripts.PlayerLogic
@@ -22,6 +23,7 @@ namespace Dev.Scripts.PlayerLogic
         //Там подразумевалось, что в случае, если предмет ложится в обе руки, каждая будет иметь ссылку на этот предмет, но это пока не так, что может вызвать некоторые логические конфликты
         private bool AllHandsFree => _hands.All(hand => hand.IsFree);
 
+        public Subject<string> ItemTaken { get; } = new Subject<string>();
 
         private void Awake()
         {
@@ -110,7 +112,6 @@ namespace Dev.Scripts.PlayerLogic
             else if (_activeHand.HandType == HandType.Right) _activeHand = GetHandByType(HandType.Left);
         }
 
-
         private void RequestToPutItemInInventory(HandType handType)
         {
             Hand leftHand = GetHandByType(handType);
@@ -133,8 +134,14 @@ namespace Dev.Scripts.PlayerLogic
             Debug.Log($"RPC put item to inv {playerRef}");
             //itemData.ItemName = leftHand.ContainingItem.TestName;
             _gameInventory.PutItemInInventory(itemData, playerRef);
+            RPC_OnItemSuccessPutInInventory(itemData);
         }
-        
+
+        [Rpc]
+        private void RPC_OnItemSuccessPutInInventory(ItemData itemData)
+        {
+            ItemTaken.OnNext(itemData.ItemName.Value);
+        }
 
         public void OnInput(PlayerInput input, NetworkButtons wasPressed, NetworkButtons wasReleased)
         {

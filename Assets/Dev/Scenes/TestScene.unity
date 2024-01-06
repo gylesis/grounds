@@ -317,6 +317,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 700575709600805542, guid: cf4dfc49ebab4d04d88360fdbbe2806d,
+        type: 3}
+      propertyPath: Flags
+      value: 2561
+      objectReference: {fileID: 0}
+    - target: {fileID: 700575709600805542, guid: cf4dfc49ebab4d04d88360fdbbe2806d,
+        type: 3}
+      propertyPath: NetworkGuid.RawGuidValue.Array.data[0]
+      value: 2757845671753336203
+      objectReference: {fileID: 0}
+    - target: {fileID: 700575709600805542, guid: cf4dfc49ebab4d04d88360fdbbe2806d,
+        type: 3}
+      propertyPath: NetworkGuid.RawGuidValue.Array.data[1]
+      value: 6260269726016439441
+      objectReference: {fileID: 0}
     - target: {fileID: 4125637892113655702, guid: cf4dfc49ebab4d04d88360fdbbe2806d,
         type: 3}
       propertyPath: m_Name
@@ -371,6 +386,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7834402301881740668, guid: cf4dfc49ebab4d04d88360fdbbe2806d,
+        type: 3}
+      propertyPath: Flags
+      value: 2561
+      objectReference: {fileID: 0}
+    - target: {fileID: 7834402301881740668, guid: cf4dfc49ebab4d04d88360fdbbe2806d,
+        type: 3}
+      propertyPath: NetworkGuid.RawGuidValue.Array.data[0]
+      value: -4878671027344768790
+      objectReference: {fileID: 0}
+    - target: {fileID: 7834402301881740668, guid: cf4dfc49ebab4d04d88360fdbbe2806d,
+        type: 3}
+      propertyPath: NetworkGuid.RawGuidValue.Array.data[1]
+      value: -3004255529777721684
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
