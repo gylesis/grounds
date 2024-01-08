@@ -4211,6 +4211,78 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 765247181}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &818308327
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 818308328}
+  - component: {fileID: 818308330}
+  - component: {fileID: 818308329}
+  m_Layer: 0
+  m_Name: PlayersDataService
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &818308328
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 818308327}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1734178841}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &818308329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 818308327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97a69477262b4b768ac2a250b5c4f71f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  _IsActive:
+    _value: 1
+--- !u!114 &818308330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 818308327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectInterest: 1
+  DefaultInterestGroups: []
+  DestroyWhenStateAuthorityLeaves: 0
+  AllowStateAuthorityOverride: 1
+  AoiPositionSource: {fileID: 0}
+  Flags: 2561
+  NetworkGuid:
+    RawGuidValue: 66f57c5e9dd74abaa2f8750ab684d9bc
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 818308329}
+  SimulationBehaviours: []
 --- !u!1 &857466182
 GameObject:
   m_ObjectHideFlags: 0
@@ -8530,6 +8602,7 @@ Transform:
   - {fileID: 1880879535}
   - {fileID: 172974611}
   - {fileID: 246900209}
+  - {fileID: 818308328}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1775457049
@@ -8914,6 +8987,7 @@ MonoBehaviour:
   _inventoryView: {fileID: 1880879536}
   _craftStation: {fileID: 172974613}
   _itemsDataService: {fileID: 246900210}
+  _playersDataService: {fileID: 818308329}
 --- !u!114 &1869068787
 MonoBehaviour:
   m_ObjectHideFlags: 0

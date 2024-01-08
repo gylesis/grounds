@@ -1,6 +1,8 @@
 ﻿using Dev.Infrastructure;
+using Dev.Scripts.PlayerLogic.InventoryLogic;
 using Fusion;
 using Sirenix.OdinInspector;
+using UniRx;
 using UnityEngine;
 
 namespace Dev.Scripts.PlayerLogic
@@ -14,23 +16,34 @@ namespace Dev.Scripts.PlayerLogic
 
         public bool IsFree => ContainingItem == null;
         
-
+        public Subject<ItemData> ItemTaken { get; } = new Subject<ItemData>();
+        public Subject<ItemData> ItemDropped { get; } = new Subject<ItemData>();
+    
+    
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         public virtual void RPC_PutItem(Item item)
         {
             Debug.Log("PutItem");
             if (IsFree == false) return;
-
+            
             SetItem(item);
             ContainingItem.RPC_ChangeState(true);
             ContainingItem.RPC_SetParent(_itemMountPoint);
             ContainingItem.RPC_SetLocalPos(Vector3.zero);
             ContainingItem.RPC_SetLocalRotation(Vector3.zero);
+            
+            var itemData = new ItemData();
+            itemData.ItemName = item.ItemName;
+            ItemTaken.OnNext(itemData);
         }
 
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         public void RPC_SetEmpty()
         {
+            var itemData = new ItemData();
+            itemData.ItemName = ContainingItem.ItemName;
+            ItemDropped.OnNext(itemData);
+            
             SetItem(null);
         }
         
@@ -39,4 +52,5 @@ namespace Dev.Scripts.PlayerLogic
             ContainingItem = item;
         }
     }
+    
 }

@@ -45,7 +45,21 @@ namespace Dev.Scripts.PlayerLogic
             _itemsDataService = DependenciesContainer.Instance.GetDependency<ItemsDataService>();
             _itemsDataService.RegisterItem(this);
         }
-        
+
+        public override void Spawned()
+        {
+            base.Spawned();
+
+            if (HasStateAuthority)
+            {
+                if (itemName == String.Empty)
+                {
+                    itemName = _itemNameTag.ItemName;
+                }
+            }
+            
+        }
+
         protected override void CorrectState()
         {
             base.CorrectState();

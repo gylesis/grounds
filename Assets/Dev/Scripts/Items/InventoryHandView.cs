@@ -17,6 +17,14 @@ namespace Dev.Scripts.Items
 
         public bool IsHandBusy => _holdingItemView != null;
 
+        public Subject<HandChangedEventContext> ItemChanged { get; } = new Subject<HandChangedEventContext>();
+
+        public struct HandChangedEventContext
+        {
+            public string ItemName;
+            public bool ToRemove;
+        }
+
         private void Awake()
         {
             _triggerZone.TriggerEntered.TakeUntilDestroy(this).Subscribe((OnItemViewEntered));
@@ -48,7 +56,7 @@ namespace Dev.Scripts.Items
 
         private void OnItemDragUp(DraggableObject draggableObject)
         {
-            Debug.Log($"iS hand busy {IsHandBusy}");
+            //Debug.Log($"iS hand busy {IsHandBusy}");
             
             if (IsHandBusy)
             {
@@ -70,7 +78,7 @@ namespace Dev.Scripts.Items
             
             if (collider.TryGetComponent<InventoryItemView>(out var itemView) == false) return;
                 
-            Debug.Log($"Potential item view entered {itemView.ItemName}");
+           // Debug.Log($"Potential item view entered {itemView.ItemName}");
             _potentialItemView = itemView;
         }
 
@@ -82,27 +90,41 @@ namespace Dev.Scripts.Items
 
             if (itemView != _potentialItemView) return;
             
-            Debug.Log($"Potential item view exit {itemView.ItemName}");
+           // Debug.Log($"Potential item view exit {itemView.ItemName}");
 
             _potentialItemView = null;
         }
 
-        public void PutItem(InventoryItemView itemView)
+        public void PutItem(InventoryItemView itemView, bool isInitialization = false)
         {
             Debug.Log($"Put item {itemView.ItemName} to {name} hand");
 
             _holdingItemView = itemView;
             itemView.transform.position = _hand.transform.position;
             itemView.DraggableObject.SetFreezeState(true);
+
+            if(isInitialization) return;
+            
+            var handChangedEventContext = new HandChangedEventContext();
+            handChangedEventContext.ItemName = itemView.ItemName;
+            handChangedEventContext.ToRemove = false;
+            
+            ItemChanged.OnNext(handChangedEventContext);
         }
 
         public void FreeHand()
         {
-            Debug.Log($"{name} free hand");
+            var itemName = _holdingItemView.ItemName;
+
             _holdingItemView.DraggableObject.SetFreezeState(false);
             _holdingItemView = null;
+            
+            var handChangedEventContext = new HandChangedEventContext();
+            handChangedEventContext.ItemName = itemName;
+            handChangedEventContext.ToRemove = true;
+            
+            ItemChanged.OnNext(handChangedEventContext);
         }
-        
         
         public void PullItemToHand(InventoryItemView itemView)
         {

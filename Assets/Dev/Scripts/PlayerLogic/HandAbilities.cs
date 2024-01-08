@@ -72,7 +72,6 @@ namespace Dev.Scripts.PlayerLogic
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         public void RPC_DropItem()
         {
-            Debug.Log("DropItem");
             if (IsFree == true) return;
             
             ContainingItem.NetRigidbody.InterpolationSpace = Spaces.World;

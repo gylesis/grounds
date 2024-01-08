@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using Dev.Infrastructure;
+using Dev.Scripts.Items;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
 using DG.Tweening;
-using ExitGames.Client.Photon.StructWrapping;
 using Fusion;
 using Sirenix.Utilities;
 using UniRx;
@@ -15,21 +15,24 @@ namespace Dev.Scripts.PlayerLogic
     {
         [SerializeField] private Hand[] _hands;
 
+        public Hand[] HandsList => _hands;
+    
         private Hand _activeHand;
         private GameInventory _gameInventory;
+        private ItemsDataService _itemsDataService;
 
         public HandAbilities ActiveHand => GetActiveHand();
 
         //Там подразумевалось, что в случае, если предмет ложится в обе руки, каждая будет иметь ссылку на этот предмет, но это пока не так, что может вызвать некоторые логические конфликты
         private bool AllHandsFree => _hands.All(hand => hand.IsFree);
 
-        public Subject<string> ItemTaken { get; } = new Subject<string>();
 
         private void Awake()
         {
             _activeHand = GetHandByType(HandType.Right);
 
             _gameInventory = DependenciesContainer.Instance.GetDependency<GameInventory>();
+            _itemsDataService = DependenciesContainer.Instance.GetDependency<ItemsDataService>();
         }
 
         public override void Spawned()
@@ -119,28 +122,20 @@ namespace Dev.Scripts.PlayerLogic
             PlayerRef playerRef = Object.InputAuthority;
             Item item = leftHand.ContainingItem;
 
-            var itemData = new ItemData(item.ItemName, item.Object.Id);
+            var itemData = new ItemData(item.ItemName);
 
-            Debug.Log($"client put item to inv {playerRef}");
             RPC_PutItemInInventory(itemData, playerRef);
 
             leftHand.RPC_DropItem();
-            item.RPC_SetActive(false);
+            
+            _itemsDataService.RPC_RemoveItemFromWorld(item);
         }
 
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         private void RPC_PutItemInInventory(ItemData itemData, PlayerRef playerRef)
         {
-            Debug.Log($"RPC put item to inv {playerRef}");
             //itemData.ItemName = leftHand.ContainingItem.TestName;
             _gameInventory.PutItemInInventory(itemData, playerRef);
-            RPC_OnItemSuccessPutInInventory(itemData);
-        }
-
-        [Rpc]
-        private void RPC_OnItemSuccessPutInInventory(ItemData itemData)
-        {
-            ItemTaken.OnNext(itemData.ItemName.Value);
         }
 
         public void OnInput(PlayerInput input, NetworkButtons wasPressed, NetworkButtons wasReleased)
@@ -149,7 +144,6 @@ namespace Dev.Scripts.PlayerLogic
 
             if (wasPressed.IsSet(Buttons.PutItemToInventory))
             {
-                Debug.Log($"Put item event");
                 Hand leftHand = GetHandByType(HandType.Left);
                 Hand rightHand = GetHandByType(HandType.Right);
     

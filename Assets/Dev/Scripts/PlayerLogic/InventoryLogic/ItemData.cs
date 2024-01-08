@@ -1,19 +1,20 @@
-﻿using Fusion;
+﻿using System;
+using Fusion;
 
 namespace Dev.Scripts.PlayerLogic.InventoryLogic
 {
     public struct ItemData : INetworkStruct
     {
-        public ItemData(NetworkString<_16> itemName, NetworkId worldItemId)
+        public ItemData(NetworkString<_16> itemName)
         {
-            WorldItemId = worldItemId;
             ItemName = itemName;
+            UniquNumber = Guid.NewGuid();
         }
-
+    
         [Networked]
         public NetworkString<_16> ItemName { get; set; }
-        
-        public NetworkId WorldItemId { get; set; }
-        
+
+        public Guid UniquNumber; // dont touch. its magic.
+
     }
 }

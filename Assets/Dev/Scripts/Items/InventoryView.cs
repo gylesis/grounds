@@ -20,9 +20,11 @@ namespace Dev.Scripts.Items
         [SerializeField] private CanvasGroup _curtain;  
         [FormerlySerializedAs("_dragHandler")] [SerializeField] private InventoryItemsDragHandler _inventoryItemsDragHandler;
         [SerializeField] private Transform _itemsParent;
+        
         [SerializeField] private TriggerZone _craftTriggerZone;
         [SerializeField] private TriggerZone _dropItemZone;
         [SerializeField] private TriggerZone _itemInfoPiedestalZone;
+        
         [SerializeField] private InventoryHandView _leftHandView;
         [SerializeField] private InventoryHandView _rightHandView;
             
@@ -33,6 +35,11 @@ namespace Dev.Scripts.Items
 
         private List<InventoryItemView> _itemViews = new List<InventoryItemView>();
         private List<ItemData> _items = new List<ItemData>();
+        private ItemsDataService _itemsDataService;
+
+        public InventoryHandView LeftHandView => _leftHandView;
+
+        public InventoryHandView RightHandView => _rightHandView;
 
         public Subject<string> ToRemoveItemFromInventory { get; } = new Subject<string>();
 
@@ -48,6 +55,8 @@ namespace Dev.Scripts.Items
         {
             _craftStation = DependenciesContainer.Instance.GetDependency<CraftStation>();
             _itemStaticDataContainer = DependenciesContainer.Instance.GetDependency<ItemStaticDataContainer>();
+            _itemsDataService = DependenciesContainer.Instance.GetDependency<ItemsDataService>();
+
             _craftStation.Crafted.TakeUntilDestroy(this).Subscribe((OnItemCrafted));
         }
 
@@ -74,11 +83,12 @@ namespace Dev.Scripts.Items
             //_craftStation.ItemViews.ForEach(x => x.transform.p);
         }
 
-        public void Show(ItemData[] items)
+        public void Show(ItemData[] inventoryItems, ItemData[] handsItems)
         {
-            _items = items.ToList();
+            _items = inventoryItems.ToList();
+            _items.AddRange(handsItems);
             
-            foreach (ItemData itemData in items)
+            foreach (ItemData itemData in inventoryItems)
             {
                 string itemName = itemData.ItemName.Value;
              
@@ -91,18 +101,33 @@ namespace Dev.Scripts.Items
                 _itemViews.Add(itemView);
             }
             
+            foreach (ItemData itemData in handsItems)
+            {
+                string itemName = itemData.ItemName.Value;
+             
+                _itemStaticDataContainer.TryGetItemStaticDataByName(itemName, out var itemStaticData);
+
+                Vector3 spawnPos = new Vector3(999,999,999);
+                InventoryItemView itemView = Instantiate(itemStaticData.InventoryData.Prefab, spawnPos, Quaternion.identity, _itemsParent);
+                itemView.Setup(itemName);
+
+                if (_leftHandView.IsHandBusy)
+                {
+                    _rightHandView.PutItem(itemView, true);
+                }
+                else
+                {
+                    _leftHandView.PutItem(itemView, true);
+                }
+                
+                _itemViews.Add(itemView);
+            }
+            
             _curtain.alpha = 1;
             _curtain.DOFade(0, 0.2f);
             _inventoryItemsDragHandler.SetActive(true);
         }
 
-        public void SendItemBack(InventoryItemView itemView)
-        {
-            Vector3 pos = _spawnBox.bounds.RandomPointInBounds();
-
-            itemView.DraggableObject.Rigidbody.position = pos;
-        }
-        
         public void Hide()  
         {
             _curtain.alpha = 1;
@@ -114,6 +139,13 @@ namespace Dev.Scripts.Items
             _items.Clear();
             
             _inventoryItemInfoView.Hide();
+        }
+
+        public void SendItemBack(InventoryItemView itemView)
+        {
+            Vector3 pos = _spawnBox.bounds.RandomPointInBounds();
+
+            itemView.DraggableObject.Rigidbody.position = pos;
         }
 
         private void OnDropItemZoneEntered(Collider collider)
@@ -140,14 +172,7 @@ namespace Dev.Scripts.Items
         {
             ItemData itemData = _items.First(x => x.ItemName.Value == itemName);
 
-            NetworkId id = itemData.WorldItemId;
-
-            var items = FindObjectsOfType<Item>(true);
-
-            Item item = items.First(x => x.Object.Id == id);
-                
-            item.RPC_SetActive(true);
-            item.RPC_ChangeState(false);
+            _itemsDataService.RPC_ReturnItemToWorldFromInventory(itemName);
         }
         
         private void OnCraftZoneEntered(Collider collider)

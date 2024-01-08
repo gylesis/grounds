@@ -34,6 +34,7 @@ namespace Dev.PlayerLogic
 
         private bool _invOpened = false;
 
+        public Hands Hands => _hands;
 
         private void Awake()
         {
@@ -63,50 +64,66 @@ namespace Dev.PlayerLogic
 
                 _buttonsPrevious = input.Buttons;
 
+                InventoryHandle(wasPressed);
+
                 if (ForbidToMove) return;
                 
-                _kcc.AddLookRotation(input.LookDirection * _sensivity * Runner.DeltaTime);
-
-                Vector3 moveDirection = _kcc.transform.forward * input.MoveDirection.y +
-                                        _kcc.transform.right * input.MoveDirection.x;
-                moveDirection.Normalize();
-                _kcc.SetInputDirection(moveDirection);
-
-                _playerView.RPC_OnInput(input.MoveDirection);
-
-                if (wasPressed.IsSet(Buttons.Jump))
-                {
-                    _kcc.Jump(Vector3.up * _jumpModifier);
-                }
-
-                if (input.Sprint)
-                {
-                    if (_kcc.FixedData.IsGrounded)
-                        _kcc.AddExternalVelocity(moveDirection * _sprintAcceleration);
-                }
-
-                var toOpenInventory = wasPressed.IsSet(Buttons.ToggleInventory);
-
-                if (toOpenInventory)
-                {
-                    Debug.Log($"Show inv {_invOpened}");
-
-                    if (_invOpened)
-                    {
-                        _gameInventory.Hide();
-                    }
-                    else
-                    {
-                        _gameInventory.ShowInventory(Object.InputAuthority);
-                    }
-
-                    _invOpened = !_invOpened;
-                }
+                LookRotationHandle(input);
+                MoveHandle(input);
+                JumpHandle(wasPressed);
 
                 if(_invOpened) return;
 
                 _hands.OnInput(input, wasPressed, wasReleased);
                 _interactor.ItemHandle(input, wasPressed, wasReleased);
+            }
+        }
+
+        private void LookRotationHandle(PlayerInput input)
+        {
+            _kcc.AddLookRotation(input.LookDirection * _sensivity * Runner.DeltaTime);
+        }
+
+        private void JumpHandle(NetworkButtons wasPressed)
+        {
+            if (wasPressed.IsSet(Buttons.Jump))
+            {
+                _kcc.Jump(Vector3.up * _jumpModifier);
+            }
+        }
+
+        private void MoveHandle(PlayerInput input)
+        {
+            Vector3 moveDirection = _kcc.transform.forward * input.MoveDirection.y +
+                                    _kcc.transform.right * input.MoveDirection.x;
+            moveDirection.Normalize();
+            _kcc.SetInputDirection(moveDirection);
+
+            if (input.Sprint)
+            {
+                if (_kcc.FixedData.IsGrounded)
+                    _kcc.AddExternalVelocity(moveDirection * _sprintAcceleration);
+            }
+
+            _playerView.RPC_OnInput(input.MoveDirection);
+        }
+
+        private void InventoryHandle(NetworkButtons wasPressed)
+        {
+            var toOpenInventory = wasPressed.IsSet(Buttons.ToggleInventory);
+
+            if (toOpenInventory)
+            {
+                if (_invOpened)
+                {
+                    _gameInventory.Hide();
+                }
+                else
+                {
+                    _gameInventory.ShowInventory(Object.InputAuthority);
+                }
+
+                _invOpened = !_invOpened;
             }
         }
 

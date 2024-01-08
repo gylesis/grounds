@@ -21,6 +21,8 @@ namespace Dev.Infrastructure
         [SerializeField] private InventoryView _inventoryView;
         [SerializeField] private CraftStation _craftStation;
         [SerializeField] private ItemsDataService _itemsDataService;
+        [SerializeField] private PlayersDataService _playersDataService;
+        
         public override void InstallBindings()
         {
             Container.Bind<CraftStation>().FromInstance(_craftStation).AsSingle();
@@ -33,6 +35,8 @@ namespace Dev.Infrastructure
             
             Container.Bind<MarkersHandler>().FromInstance(_markersHandler).AsSingle();
             Container.Bind<InteractorView>().FromInstance(_interactorView).AsSingle();
+            
+            Container.Bind<PlayersDataService>().FromInstance(_playersDataService).AsSingle();
             Container.Bind<PlayersSpawner>().FromInstance(_playersSpawner).AsSingle();
             
             Container.Bind<DamageAreaSpawner>().FromInstance(_damageAreaSpawner).AsSingle();
