@@ -363,10 +363,9 @@ MonoBehaviour:
     _value: 1
   _itemMountPoint: {fileID: 2649448449979968153}
   _ContainingItem: {fileID: 0}
+  _player: {fileID: 8489570213778661667}
   _handType: 1
   _foreArmJoint: {fileID: 4099137132786339578}
-  _itemEnumeration: 0
-  _player: {fileID: 8489570213778661667}
 --- !u!1 &1068708981001118909
 GameObject:
   m_ObjectHideFlags: 0
@@ -854,10 +853,9 @@ MonoBehaviour:
     _value: 1
   _itemMountPoint: {fileID: 5091040268904405783}
   _ContainingItem: {fileID: 0}
+  _player: {fileID: 8489570213778661667}
   _handType: 0
   _foreArmJoint: {fileID: 8916292967839868789}
-  _itemEnumeration: 0
-  _player: {fileID: 8489570213778661667}
 --- !u!1 &2122922072800034053
 GameObject:
   m_ObjectHideFlags: 0
@@ -1583,6 +1581,7 @@ MonoBehaviour:
     _value: 1
   _itemMountPoint: {fileID: 3707793341912709865}
   _ContainingItem: {fileID: 0}
+  _player: {fileID: 0}
   _hands:
   - {fileID: 1086429060926523364}
   - {fileID: 384047101695566126}
@@ -2015,7 +2014,6 @@ GameObject:
   - component: {fileID: 4925156170821849819}
   - component: {fileID: 4128722260976826700}
   - component: {fileID: 7333621857625742653}
-  - component: {fileID: 7339092735656724895}
   m_Layer: 0
   m_Name: View
   m_TagString: Untagged
@@ -2115,7 +2113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  Animator: {fileID: 7339092735656724895}
+  Animator: {fileID: 7368471915985917799}
   TotalWords: 4
   SyncSettings: 79
   FloatAccuracy:
@@ -2132,27 +2130,6 @@ MonoBehaviour:
     _hash: -814817977
   StateHashes: 000000008a18fce4b9abd9d3958341e26c7c1356e4f31ee3a3ebcb27304df975c9b2abc16cf375b6903d34ef
   TriggerHashes: 00000000
---- !u!95 &7339092735656724895
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4824382645645672551}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 41f081d5c6d286c47a33bed3f84de79a, type: 3}
-  m_Controller: {fileID: 9100000, guid: d1fb73b9547d25543a28ed8787712720, type: 2}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4851267037826556427
 GameObject:
   m_ObjectHideFlags: 0
@@ -3373,7 +3350,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8145996285216546001}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 41f081d5c6d286c47a33bed3f84de79a, type: 3}
   m_Controller: {fileID: 9100000, guid: d1fb73b9547d25543a28ed8787712720, type: 2}
   m_CullingMode: 1
