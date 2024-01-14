@@ -67,7 +67,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
                 if (leftHand.IsFree == false)
                 {
                     var itemData = new ItemData();
-                    itemData.ItemName = itemName;
+                    itemData.ItemNameNet = itemName;
                     
                     PutItemInInventory(itemData, playerRef);
                     
@@ -78,7 +78,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
                 else if (rightHand.IsFree == false)
                 {
                     var itemData = new ItemData();
-                    itemData.ItemName = itemName;
+                    itemData.ItemNameNet = itemName;
                     
                     PutItemInInventory(itemData, playerRef);
                     
@@ -118,7 +118,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 
         private void OnItemDroppedFromHands(ItemData itemData, PlayerRef playerRef)
         {
-            RemoveItemFromHands(playerRef, itemData.ItemName.Value);
+            RemoveItemFromHands(playerRef, itemData.ItemNameNet.Value);
 
             //Debug.Log($"Item {itemData.ItemName} dropped from hands");
         }
@@ -128,9 +128,9 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             InventoryData inventoryData = GetInventoryData(playerRef);
             var indexOf = _playersInventoryDatas.IndexOf(inventoryData);
 
-            if(inventoryData.HandItems.Any(x => x.ItemName == itemName) == false) return;
+            if(inventoryData.HandItems.Any(x => x.ItemNameNet == itemName) == false) return;
             
-            ItemData data = inventoryData.HandItems.First(x => x.ItemName == itemName);
+            ItemData data = inventoryData.HandItems.First(x => x.ItemNameNet == itemName);
 
             inventoryData.HandItems.Remove(data);
             _playersInventoryDatas[indexOf] = inventoryData;
@@ -141,9 +141,9 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             InventoryData inventoryData = GetInventoryData(playerRef);
             var indexOf = _playersInventoryDatas.IndexOf(inventoryData);
 
-            if(inventoryData.InventoryItems.Any(x => x.ItemName == itemName) == false) return;
+            if(inventoryData.InventoryItems.Any(x => x.ItemNameNet == itemName) == false) return;
             
-            ItemData data = inventoryData.InventoryItems.First(x => x.ItemName == itemName);
+            ItemData data = inventoryData.InventoryItems.First(x => x.ItemNameNet == itemName);
 
             inventoryData.InventoryItems.Remove(data);
             _playersInventoryDatas[indexOf] = inventoryData;
@@ -197,7 +197,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 
             _playersInventoryDatas[indexOf] = data;
             
-            Debug.Log($"Item {itemData.ItemName} added to Player {playerRef}");
+            Debug.Log($"Item {itemData.ItemNameNet} added to Player {playerRef}");
         }
 
         public void ShowInventory(PlayerRef playerRef)

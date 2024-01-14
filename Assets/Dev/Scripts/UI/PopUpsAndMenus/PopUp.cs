@@ -17,6 +17,7 @@ namespace Dev.UI.PopUpsAndMenus
 
         public bool IsRoot => _isRoot;
 
+        public bool IsActive => _canvasGroup.alpha != 0;
         public Subject<bool> ShowAndHide { get; } = new Subject<bool>();
 
         private IDisposable _disposable;

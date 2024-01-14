@@ -21,11 +21,11 @@ namespace Dev.Infrastructure
         
         public void SpawnPlayer(PlayerRef playerRef, bool firstSpawn = true)
         {
-            if (PlayersList.ContainsKey(playerRef))
+            /*if (PlayersList.ContainsKey(playerRef))
             {
                 Debug.Log($"This player already has character!!");
                 return;
-            }
+            }*/
             
             PlayerCharacter playerCharacterPrefab = _playerCharacterPrefab;
 

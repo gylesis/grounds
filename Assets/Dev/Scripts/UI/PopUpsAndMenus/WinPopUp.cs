@@ -43,7 +43,7 @@ namespace Dev.UI.PopUpsAndMenus
 
             foreach (ItemData itemData in items)
             {
-                _winText.text += $"{itemData.ItemName}\n";
+                _winText.text += $"{itemData.ItemNameNet}\n";
             }
 
             Show();

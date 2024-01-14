@@ -14,13 +14,14 @@ namespace Dev.Infrastructure
     public class ConnectionManager : NetworkContext, INetworkRunnerCallbacks
     {
         [SerializeField] private NetworkRunner _networkRunner;
-        [SerializeField] private Transform _testSpawner;
 
         private PopUpService _popUpService;
         private PlayersSpawner _playersSpawner;
         private SceneCameraController _sceneCameraController;
 
         public static ConnectionManager Instance { get; private set; }
+
+        public Action<StartGameResult> LastGameStartResult;
 
         private void Awake()
         {
@@ -38,8 +39,10 @@ namespace Dev.Infrastructure
 
         private async void TryAutoConnect()
         {
-            _networkRunner.gameObject.SetActive(false);
+            Destroy(_networkRunner.gameObject);
 
+            if(Runner) return;
+            
             NetworkRunner networkRunner = FindObjectOfType<NetworkRunner>();
 
             if (networkRunner == null)
@@ -50,36 +53,13 @@ namespace Dev.Infrastructure
 
             if (networkRunner.State == NetworkRunner.States.Running)
             {
-                _testSpawner.gameObject.SetActive(false);
                 networkRunner.AddCallbacks(this);
                 _networkRunner.gameObject.SetActive(false);
-                return;
             }
             else
             {
                 _networkRunner.gameObject.SetActive(true);
-                _testSpawner.gameObject.SetActive(true);
                 _networkRunner.AddCallbacks(this);
-
-                return;
-
-                var startGameArgs = new StartGameArgs();
-
-                startGameArgs.GameMode = GameMode.AutoHostOrClient;
-                startGameArgs.SceneManager = FindObjectOfType<SceneLoader>();
-                startGameArgs.Scene = SceneManager.GetActiveScene().buildIndex;
-                startGameArgs.SessionName = "Test1";
-
-                StartGameResult startGameResult = await _networkRunner.StartGame(startGameArgs);
-
-                if (startGameResult.Ok)
-                {
-                    Debug.Log($"Started game with mode: {_networkRunner.GameMode}");
-                }
-                else
-                {
-                    Debug.LogError($"{startGameResult.ErrorMessage}");
-                }
             }
         }
 
@@ -90,6 +70,50 @@ namespace Dev.Infrastructure
             _playersSpawner = playersSpawner;
         }
 
+        private async UniTask<StartGameResult> StartGame(StartGameArgs startGameArgs)
+        {
+            _networkRunner.gameObject.SetActive(true);
+            var startGameResult = await _networkRunner.StartGame(startGameArgs);
+
+            if (startGameResult.Ok == false)
+            {
+                Debug.LogError($"{startGameResult.ErrorMessage}");
+            }
+            LastGameStartResult?.Invoke(startGameResult);
+            
+            return startGameResult;
+        }
+
+        public void StartSinglePlayer()
+        {
+            var startGameArgs = new StartGameArgs();
+            startGameArgs.GameMode = GameMode.Single;
+            startGameArgs.SceneManager = FindObjectOfType<SceneLoader>();
+            startGameArgs.Scene = SceneManager.GetActiveScene().buildIndex;
+            
+            StartGame(startGameArgs);
+        }
+
+        public void StartHost()
+        {
+            var startGameArgs = new StartGameArgs();
+            startGameArgs.GameMode = GameMode.Host;
+            startGameArgs.SceneManager = FindObjectOfType<SceneLoader>();
+            startGameArgs.Scene = SceneManager.GetActiveScene().buildIndex;
+
+            StartGame(startGameArgs);
+        }
+
+        public void StartClient()
+        {
+            var startGameArgs = new StartGameArgs();
+            startGameArgs.GameMode = GameMode.Client;
+            startGameArgs.SceneManager = FindObjectOfType<SceneLoader>();
+            startGameArgs.Scene = SceneManager.GetActiveScene().buildIndex;
+
+            StartGame(startGameArgs);
+        }
+        
         // for new player after lobby started. invokes if game starts from Lobby
         public async void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
         {
@@ -217,8 +241,6 @@ namespace Dev.Infrastructure
 
         public async void OnSceneLoadDone(NetworkRunner runner)
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(1));
-
             _sceneCameraController.Camera.gameObject.SetActive(false);
 
             Debug.Log($"OnSceneLoadDone");

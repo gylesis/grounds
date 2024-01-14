@@ -33,7 +33,7 @@ namespace Dev.Scripts.PlayerLogic
             ContainingItem.RPC_SetLocalRotation(Vector3.zero);
             
             var itemData = new ItemData();
-            itemData.ItemName = item.ItemName;
+            itemData.ItemNameNet = item.ItemName;
             ItemTaken.OnNext(itemData);
         }
 
@@ -41,7 +41,7 @@ namespace Dev.Scripts.PlayerLogic
         public void RPC_SetEmpty()
         {
             var itemData = new ItemData();
-            itemData.ItemName = ContainingItem.ItemName;
+            itemData.ItemNameNet = ContainingItem.ItemName;
             ItemDropped.OnNext(itemData);
             
             SetItem(null);
