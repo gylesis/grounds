@@ -90,7 +90,7 @@ namespace Dev.Scripts.Items
             
             foreach (ItemData itemData in inventoryItems)
             {
-                string itemName = itemData.ItemName.Value;
+                string itemName = itemData.ItemNameNet.Value;
              
                 _itemStaticDataContainer.TryGetItemStaticDataByName(itemName, out var itemStaticData);
 
@@ -103,7 +103,7 @@ namespace Dev.Scripts.Items
             
             foreach (ItemData itemData in handsItems)
             {
-                string itemName = itemData.ItemName.Value;
+                string itemName = itemData.ItemNameNet.Value;
              
                 _itemStaticDataContainer.TryGetItemStaticDataByName(itemName, out var itemStaticData);
 
@@ -170,7 +170,7 @@ namespace Dev.Scripts.Items
 
         private void ReturnWorldItemAlive(string itemName)
         {
-            ItemData itemData = _items.First(x => x.ItemName.Value == itemName);
+            ItemData itemData = _items.First(x => x.ItemNameNet.Value == itemName);
 
             _itemsDataService.RPC_ReturnItemToWorldFromInventory(itemName);
         }

@@ -8,6 +8,8 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
     {
         [SerializeField] private ItemNameTag _itemNameTag;
 
+        public Sprite ItemIcon;
+        
         public ItemNameTag ItemNameTag => _itemNameTag;
 
         public string ItemName => _itemNameTag.ItemName;
