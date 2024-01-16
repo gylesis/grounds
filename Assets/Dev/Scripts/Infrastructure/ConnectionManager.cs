@@ -39,9 +39,11 @@ namespace Dev.Infrastructure
 
         private async void TryAutoConnect()
         {
-            Destroy(_networkRunner.gameObject);
-
-            if(Runner) return;
+            if (Runner)
+            {
+                Destroy(_networkRunner.gameObject);
+                return;
+            }
             
             NetworkRunner networkRunner = FindObjectOfType<NetworkRunner>();
 
