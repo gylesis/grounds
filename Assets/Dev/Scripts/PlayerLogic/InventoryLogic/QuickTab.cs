@@ -7,6 +7,9 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
     {
         [SerializeField] private Image _itemIcon;
         [SerializeField] private QuickTabReactiveButton _button;
+        [SerializeField] private RectTransform _rectTransform;
+
+        public RectTransform RectTransform => _rectTransform;
 
         public QuickTabReactiveButton Button => _button;
 

@@ -167,6 +167,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemIcon: {fileID: 8595877031041707183}
   _button: {fileID: 45607123101885936}
+  _rectTransform: {fileID: 4019077941902662835}
 --- !u!1001 &5190337583142997186
 PrefabInstance:
   m_ObjectHideFlags: 0

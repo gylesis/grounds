@@ -16,10 +16,13 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         [Networked] private NetworkBool IsShown { get; set; }
 
         private TickTimer _showTimer;
+        private PlayersDataService _playersDataService;
+
         private void Start()
         {
             _popUpService = DependenciesContainer.Instance.GetDependency<PopUpService>();
             _gameInventory = DependenciesContainer.Instance.GetDependency<GameInventory>();
+            _playersDataService = DependenciesContainer.Instance.GetDependency<PlayersDataService>();
         }
 
         public override void Render()
@@ -60,6 +63,8 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 
             quickChooseMenu.Setup(quickMenuSetupContext);
 
+            _playersDataService.GetPlayer(playerRef).PlayerController.SetAllowToAim(false);
+
             IsShown = true;
         }
 
@@ -67,6 +72,8 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         {
             _popUpService.HidePopUp<BazookaQuickChooseMenu>();
             IsShown = false;
+            
+            _playersDataService.GetPlayer(Object.InputAuthority).PlayerController.SetAllowToAim(true);
         }
     }
 }

@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Dev.UI;
 using Dev.UI.PopUpsAndMenus;
+using DG.Tweening;
 using UniRx;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using Zenject;
 
 namespace Dev.Scripts.PlayerLogic.InventoryLogic
@@ -12,17 +16,30 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
     {
         [SerializeField] private Transform _quickTabsParent;
         [SerializeField] private QuickTab _quickTabPrefab;
-
-        [SerializeField] private Transform _chooseTransform;
-        
+        [SerializeField] private HorizontalLayoutGroup _tabHorizontalLayout;
+        [SerializeField] private RectTransform _tabsCenterTransform;
         
         private ItemStaticDataContainer _itemStaticDataContainer;
 
         private List<QuickTab> _quickTabs = new();
         private Action<int> _onTabChosen;
 
-        private QuickTab _currentTab;
+        private int TabsCount => _quickTabs.Count;
         
+        private QuickTab _currentTab;
+        private int _currentTabIndex = 0;
+
+        private float MaxWidth => (TabsCount - 1) * WidthStep;
+        private float WidthStep => (_tabHorizontalLayout.spacing + _quickTabPrefab.RectTransform.rect.width);
+        
+        private float _swapTimer;
+        
+        private void Start()    
+        {
+            _quickTabs = _quickTabsParent.GetComponentsInChildren<QuickTab>().ToList();
+            _currentTab = _quickTabs[_currentTabIndex];
+        }
+
         [Inject]
         private void Init(ItemStaticDataContainer itemStaticDataContainer)
         {
@@ -56,21 +73,71 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         {
             if(IsActive == false) return;
 
-            if (Input.GetKeyDown(KeyCode.RightArrow))
+            if (AllowToSwapTab() == false) return;
+
+            if (Mouse.current.delta.x.value > 2)
             {
-                
+                Move(true);
             }
+            else if (Mouse.current.delta.x.value < -2)
+            {
+                Move(false);
+            }
+        }
+
+        private bool AllowToSwapTab()
+        {
+            bool allowToSwapTab;
             
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            if (_swapTimer >= 0.1f)
             {
-                
+                allowToSwapTab = true;
             }
-           
+            else
+            {
+                allowToSwapTab = false;
+                _swapTimer += Time.deltaTime;
+            }
+
+            return allowToSwapTab;
         }
 
         private void Move(bool isRight)
         {
+            float originPos = _tabsCenterTransform.anchoredPosition.x;
+
+            if (isRight)
+            {
+                if (originPos - WidthStep < -MaxWidth)
+                {
+                    return;
+                }
+            }
+            else
+            {
+                if (originPos + WidthStep > 0)
+                {
+                    return;
+                }
+            }
             
+            _swapTimer = 0;
+
+            float moveUnits = _tabHorizontalLayout.spacing + _quickTabPrefab.RectTransform.rect.width;
+            float sign = isRight ? -1 : 1;
+            
+            float targetPos = originPos + (sign * moveUnits);
+            
+            DOVirtual.Float(originPos, targetPos, 0.099f, (value =>
+            {
+                var anchoredPosition = Vector2.right * value;
+
+                _tabsCenterTransform.anchoredPosition = anchoredPosition;
+            }));
+            
+            _currentTabIndex += 1 * -(int) sign;
+    
+            _currentTab = _quickTabs[_currentTabIndex];
         }
         
         private void OnQuickTabChosen(EventContext<QuickTab> context)

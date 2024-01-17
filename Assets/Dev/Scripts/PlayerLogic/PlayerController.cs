@@ -30,7 +30,8 @@ namespace Dev.PlayerLogic
         private PopUpService _popUpService;
         private GameInventory _gameInventory;
 
-        [Networked] public NetworkBool ForbidToMove { get; set; }
+        [Networked] private NetworkBool AllowToMove { get; set; } = true;
+        [Networked] private NetworkBool AllowToAim{ get; set; } = true;
 
         private bool _invOpened = false;
 
@@ -66,11 +67,14 @@ namespace Dev.PlayerLogic
 
                 InventoryHandle(wasPressed);
 
-                if (ForbidToMove) return;
+                if (AllowToMove == false) return;
                 
-                LookRotationHandle(input);
                 MoveHandle(input);
                 JumpHandle(wasPressed);
+                
+                if (AllowToAim == false) return;
+                
+                LookRotationHandle(input);
 
                 if(_invOpened) return;
 
@@ -79,9 +83,27 @@ namespace Dev.PlayerLogic
             }
         }
 
-        private void LookRotationHandle(PlayerInput input)
+        public void SetAllowToAim(bool allow)
         {
-            _kcc.AddLookRotation(input.LookDirection * _sensivity * Runner.DeltaTime);
+            AllowToAim = allow;
+
+            if (allow == false)
+            {
+                _kcc.AddLookRotation(Vector2.zero);
+            }
+        }
+        
+        public void SetAllowToMove(bool allow)
+        {
+            AllowToMove = allow;
+
+            if (allow == false)
+            {
+                _kcc.SetInputDirection(Vector3.zero);
+                _kcc.SetDynamicVelocity(Vector3.zero);
+                _kcc.SetExternalVelocity(Vector3.zero);
+                _kcc.SetKinematicVelocity(Vector3.zero);
+            }
         }
 
         private void JumpHandle(NetworkButtons wasPressed)
@@ -90,6 +112,11 @@ namespace Dev.PlayerLogic
             {
                 _kcc.Jump(Vector3.up * _jumpModifier);
             }
+        }
+
+        private void LookRotationHandle(PlayerInput input)
+        {
+            _kcc.AddLookRotation(input.LookDirection * _sensivity * Runner.DeltaTime);
         }
 
         private void MoveHandle(PlayerInput input)

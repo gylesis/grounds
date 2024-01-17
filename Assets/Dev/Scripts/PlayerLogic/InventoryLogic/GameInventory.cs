@@ -221,7 +221,8 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
 
-            _playersDataService.GetPlayer(playerRef).PlayerController.ForbidToMove = true;
+            _playersDataService.GetPlayer(playerRef).PlayerController.SetAllowToMove(false);
+            _playersDataService.GetPlayer(playerRef).PlayerController.SetAllowToAim(false);
 
             var inventoryItems = inventoryData.InventoryItems.ToArray();
             var handsItems = inventoryData.HandItems.ToArray();
@@ -234,7 +235,8 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
 
-            _playersDataService.GetPlayer(Runner.LocalPlayer).PlayerController.ForbidToMove = false;
+            _playersDataService.GetPlayer(Runner.LocalPlayer).PlayerController.SetAllowToMove(true);
+            _playersDataService.GetPlayer(Runner.LocalPlayer).PlayerController.SetAllowToAim(true);
 
             _inventoryView.Hide();
         }
