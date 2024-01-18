@@ -16,12 +16,11 @@ namespace Dev.Scripts.PlayerLogic
         private Camera _camera;
         protected Tween _activeTween;
         
-        private ItemsDataService _itemsDataService;
+        protected ItemsDataService _itemsDataService;
 
         public override void Spawned()
         {
             base.Spawned();
-
             _itemsDataService = DependenciesContainer.Instance.GetDependency<ItemsDataService>();
 
             _camera = _player.CameraController.CharacterCamera;

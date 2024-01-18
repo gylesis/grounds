@@ -19,7 +19,6 @@ namespace Dev.Scripts.PlayerLogic
     
         private Hand _activeHand;
         private GameInventory _gameInventory;
-        private ItemsDataService _itemsDataService;
 
         public HandAbilities ActiveHand => GetActiveHand();
 

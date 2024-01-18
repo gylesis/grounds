@@ -7,6 +7,7 @@ using Fusion;
 using Sirenix.OdinInspector;
 using UniRx;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Dev.Scripts.PlayerLogic
 {

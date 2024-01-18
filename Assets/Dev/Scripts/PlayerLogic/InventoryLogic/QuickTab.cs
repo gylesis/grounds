@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using Dev.UI;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Dev.Scripts.PlayerLogic.InventoryLogic
 {
-    public class QuickTab : MonoBehaviour
+    public class QuickTab : UIElementBase
     {
         [SerializeField] private Image _itemIcon;
         [SerializeField] private QuickTabReactiveButton _button;

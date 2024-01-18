@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Banana
   m_EditorClassIdentifier: 
   _itemNameTag: {fileID: 11400000, guid: 8dcca7102c523534496282392bf7e4a3, type: 2}
+  ItemIcon: {fileID: 21300000, guid: 0ef2db9811066df459753c7004578d1a, type: 3}
   ItemDescription: Yellow thing
+  _itemTypes: 00000000
   WorldData:
     Prefab: {fileID: 8066373768087005516, guid: dbb855dcf59c89f4cbbe0a0ded80a167,
       type: 3}

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Dev.Infrastructure;
 using Dev.UI;
 using Dev.UI.PopUpsAndMenus;
 using DG.Tweening;
@@ -37,6 +38,9 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         private void Start()    
         {
             _quickTabs = _quickTabsParent.GetComponentsInChildren<QuickTab>().ToList();
+            
+            if(TabsCount == 0) return;
+            
             _currentTab = _quickTabs[_currentTabIndex];
         }
 
@@ -48,6 +52,13 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         
         public void Setup(QuickMenuSetupContext setupContext)
         {
+            foreach (var quickTab in _quickTabs)
+            {
+                Destroy(quickTab.gameObject);
+            }
+            _quickTabs.Clear();
+            
+            
             _onTabChosen = setupContext.TabChosen;
 
             for (var index = 0; index < setupContext.Items.Count; index++)
@@ -73,6 +84,11 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         {
             if(IsActive == false) return;
 
+            if (Input.GetMouseButtonDown(0))
+            {
+                ApplyCurrentTabItem();
+            }
+            
             if (AllowToSwapTab() == false) return;
 
             if (Mouse.current.delta.x.value > 2)
@@ -82,6 +98,22 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             else if (Mouse.current.delta.x.value < -2)
             {
                 Move(false);
+            }
+        }
+
+        private void ApplyCurrentTabItem()
+        {
+            SelectTab(_currentTabIndex);
+            
+            
+        }
+
+        private void SelectTab(int tabId)
+        {
+            for (var index = 0; index < _quickTabs.Count; index++)
+            {
+                var quickTab = _quickTabs[index];
+                quickTab.SetSelectionState(index == tabId);
             }
         }
 
