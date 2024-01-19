@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Dynamite
   m_EditorClassIdentifier: 
   _itemNameTag: {fileID: 11400000, guid: 808213744fb65b8469746d337662ae90, type: 2}
+  _itemTypes: 00000000
+  ItemIcon: {fileID: 21300000, guid: 8bd86440caf3cc84487aeedd1a967f94, type: 3}
   ItemDescription: Common Explosive
   WorldData:
     Prefab: {fileID: 4255678502252178019, guid: dc2a3a349a95dc347a710b61ad56b59f,

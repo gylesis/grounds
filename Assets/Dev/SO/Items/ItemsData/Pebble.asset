@@ -10,15 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 48f1a8b3798047bc887b54dbd6eb253b, type: 3}
-  m_Name: Plank
+  m_Name: Pebble
   m_EditorClassIdentifier: 
-  _itemNameTag: {fileID: 11400000, guid: 9107ff392b5d9554985313aca644920f, type: 2}
-  ItemDescription: Just plank
+  _itemNameTag: {fileID: 11400000, guid: 7c6ba9c41be2b63439d79e55b1a1c055, type: 2}
+  ItemIcon: {fileID: 21300000, guid: 6a8853ff14f35b540ac5ad93c9ea0115, type: 3}
+  ItemDescription: Mysterious stone...
+  _itemTypes: 00000000
   WorldData:
-    Prefab: {fileID: 3333041202985477319, guid: c7f5be248db638c40a7f655b830dff98,
+    Prefab: {fileID: 6464772038977278317, guid: 6a5b8ebce3873e54ab5ed6fe98f69895,
       type: 3}
   InventoryData:
-    Prefab: {fileID: 2413673151452817282, guid: 7cb84f687e0711f43ad3a07e6d4b173c,
+    Prefab: {fileID: 6859324655132778651, guid: 110e3fcf85404a04aaf8ed9c5d5a12e8,
       type: 3}
-  PositionInHand: {x: 0, y: 0, z: 0}
+  PositionInHand: {x: -0.064, y: 0, z: 0}
   RotationInHand: {x: 0, y: 0, z: 0}

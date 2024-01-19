@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Dev.Infrastructure;
 using Dev.UI.PopUpsAndMenus;
 using Fusion;
@@ -8,7 +9,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 {
     public class WeaponQuickLoader : NetworkContext
     {
-        private float _timer;
+        [SerializeField] private float _quickTabsShowCooldown = 1f;
 
         private PopUpService _popUpService;
         private GameInventory _gameInventory;
@@ -17,23 +18,35 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 
         private TickTimer _showTimer;
         private PlayersDataService _playersDataService;
+        private ItemStaticDataContainer _itemStaticDataContainer;
 
+        private TickTimer _showQuickTabsTimer;
+        
         private void Start()
         {
             _popUpService = DependenciesContainer.Instance.GetDependency<PopUpService>();
             _gameInventory = DependenciesContainer.Instance.GetDependency<GameInventory>();
             _playersDataService = DependenciesContainer.Instance.GetDependency<PlayersDataService>();
+            _itemStaticDataContainer = DependenciesContainer.Instance.GetDependency<ItemStaticDataContainer>();
         }
 
         public override void Render()
         {
             if(HasInputAuthority == false) return;
 
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                _showQuickTabsTimer = TickTimer.CreateFromSeconds(Runner, _quickTabsShowCooldown);
+            }
+            
             if (Input.GetKey(KeyCode.R))
             {
-                if (IsShown == false)
+                if (_showQuickTabsTimer.Expired(Runner))
                 {
-                    RPC_ShowQuickMenuRequest(Object.InputAuthority);
+                    if (IsShown == false)
+                    {
+                        RPC_ShowQuickMenuRequest(Object.InputAuthority);
+                    }
                 }
             }
             else
@@ -43,6 +56,11 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
                     Hide();
                 }
             }
+
+            if (Input.GetKeyUp(KeyCode.R))
+            {
+                _showQuickTabsTimer = TickTimer.None;
+            }
             
         }
 
@@ -50,7 +68,20 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         private void RPC_ShowQuickMenuRequest(PlayerRef playerRef)
         {
             var inventoryData = _gameInventory.GetInventoryData(playerRef);
-            RPC_ShowQuickMenu(playerRef, inventoryData.InventoryItems.ToArray());
+
+            var itemDatas = new List<ItemData>();
+
+            foreach (ItemData itemData in inventoryData.InventoryItems)
+            {
+                bool isItemThisTypeof = _itemStaticDataContainer.IsItemThisTypeof(itemData.ItemName, ItemType.LoadableInItemLauncher);
+
+                if (isItemThisTypeof)
+                {
+                    itemDatas.Add(itemData);
+                }
+            }
+            
+            RPC_ShowQuickMenu(playerRef, itemDatas.ToArray());
         }
 
         [Rpc]

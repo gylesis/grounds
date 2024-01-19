@@ -1,4 +1,5 @@
-﻿using Dev.Scripts.Items;
+﻿using System.Collections.Generic;
+using Dev.Scripts.Items;
 using UnityEngine;
 
 namespace Dev.Scripts.PlayerLogic.InventoryLogic
@@ -7,14 +8,17 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
     public class ItemStaticData : ScriptableObject
     {
         [SerializeField] private ItemNameTag _itemNameTag;
-
-        public Sprite ItemIcon;
         
         public ItemNameTag ItemNameTag => _itemNameTag;
 
         public string ItemName => _itemNameTag.ItemName;
+
+        public List<ItemType> ItemTypes => _itemTypes;
         
+        public Sprite ItemIcon;
         public string ItemDescription;
+
+        [SerializeField] private List<ItemType> _itemTypes;
 
         public ItemWorldData WorldData;
         public ItemInventoryStaticData InventoryData;
