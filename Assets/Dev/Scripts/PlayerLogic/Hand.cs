@@ -15,7 +15,7 @@ namespace Dev.Scripts.PlayerLogic
         private Tween _activeTween;
         private Vector3 _initialArmRotation;
 
-        private void Start()
+        public override void Start()
         {
             _initialArmRotation = _foreArmJoint.localEulerAngles;
         }
