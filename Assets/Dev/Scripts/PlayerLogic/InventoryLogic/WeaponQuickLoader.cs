@@ -11,7 +11,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 {
     public class WeaponQuickLoader : NetworkContext
     {
-        [SerializeField] private float _quickTabsShowCooldown = 1f;
+        [SerializeField] private float _quickTabsShowCooldown = 0.5f;
 
         private PopUpService _popUpService;
         private GameInventory _gameInventory;
@@ -74,11 +74,8 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 
             PlayerController playerController = _playersDataService.GetPlayer(playerRef).PlayerController;
             
-            if (playerController.Hands.IsFree == false)
-            {
-                if(playerController.Hands.ContainingItem.ItemEnumeration != ItemEnumeration.RocketLauncher) return;
-            }
-            
+            if (AllowToShowQuickTabs(playerController.Hands) == false) return;
+
             var itemDatas = new List<ItemData>();
 
             foreach (ItemData itemData in inventoryData.InventoryItems)
@@ -92,6 +89,25 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             }
             
             RPC_ShowQuickMenu(playerRef, itemDatas.ToArray());
+        }
+
+        private bool AllowToShowQuickTabs(Hands hands)
+        {
+            if (hands.IsAnyHandBusy() == false)
+            {
+                return false;
+            }
+            
+            bool hasItem = _itemStaticDataContainer.TryGetItemByType(out var itemStaticData, ItemType.Firearm);
+
+            if (hasItem)
+            {
+                var hasThisItemInHands = hands.HasThisItemInHands(itemStaticData.ItemId);
+
+                return hasThisItemInHands;
+            }
+
+            return false;
         }
 
         [Rpc]

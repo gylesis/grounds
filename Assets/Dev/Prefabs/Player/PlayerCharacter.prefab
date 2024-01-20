@@ -363,7 +363,6 @@ MonoBehaviour:
     _value: 1
   _itemMountPoint: {fileID: 2649448449979968153}
   _ContainingItem: {fileID: 0}
-  _player: {fileID: 8489570213778661667}
   _handType: 1
   _foreArmJoint: {fileID: 4099137132786339578}
 --- !u!1 &1068708981001118909
@@ -853,7 +852,6 @@ MonoBehaviour:
     _value: 1
   _itemMountPoint: {fileID: 5091040268904405783}
   _ContainingItem: {fileID: 0}
-  _player: {fileID: 8489570213778661667}
   _handType: 0
   _foreArmJoint: {fileID: 8916292967839868789}
 --- !u!1 &2122922072800034053
@@ -1585,7 +1583,6 @@ MonoBehaviour:
     _value: 1
   _itemMountPoint: {fileID: 3707793341912709865}
   _ContainingItem: {fileID: 0}
-  _player: {fileID: 0}
   _hands:
   - {fileID: 1086429060926523364}
   - {fileID: 384047101695566126}
@@ -1718,7 +1715,7 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _IsActive:
     _value: 1
-  _quickTabsShowCooldown: 1
+  _quickTabsShowCooldown: 0.5
 --- !u!114 &7286655123904594909
 MonoBehaviour:
   m_ObjectHideFlags: 0

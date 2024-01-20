@@ -41,6 +41,24 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
                 return true;
             }
             
+            return false;   
+        }
+
+        public bool TryGetItemByType(out ItemStaticData itemStaticData, params ItemType[] itemTypes)
+        {
+            itemStaticData = null;
+            
+            foreach (ItemType itemType in itemTypes)
+            {
+                ItemStaticData staticData = _items.FirstOrDefault(x => x.ItemTypes.Contains(itemType));
+
+                if (staticData)
+                {
+                    itemStaticData = staticData;
+                    return true;
+                }
+            }
+
             return false;
         }
         

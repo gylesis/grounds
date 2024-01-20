@@ -50,6 +50,7 @@ namespace Dev.PlayerLogic
             _gameInventory = gameInventory;
         }
 
+
         public override void Spawned()
         {
             if (HasInputAuthority == false)

@@ -49,6 +49,18 @@ namespace Dev.Scripts.Items
 
             return "NONE";
         }
+
+        public ItemType[] GetItemTypesById(int itemId)
+        {
+            bool hasData = _itemStaticDataContainer.TryGetItemStaticDataById(itemId, out var staticData);
+
+            if (hasData)
+            {
+                return staticData.ItemTypes.ToArray();
+            }
+
+            return null;
+        }
         
         private void SpawnItemsOnSpawnPlaces()
         {
@@ -66,7 +78,7 @@ namespace Dev.Scripts.Items
                 _itemStaticDataContainer.Find(item);
             }*/
         }
-
+        
         public Item SpawnItem(int itemId, Vector3 pos)
         {
             bool hasData = _itemStaticDataContainer.TryGetItemStaticDataById(itemId, out var itemStaticData);

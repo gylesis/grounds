@@ -3,4 +3,5 @@
     LoadableInItemLauncher,
     Explosive,
     Edible,
+    Firearm
 }

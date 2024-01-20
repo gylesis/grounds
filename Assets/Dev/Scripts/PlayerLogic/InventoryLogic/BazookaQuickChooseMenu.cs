@@ -60,34 +60,35 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             _quickTabs.Clear();
 
             int itemsCount = setupContext.Items.Count;
-            
+
             if (itemsCount == 0)
             {
                 _noItemsSign.text = "No items to load";
                 _noItemsSign.gameObject.SetActive(true);
                 _chooseArrowTransform.gameObject.SetActive(false);
-                return;
             }
-            
-            _chooseArrowTransform.gameObject.SetActive(true);
-            _noItemsSign.gameObject.SetActive(false);
-            
-            _onTabChosen = setupContext.TabChosen;
-
-            for (var index = 0; index < itemsCount; index++)
+            else
             {
-                var itemData = setupContext.Items[index];
-                int itemId = itemData.ItemId;
+                _chooseArrowTransform.gameObject.SetActive(true);
+                _noItemsSign.gameObject.SetActive(false);
+            
+                _onTabChosen = setupContext.TabChosen;
+
+                for (var index = 0; index < itemsCount; index++)
+                {
+                    var itemData = setupContext.Items[index];
+                    int itemId = itemData.ItemId;
                 
-                var hasData = _itemStaticDataContainer.TryGetItemStaticDataById(itemId, out var itemStaticData);
+                    var hasData = _itemStaticDataContainer.TryGetItemStaticDataById(itemId, out var itemStaticData);
 
-                if (hasData == false) continue;
+                    if (hasData == false) continue;
 
-                QuickTab quickTab = Instantiate(_quickTabPrefab, _quickTabsParent);
+                    QuickTab quickTab = Instantiate(_quickTabPrefab, _quickTabsParent);
 
-                quickTab.Setup(itemStaticData.ItemIcon, itemId);
+                    quickTab.Setup(itemStaticData.ItemIcon, itemId);
                 
-                _quickTabs.Add(quickTab);
+                    _quickTabs.Add(quickTab);
+                } 
             }
             
             Show();
