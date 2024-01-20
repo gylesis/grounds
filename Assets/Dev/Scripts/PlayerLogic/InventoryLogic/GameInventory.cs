@@ -7,6 +7,7 @@ using Dev.Scripts.Items;
 using Fusion;
 using UniRx;
 using UnityEngine;
+using Zenject;
 
 namespace Dev.Scripts.PlayerLogic.InventoryLogic
 {
@@ -20,10 +21,6 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 
         private void Start()
         {
-            _inventoryView = DependenciesContainer.Instance.GetDependency<InventoryView>();
-            _playersDataService = DependenciesContainer.Instance.GetDependency<PlayersDataService>();
-            _itemsDataService = DependenciesContainer.Instance.GetDependency<ItemsDataService>();
-
             _inventoryView.ToRemoveItemFromInventory
                 .TakeUntilDestroy(this)
                 .Subscribe((OnRemoveItemFromInventoryClient));
@@ -39,6 +36,14 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
                     OnInventoryHandItemChanged(Runner.LocalPlayer, context, false)));
         }
 
+        [Inject]
+        private void Construct(InventoryView inventoryView, PlayersDataService playersDataService, ItemsDataService itemsDataService)
+        {
+            _itemsDataService = itemsDataService;
+            _inventoryView = inventoryView;
+            _playersDataService = playersDataService;
+        }
+        
         private void OnInventoryHandItemChanged(PlayerRef playerRef, InventoryHandView.HandChangedEventContext context,
             bool isLeftHand)
         {

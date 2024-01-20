@@ -5,8 +5,8 @@ using Dev.Scripts.PlayerLogic.InventoryLogic;
 using DG.Tweening;
 using Fusion;
 using Sirenix.Utilities;
-using UniRx;
 using UnityEngine;
+using Zenject;
 
 namespace Dev.Scripts.PlayerLogic
 {
@@ -29,11 +29,15 @@ namespace Dev.Scripts.PlayerLogic
         private void Awake()
         {
             _activeHand = GetHandByType(HandType.Right);
-
-            _gameInventory = DependenciesContainer.Instance.GetDependency<GameInventory>();
-            _itemsDataService = DependenciesContainer.Instance.GetDependency<ItemsDataService>();
         }
 
+        [Inject]
+        private void Construct(GameInventory gameInventory, ItemsDataService itemsDataService)
+        {
+            _gameInventory = gameInventory;
+            _itemsDataService = itemsDataService;
+        }
+        
         public override void Spawned()
         {
             if (HasStateAuthority)

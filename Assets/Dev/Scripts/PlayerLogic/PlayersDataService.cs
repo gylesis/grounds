@@ -1,6 +1,7 @@
 ﻿using Dev.Infrastructure;
 using Dev.PlayerLogic;
 using Fusion;
+using Zenject;
 
 namespace Dev.Scripts.PlayerLogic
 {
@@ -8,14 +9,15 @@ namespace Dev.Scripts.PlayerLogic
     {
         private PlayersSpawner _playersSpawner;
 
-        private void Init(PlayersSpawner playersSpawner)
+        [Inject]
+        private void Construct(PlayersSpawner playersSpawner)
         {
             _playersSpawner = playersSpawner;
         }
-
+    
         public PlayerCharacter GetPlayer(PlayerRef playerRef)
         {
-            PlayerCharacter playerCharacter = Runner.GetPlayerObject(playerRef).GetComponent<PlayerCharacter>();
+            PlayerCharacter playerCharacter = _playersSpawner.GetPlayer(playerRef);
 
             return playerCharacter;
         }

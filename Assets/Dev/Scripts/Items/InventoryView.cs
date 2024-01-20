@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Dev.Infrastructure;
 using Dev.Levels.Interactions;
 using Dev.Scripts.PlayerLogic;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
+using Dev.UI.PopUpsAndMenus;
 using Dev.Utils;
 using DG.Tweening;
 using Fusion;
@@ -11,6 +11,7 @@ using Fusion.KCC;
 using UniRx;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Zenject;
 
 namespace Dev.Scripts.Items
 {
@@ -53,13 +54,17 @@ namespace Dev.Scripts.Items
         
         private void Start()
         {
-            _craftStation = DependenciesContainer.Instance.GetDependency<CraftStation>();
-            _itemStaticDataContainer = DependenciesContainer.Instance.GetDependency<ItemStaticDataContainer>();
-            _itemsDataService = DependenciesContainer.Instance.GetDependency<ItemsDataService>();
-
             _craftStation.Crafted.TakeUntilDestroy(this).Subscribe((OnItemCrafted));
         }
 
+        [Inject]
+        private void Construct(ItemStaticDataContainer itemStaticDataContainer, CraftStation craftStation, ItemsDataService itemsDataService)
+        {
+            _itemsDataService = itemsDataService;
+            _itemStaticDataContainer = itemStaticDataContainer;
+            _craftStation = craftStation;
+        }
+        
         private void OnItemCrafted(bool isSuccess)
         {
             if (isSuccess)

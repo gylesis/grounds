@@ -1,5 +1,7 @@
-﻿using DG.Tweening;
+﻿using Dev.PlayerLogic;
+using DG.Tweening;
 using UnityEngine;
+using Zenject;
 
 namespace Dev.Scripts.PlayerLogic
 {
@@ -17,7 +19,7 @@ namespace Dev.Scripts.PlayerLogic
         {
             _initialArmRotation = _foreArmJoint.localEulerAngles;
         }
-
+        
         public override void PrepareToSwing()
         {
             _activeTween?.Kill();

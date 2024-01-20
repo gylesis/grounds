@@ -1402,6 +1402,8 @@ GameObject:
   - component: {fileID: 3247660848140748017}
   - component: {fileID: 105226013070390239}
   - component: {fileID: 2732512652579133688}
+  - component: {fileID: 7286655123904594909}
+  - component: {fileID: 2936169146516550440}
   m_Layer: 0
   m_Name: PlayerCharacter
   m_TagString: Player
@@ -1610,8 +1612,6 @@ MonoBehaviour:
   _jumpModifier: 5
   _sensivity: 6
   _sprintAcceleration: 4.5
-  _ForbidToMove:
-    _value: 0
 --- !u!114 &5652419671481334003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1718,6 +1718,37 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _IsActive:
     _value: 1
+  _quickTabsShowCooldown: 1
+--- !u!114 &7286655123904594909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3706882407202003477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08eca9f7688a0a24685b89133b020c8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scriptableObjectInstallers: []
+  _monoInstallers:
+  - {fileID: 2936169146516550440}
+  _installerPrefabs: []
+  _autoRun: 1
+  _kernel: {fileID: 0}
+--- !u!114 &2936169146516550440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3706882407202003477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38e3dd868d6c4aab846afa06aa8e37bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3741360720669758293
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,6 @@
-﻿using Dev.Infrastructure;
-using Dev.Scripts.PlayerLogic.InventoryLogic;
+﻿using Dev.Scripts.PlayerLogic.InventoryLogic;
 using UnityEngine;
+using Zenject;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -16,11 +16,12 @@ namespace Dev.Scripts.Items
 
         private ItemsDataService _itemsDataService;
        
-        private void Awake()
+        [Inject]
+        private void Construct(ItemsDataService itemsDataService)
         {
-            _itemsDataService = DependenciesContainer.Instance.GetDependency<ItemsDataService>();
+            _itemsDataService = itemsDataService;
         }
-
+        
         public string GetRandomItemNameToSpawn()
         {
             return _itemsToSpawn[Random.Range(0, _itemsToSpawn.Length)].ItemName;
