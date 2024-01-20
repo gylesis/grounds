@@ -17,9 +17,10 @@ namespace Dev.Scripts.PlayerLogic
 
         public override void Start()
         {
+            base.Start();
             _initialArmRotation = _foreArmJoint.localEulerAngles;
         }
-        
+
         public override void PrepareToSwing()
         {
             _activeTween?.Kill();

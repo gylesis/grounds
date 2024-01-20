@@ -20,7 +20,7 @@ MonoBehaviour:
     Prefab: {fileID: 6464772038977278317, guid: 6a5b8ebce3873e54ab5ed6fe98f69895,
       type: 3}
   InventoryData:
-    Prefab: {fileID: 6859324655132778651, guid: 110e3fcf85404a04aaf8ed9c5d5a12e8,
+    Prefab: {fileID: 2137249345165925437, guid: ce68a86026362a84082e46de6d52ff51,
       type: 3}
   PositionInHand: {x: -0.064, y: 0, z: 0}
   RotationInHand: {x: 0, y: 0, z: 0}
