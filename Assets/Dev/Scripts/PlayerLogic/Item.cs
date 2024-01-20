@@ -8,6 +8,7 @@ using Sirenix.OdinInspector;
 using UniRx;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Zenject;
 
 namespace Dev.Scripts.PlayerLogic
 {
@@ -41,9 +42,14 @@ namespace Dev.Scripts.PlayerLogic
        // public string ItemName => _itemNameTag.ItemName;
         public string ItemName => itemName.Value;
 
+        [Inject]
+        private void Construct(ItemsDataService itemsDataService)
+        {
+            _itemsDataService = itemsDataService;
+        }
+
         private void Start()
         {
-            _itemsDataService = DependenciesContainer.Instance.GetDependency<ItemsDataService>();
             _itemsDataService.RegisterItem(this);
         }
 

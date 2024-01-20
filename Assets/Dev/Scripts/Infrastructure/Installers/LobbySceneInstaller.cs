@@ -10,7 +10,6 @@ namespace Dev.Infrastructure
         
         public override void InstallBindings()
         {
-            Container.Bind<DependenciesContainer>().AsSingle().NonLazy();
             Container.Bind<InteractorView>().FromInstance(_interactorView).AsSingle();
         }
     }

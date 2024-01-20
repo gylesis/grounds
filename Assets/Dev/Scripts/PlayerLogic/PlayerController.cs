@@ -7,6 +7,7 @@ using Dev.UI.PopUpsAndMenus;
 using Fusion;
 using Fusion.KCC;
 using UnityEngine;
+using Zenject;
 using Cursor = UnityEngine.Cursor;
 
 namespace Dev.PlayerLogic
@@ -43,9 +44,10 @@ namespace Dev.PlayerLogic
             Cursor.lockState = CursorLockMode.Locked;
         }
 
-        private void Start()
+        [Inject]
+        private void Construct(GameInventory gameInventory)
         {
-            _gameInventory = DependenciesContainer.Instance.GetDependency<GameInventory>();
+            _gameInventory = gameInventory;
         }
 
         public override void Spawned()

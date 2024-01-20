@@ -20,10 +20,12 @@ namespace Dev.Scripts.Items
         [SerializeField] private ItemSpawnPlace[] _itemSpawnPlaces;
         
         private ItemStaticDataContainer _itemStaticDataContainer;
+        private DiContainer _diContainer;
 
         [Inject]
-        private void Init(ItemStaticDataContainer itemStaticDataContainer)
+        private void Init(ItemStaticDataContainer itemStaticDataContainer, DiContainer diContainer)
         {
+            _diContainer = diContainer;
             _itemStaticDataContainer = itemStaticDataContainer;
         }
 
@@ -76,6 +78,7 @@ namespace Dev.Scripts.Items
 
             Item item = Runner.Spawn(itemStaticData.WorldData.Prefab, pos, Quaternion.identity);
 
+            _diContainer.Inject(item);
             item.Setup(itemStaticData.ItemNameTag.ItemName);
 
             return item;

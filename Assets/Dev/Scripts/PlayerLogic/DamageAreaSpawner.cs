@@ -10,21 +10,6 @@ namespace Dev.Scripts.PlayerLogic
         [SerializeField] private BoxDamageArea _boxDamageAreaPrefab;
         [SerializeField] private SphereDamageArea _sphereDamageAreaPrefab;
                 
-        
-        private static DamageAreaSpawner _instance;
-
-        public static DamageAreaSpawner Instance
-        {
-            get
-            {
-                if (_instance)
-                {
-                    return _instance;
-                }
-                _instance = DependenciesContainer.Instance.GetDependency<DamageAreaSpawner>();
-                return _instance;
-            }
-        }
 
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         public void RPC_SpawnBox(ItemEnumeration itemEnumeration, Vector3 point, Health inflictor)
@@ -39,15 +24,12 @@ namespace Dev.Scripts.PlayerLogic
             damageArea.Setup(boxDamageAreaConfig, inflictor);
         }
         
-        
-        
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         public void RPC_SpawnSphere(ItemEnumeration itemEnumeration, Vector3 point, Health inflictor)
         {
             var config = (SphereDamageAreaConfig)_damageConfigLibrary.GetConfig(itemEnumeration);
             SpawnSphere(config, point, inflictor);
         }
-        
 
         private void SpawnSphere(SphereDamageAreaConfig sphereDamageAreaConfig ,Vector3 point, Health inflictor)
         {

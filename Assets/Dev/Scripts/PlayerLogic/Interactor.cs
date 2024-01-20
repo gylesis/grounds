@@ -1,8 +1,11 @@
 ﻿using Cysharp.Threading.Tasks;
 using Dev.Infrastructure;
 using Dev.PlayerLogic;
+using Dev.Scripts.Items;
+using Dev.Scripts.PlayerLogic.InventoryLogic;
 using Fusion;
 using UnityEngine;
+using Zenject;
 
 namespace Dev.Scripts.PlayerLogic
 {
@@ -24,10 +27,15 @@ namespace Dev.Scripts.PlayerLogic
 
         private void Start()
         {
-            _interactorView = DependenciesContainer.Instance.GetDependency<InteractorView>();
             //  _gameDataService = DependenciesContainer.Instance.GetDependency<GameDataService>();
         }
 
+        [Inject]
+        private void Construct(InteractorView interactorView)
+        {
+            _interactorView = interactorView;
+        }
+        
         public override async void Spawned()
         {
             base.Spawned();

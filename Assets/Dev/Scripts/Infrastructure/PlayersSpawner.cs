@@ -4,6 +4,7 @@ using Fusion;
 using UniRx;
 using Unity.Mathematics;
 using UnityEngine;
+using Zenject;
 
 namespace Dev.Infrastructure
 {
@@ -11,6 +12,7 @@ namespace Dev.Infrastructure
     {
         [SerializeField] private Transform _spawnPoint;
         [SerializeField] private PlayerCharacter _playerCharacterPrefab;
+        private DiContainer _diContainer;
 
         public Subject<PlayerRef> PlayerSpawned { get; } = new Subject<PlayerRef>();
         public Subject<PlayerRef> PlayerDeSpawned { get; } = new Subject<PlayerRef>();
@@ -18,6 +20,12 @@ namespace Dev.Infrastructure
         [Networked] private NetworkDictionary<PlayerRef, PlayerCharacter> PlayersList { get; }
         
         public int PlayersCount => PlayersList.Count;
+
+        [Inject]
+        private void Construct(DiContainer diContainer)
+        {
+            _diContainer = diContainer;
+        }
         
         public void SpawnPlayer(PlayerRef playerRef, bool firstSpawn = true)
         {
@@ -32,7 +40,10 @@ namespace Dev.Infrastructure
             Vector3 spawnPos = _spawnPoint.position;
 
             PlayerCharacter playerCharacter = Runner.Spawn(playerCharacterPrefab, spawnPos,
-                quaternion.identity, playerRef);
+                quaternion.identity, playerRef, ((runner, o) =>
+                {
+                    _diContainer.Inject(o.GetComponent<GameObjectContext>());
+                }));
 
             NetworkObject playerNetObj = playerCharacter.Object;
 
@@ -50,7 +61,7 @@ namespace Dev.Infrastructure
             PlayersGameData.AddAlivePlayer(playerRef);
             
             RPC_OnPlayerSpawnedInvoke(playerCharacter);
-
+            
             //LoadWeapon(player);
         }
 

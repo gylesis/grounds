@@ -4,6 +4,7 @@ using Dev.Infrastructure;
 using Dev.UI.PopUpsAndMenus;
 using Fusion;
 using UnityEngine;
+using Zenject;
 
 namespace Dev.Scripts.PlayerLogic.InventoryLogic
 {
@@ -22,14 +23,15 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 
         private TickTimer _showQuickTabsTimer;
         
-        private void Start()
+        [Inject]
+        private void Construct(ItemStaticDataContainer itemStaticDataContainer, PlayersDataService playersDataService, GameInventory gameInventory, PopUpService popUpService)
         {
-            _popUpService = DependenciesContainer.Instance.GetDependency<PopUpService>();
-            _gameInventory = DependenciesContainer.Instance.GetDependency<GameInventory>();
-            _playersDataService = DependenciesContainer.Instance.GetDependency<PlayersDataService>();
-            _itemStaticDataContainer = DependenciesContainer.Instance.GetDependency<ItemStaticDataContainer>();
+            _itemStaticDataContainer = itemStaticDataContainer;
+            _popUpService = popUpService;
+            _gameInventory = gameInventory;
+            _playersDataService = playersDataService;
         }
-
+        
         public override void Render()
         {
             if(HasInputAuthority == false) return;

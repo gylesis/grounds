@@ -1,4 +1,5 @@
-﻿using Dev.Infrastructure;
+
+using System;
 using Dev.PlayerLogic;
 using Dev.Scripts.Items;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
@@ -15,9 +16,9 @@ namespace Dev.Scripts.PlayerLogic
 
         private Camera _camera;
         protected Tween _activeTween;
-        
+
         protected ItemsDataService _itemsDataService;
-        
+   
         [Inject]
         public virtual void Construct(DiContainer diContainer, ItemsDataService itemsDataService, PlayersSpawner playersSpawner)
         {
@@ -27,9 +28,15 @@ namespace Dev.Scripts.PlayerLogic
             _camera = _player.CameraController.CharacterCamera;
         }
 
+        [Inject]
+        private void Construct(ItemsDataService itemsDataService, DamageAreaSpawner damageAreaSpawner)
+        {
+            _damageAreaSpawner = damageAreaSpawner;
+            _itemsDataService = itemsDataService;
+        }
+
         public virtual void PrepareToSwing()
         {
-            
         }
 
         public virtual void Swing()
@@ -39,7 +46,7 @@ namespace Dev.Scripts.PlayerLogic
             var itemEnumeration = ContainingItem == null ? ItemEnumeration.EmptyHand : ContainingItem.ItemEnumeration;
             var point = _camera.transform.position + _camera.transform.forward * 4f;
 
-            DamageAreaSpawner.Instance.RPC_SpawnBox(itemEnumeration, point, _player.Health);
+            _damageAreaSpawner.RPC_SpawnBox(itemEnumeration, point, _player.Health);
         }
 
         public virtual void Throw()
@@ -73,9 +80,9 @@ namespace Dev.Scripts.PlayerLogic
         public void RPC_DropItem()
         {
             if (IsFree == true) return;
-            
+
             ContainingItem.NetRigidbody.InterpolationSpace = Spaces.World;
-            
+
             ContainingItem.RPC_ChangeState(false);
             ContainingItem.RPC_SetParent(null);
             RPC_SetEmpty();
@@ -89,10 +96,10 @@ namespace Dev.Scripts.PlayerLogic
 
             ContainingItem.RPC_ChangeState(false);
             ContainingItem.RPC_SetParent(null);
-            
+
             bool raycastSuccess =
                 Physics.Raycast(
-                    _camera.ScreenPointToRay(new Vector3((float) Screen.width / 2, (float) Screen.height / 2)),
+                    _camera.ScreenPointToRay(new Vector3((float)Screen.width / 2, (float)Screen.height / 2)),
                     out var hit);
 
             Vector3 direction =
@@ -105,9 +112,10 @@ namespace Dev.Scripts.PlayerLogic
             ContainingItem.NetRigidbody.Rigidbody.AddForce(throwForce + playerVelocity, ForceMode.Impulse);
             
 
+
             RPC_SetEmpty();
         }
-        
+
         public virtual Tween AnimatePrepare()
         {
             return null;
