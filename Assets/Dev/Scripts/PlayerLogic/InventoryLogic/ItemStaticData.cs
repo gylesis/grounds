@@ -12,7 +12,8 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         public ItemNameTag ItemNameTag => _itemNameTag;
 
         public string ItemName => _itemNameTag.ItemName;
-
+        public int ItemId => _itemNameTag.ItemId;
+        
         public List<ItemType> ItemTypes => _itemTypes;
         
         public Sprite ItemIcon;

@@ -126,7 +126,7 @@ namespace Dev.Scripts.PlayerLogic
             PlayerRef playerRef = Object.InputAuthority;
             Item item = leftHand.ContainingItem;
 
-            var itemData = new ItemData(item.ItemName);
+            var itemData = new ItemData(item.ItemId);
 
             RPC_PutItemInInventory(itemData, playerRef);
 

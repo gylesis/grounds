@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: BananaTag
   m_EditorClassIdentifier: 
   _itemName: Banana
+  _itemId: -2116523860

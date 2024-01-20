@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Dev.Infrastructure;
-using Dev.UI;
 using Dev.UI.PopUpsAndMenus;
 using DG.Tweening;
-using UniRx;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -15,64 +13,79 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 {
     public class BazookaQuickChooseMenu : PopUp
     {
+        [SerializeField] private Transform _chooseArrowTransform;
         [SerializeField] private Transform _quickTabsParent;
         [SerializeField] private QuickTab _quickTabPrefab;
         [SerializeField] private HorizontalLayoutGroup _tabHorizontalLayout;
         [SerializeField] private RectTransform _tabsCenterTransform;
+        [SerializeField] private TMP_Text _noItemsSign;
+        
+        private float MaxWidth => (TabsCount - 1) * WidthStep;
+        private float WidthStep => (_tabHorizontalLayout.spacing + _quickTabPrefab.RectTransform.rect.width);
         
         private ItemStaticDataContainer _itemStaticDataContainer;
 
         private List<QuickTab> _quickTabs = new();
         private Action<int> _onTabChosen;
 
-        private int TabsCount => _quickTabs.Count;
+        private QuickTab _currentSelectedTab;
+        private QuickTab _currentScrollingTab;
         
-        private QuickTab _currentTab;
         private int _currentTabIndex = 0;
-
-        private float MaxWidth => (TabsCount - 1) * WidthStep;
-        private float WidthStep => (_tabHorizontalLayout.spacing + _quickTabPrefab.RectTransform.rect.width);
-        
         private float _swapTimer;
-        
+        private int TabsCount => _quickTabs.Count;
+
+        [Inject]
+        private void Construct(ItemStaticDataContainer itemStaticDataContainer)
+        {
+            _itemStaticDataContainer = itemStaticDataContainer;
+        }
+
         private void Start()    
         {
             _quickTabs = _quickTabsParent.GetComponentsInChildren<QuickTab>().ToList();
             
             if(TabsCount == 0) return;
             
-            _currentTab = _quickTabs[_currentTabIndex];
+            _currentSelectedTab = _quickTabs[_currentTabIndex];
         }
 
-        [Inject]
-        private void Init(ItemStaticDataContainer itemStaticDataContainer)
-        {
-            _itemStaticDataContainer = itemStaticDataContainer;
-        }
-        
         public void Setup(QuickMenuSetupContext setupContext)
         {
             foreach (var quickTab in _quickTabs)
             {
                 Destroy(quickTab.gameObject);
             }
-            _quickTabs.Clear();
             
+            _quickTabs.Clear();
+
+            int itemsCount = setupContext.Items.Count;
+            
+            if (itemsCount == 0)
+            {
+                _noItemsSign.text = "No items to load";
+                _noItemsSign.gameObject.SetActive(true);
+                _chooseArrowTransform.gameObject.SetActive(false);
+                return;
+            }
+            
+            _chooseArrowTransform.gameObject.SetActive(true);
+            _noItemsSign.gameObject.SetActive(false);
             
             _onTabChosen = setupContext.TabChosen;
 
-            for (var index = 0; index < setupContext.Items.Count; index++)
+            for (var index = 0; index < itemsCount; index++)
             {
                 var itemData = setupContext.Items[index];
-                var hasData =
-                    _itemStaticDataContainer.TryGetItemStaticDataByName(itemData.ItemName, out var itemStaticData);
+                int itemId = itemData.ItemId;
+                
+                var hasData = _itemStaticDataContainer.TryGetItemStaticDataById(itemId, out var itemStaticData);
 
                 if (hasData == false) continue;
 
                 QuickTab quickTab = Instantiate(_quickTabPrefab, _quickTabsParent);
 
-                quickTab.Setup(index, itemStaticData.ItemIcon);
-                quickTab.Button.Clicked.TakeUntilDestroy(this).Subscribe((OnQuickTabChosen));
+                quickTab.Setup(itemStaticData.ItemIcon, itemId);
                 
                 _quickTabs.Add(quickTab);
             }
@@ -82,7 +95,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 
         private void Update()
         {
-            if(IsActive == false) return;
+            if(IsActive == false && _quickTabs.Count != 0) return;
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -105,7 +118,6 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         {
             SelectTab(_currentTabIndex);
             
-            
         }
 
         private void SelectTab(int tabId)
@@ -113,7 +125,14 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             for (var index = 0; index < _quickTabs.Count; index++)
             {
                 var quickTab = _quickTabs[index];
-                quickTab.SetSelectionState(index == tabId);
+                var isSelected = index == tabId;
+
+                if (isSelected)
+                {
+                    _currentSelectedTab = quickTab;
+                }
+                
+                quickTab.SetSelectionState(isSelected);
             }
         }
 
@@ -169,12 +188,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             
             _currentTabIndex += 1 * -(int) sign;
     
-            _currentTab = _quickTabs[_currentTabIndex];
-        }
-        
-        private void OnQuickTabChosen(EventContext<QuickTab> context)
-        {
-            _onTabChosen?.Invoke(context.Value.TabId);
+            _currentScrollingTab = _quickTabs[_currentTabIndex];
         }
     }
 }

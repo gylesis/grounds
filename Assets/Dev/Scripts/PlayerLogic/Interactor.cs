@@ -25,34 +25,17 @@ namespace Dev.Scripts.PlayerLogic
 
         private Item TargetItem { get; set; }
 
-        private void Start()
-        {
-            //  _gameDataService = DependenciesContainer.Instance.GetDependency<GameDataService>();
-        }
-
         [Inject]
-        private void Construct(InteractorView interactorView)
+        private void Construct(InteractorView interactorView, PlayerCharacter playerCharacter)
         {
             _interactorView = interactorView;
+            _player = playerCharacter;
         }
         
-        public override async void Spawned()
-        {
-            base.Spawned();
-
-            //_player = _gameDataService.GetPlayer(Object.InputAuthority);
-
-            await UniTask.DelayFrame(5);
-
-            _player = Runner.GetPlayerObject(Object.InputAuthority).GetComponent<PlayerCharacter>(); // TEMP
-        }
-
         public override void Render()
         {
             if (HasInputAuthority == false) return;
             
-            if (_player == null) return; // TEMP
-
             var center = new Vector2(Screen.width / 2, Screen.height / 2);
 
             Ray ray = _player.CameraController.CharacterCamera.ScreenPointToRay(center);
@@ -79,6 +62,12 @@ namespace Dev.Scripts.PlayerLogic
                         if (TargetItem.GetInstanceID() == item.GetInstanceID())
                         {
                             _hadItemInPrevFrame = true;
+                        }
+                        else
+                        {
+                            _interactorView.ShowItem(item, _player);
+
+                            TargetItem = item;
                         }
                     }
                 }

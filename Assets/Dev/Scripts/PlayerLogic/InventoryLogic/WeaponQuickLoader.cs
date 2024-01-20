@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Dev.Infrastructure;
+using Dev.PlayerLogic;
 using Dev.UI.PopUpsAndMenus;
 using Fusion;
 using UnityEngine;
@@ -66,16 +67,23 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             
         }
 
-        [Rpc]
+        [Rpc(RpcSources.All,RpcTargets.StateAuthority)]
         private void RPC_ShowQuickMenuRequest(PlayerRef playerRef)
         {
             var inventoryData = _gameInventory.GetInventoryData(playerRef);
 
+            PlayerController playerController = _playersDataService.GetPlayer(playerRef).PlayerController;
+            
+            if (playerController.Hands.IsFree == false)
+            {
+                if(playerController.Hands.ContainingItem.ItemEnumeration != ItemEnumeration.RocketLauncher) return;
+            }
+            
             var itemDatas = new List<ItemData>();
 
             foreach (ItemData itemData in inventoryData.InventoryItems)
             {
-                bool isItemThisTypeof = _itemStaticDataContainer.IsItemThisTypeof(itemData.ItemName, ItemType.LoadableInItemLauncher);
+                bool isItemThisTypeof = _itemStaticDataContainer.IsItemOfThisType(itemData.ItemId, ItemType.LoadableInItemLauncher);
 
                 if (isItemThisTypeof)
                 {

@@ -49,7 +49,8 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         {
             if (HasStateAuthority == false) return;
 
-            string itemName = context.ItemName;
+            int itemId = context.ItemId;
+            
             PlayerCharacter playerCharacter = _playersDataService.GetPlayer(playerRef);
             Hand targetHand;
             
@@ -62,7 +63,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
                 targetHand = playerCharacter.PlayerController.Hands.GetHandByType(HandType.Right);
             }
 
-            Debug.Log($"Item {context.ItemName} to remove - {context.ToRemove}, is left hand {isLeftHand}");
+            Debug.Log($"Item {context.ItemId} to remove - {context.ToRemove}, is left hand {isLeftHand}");
                 
             if (context.ToRemove)
             {
@@ -71,32 +72,30 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
                 
                 if (leftHand.IsFree == false)
                 {
-                    var itemData = new ItemData();
-                    itemData.ItemNameNet = itemName;
+                    var itemData = new ItemData(itemId);
                     
                     PutItemInInventory(itemData, playerRef);
                     
-                    RemoveItemFromHands(playerRef, itemName);
+                    RemoveItemFromHands(playerRef, itemId);
                     _itemsDataService.RPC_RemoveItemFromWorld(leftHand.ContainingItem);
                     leftHand.RPC_DropItem();
                 }
                 else if (rightHand.IsFree == false)
                 {
-                    var itemData = new ItemData();
-                    itemData.ItemNameNet = itemName;
+                    var itemData = new ItemData(itemId);
                     
                     PutItemInInventory(itemData, playerRef);
                     
-                    RemoveItemFromHands(playerRef, itemName);
+                    RemoveItemFromHands(playerRef, itemId);
                     _itemsDataService.RPC_RemoveItemFromWorld(rightHand.ContainingItem);
                     rightHand.RPC_DropItem();
                 }
             }
             else
             {
-                RemoveItemFromInventory(playerRef, itemName);
+                RemoveItemFromInventory(playerRef, itemId);
                 
-                Item item = _itemsDataService.SpawnItem(itemName, Vector3.zero);
+                Item item = _itemsDataService.SpawnItem(itemId, Vector3.zero);
                 targetHand.RPC_PutItem(item);
             }
             
@@ -123,37 +122,37 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 
         private void OnItemDroppedFromHands(ItemData itemData, PlayerRef playerRef)
         {
-            RemoveItemFromHands(playerRef, itemData.ItemNameNet.Value);
+            RemoveItemFromHands(playerRef, itemData.ItemId);
 
             //Debug.Log($"Item {itemData.ItemName} dropped from hands");
         }
 
-        private void RemoveItemFromHands(PlayerRef playerRef, string itemName)
+        private void RemoveItemFromHands(PlayerRef playerRef, int itemId)
         {
             InventoryData inventoryData = GetInventoryData(playerRef);
             var indexOf = _playersInventoryDatas.IndexOf(inventoryData);
 
-            if(inventoryData.HandItems.Any(x => x.ItemNameNet == itemName) == false) return;
+            if(inventoryData.HandItems.Any(x => x.ItemId == itemId) == false) return;
             
-            ItemData data = inventoryData.HandItems.First(x => x.ItemNameNet == itemName);
+            ItemData data = inventoryData.HandItems.First(x => x.ItemId == itemId);
 
             inventoryData.HandItems.Remove(data);
             _playersInventoryDatas[indexOf] = inventoryData;
         }
             
-         private void RemoveItemFromInventory(PlayerRef playerRef, string itemName)
+         private void RemoveItemFromInventory(PlayerRef playerRef, int itemId)
         {
             InventoryData inventoryData = GetInventoryData(playerRef);
             var indexOf = _playersInventoryDatas.IndexOf(inventoryData);
 
-            if(inventoryData.InventoryItems.Any(x => x.ItemNameNet == itemName) == false) return;
+            if(inventoryData.InventoryItems.Any(x => x.ItemId == itemId) == false) return;
             
-            ItemData data = inventoryData.InventoryItems.First(x => x.ItemNameNet == itemName);
+            ItemData data = inventoryData.InventoryItems.First(x => x.ItemId == itemId);
 
             inventoryData.InventoryItems.Remove(data);
             _playersInventoryDatas[indexOf] = inventoryData;
 
-            Debug.Log($"Remove item {itemName} from Player {playerRef}");
+            Debug.Log($"Remove item {itemId} from Player {playerRef}");
         }   
         
         private void OnItemTakenToHands(ItemData itemData, PlayerRef playerRef)
@@ -169,15 +168,15 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             _playersInventoryDatas[indexOf] = inventoryData;
         }
 
-        private void OnRemoveItemFromInventoryClient(string itemName)
+        private void OnRemoveItemFromInventoryClient(int itemId)
         {
-            RPC_RemoveItemFromInventory(Runner.LocalPlayer, itemName);
+            RPC_RemoveItemFromInventory(Runner.LocalPlayer, itemId);
         }
 
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-        private void RPC_RemoveItemFromInventory(PlayerRef itemOwner, NetworkString<_16> itemName)
+        private void RPC_RemoveItemFromInventory(PlayerRef itemOwner, int itemId)
         {
-            RemoveItemFromInventory(itemOwner, itemName.Value);
+            RemoveItemFromInventory(itemOwner, itemId);
         }
 
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
@@ -202,7 +201,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 
             _playersInventoryDatas[indexOf] = data;
             
-            Debug.Log($"Item {itemData.ItemNameNet} added to Player {playerRef}");
+            Debug.Log($"Item {itemData.ItemId} added to Player {playerRef}");
         }
 
         public void ShowInventory(PlayerRef playerRef)

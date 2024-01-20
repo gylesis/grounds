@@ -24,8 +24,8 @@ namespace Dev.Scripts.PlayerLogic
         [SerializeField] private ItemEnumeration _itemEnumeration;
         [SerializeField] private ItemNameTag _itemNameTag;
         
-        [Networked]
-        private NetworkString<_16> itemName { get; set; }
+        [Networked, ReadOnly]
+        public int ItemId { get; private set; }
         
         private Subject<Unit> _useAction = new();
         private ItemDynamicData _itemDynamicData = new();
@@ -39,8 +39,6 @@ namespace Dev.Scripts.PlayerLogic
         public Health Health => _health;
         public ItemDynamicData ItemDynamicData => _itemDynamicData;
 
-       // public string ItemName => _itemNameTag.ItemName;
-        public string ItemName => itemName.Value;
 
         [Inject]
         private void Construct(ItemsDataService itemsDataService)
@@ -59,9 +57,9 @@ namespace Dev.Scripts.PlayerLogic
 
             if (HasStateAuthority)
             {
-                if (itemName == String.Empty)
+                if (ItemId == 0)
                 {
-                    itemName = _itemNameTag.ItemName;
+                    ItemId = _itemNameTag.ItemId;
                 }
             }
             
@@ -74,16 +72,10 @@ namespace Dev.Scripts.PlayerLogic
             SetItemState(IsCarrying);
         }
 
-        public void Setup(ItemNameTag itemNameTag)
+        public void Setup(int itemId)
         {
-            _itemNameTag = itemNameTag;
+            ItemId = itemId;
         }
-        
-        public void Setup(string itemName)
-        {
-            this.itemName = itemName;
-        }
-        
         
         [Rpc]
         public virtual void RPC_ChangeState(bool isCarrying)
@@ -127,7 +119,7 @@ namespace Dev.Scripts.PlayerLogic
         [Button]
         private void UpdatePositionDataInHand()
         {
-            ItemStaticData itemStaticData = _itemsDataService.GetItemStaticData(ItemName);
+            ItemStaticData itemStaticData = _itemsDataService.GetItemStaticData(ItemId);
             
             itemStaticData.PositionInHand = transform.localPosition;
             itemStaticData.RotationInHand = transform.localRotation.eulerAngles;

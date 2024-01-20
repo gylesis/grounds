@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: DynamiteTag
   m_EditorClassIdentifier: 
   _itemName: Dynamite
+  _itemId: 1493892679

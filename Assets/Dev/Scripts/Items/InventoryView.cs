@@ -42,7 +42,7 @@ namespace Dev.Scripts.Items
 
         public InventoryHandView RightHandView => _rightHandView;
 
-        public Subject<string> ToRemoveItemFromInventory { get; } = new Subject<string>();
+        public Subject<int> ToRemoveItemFromInventory { get; } = new Subject<int>();
 
         private void Awake()
         {
@@ -95,26 +95,26 @@ namespace Dev.Scripts.Items
             
             foreach (ItemData itemData in inventoryItems)
             {
-                string itemName = itemData.ItemNameNet.Value;
+                int itemId = itemData.ItemId;
              
-                _itemStaticDataContainer.TryGetItemStaticDataByName(itemName, out var itemStaticData);
+                _itemStaticDataContainer.TryGetItemStaticDataById(itemId, out var itemStaticData);
 
                 Vector3 spawnPos = _spawnBox.bounds.RandomPointInBounds();
                 InventoryItemView itemView = Instantiate(itemStaticData.InventoryData.Prefab, spawnPos, Quaternion.identity, _itemsParent);
-                itemView.Setup(itemName);
+                itemView.Setup(itemId);
                 
                 _itemViews.Add(itemView);
             }
             
             foreach (ItemData itemData in handsItems)
             {
-                string itemName = itemData.ItemNameNet.Value;
+                int itemId = itemData.ItemId;
              
-                _itemStaticDataContainer.TryGetItemStaticDataByName(itemName, out var itemStaticData);
+                _itemStaticDataContainer.TryGetItemStaticDataById(itemId, out var itemStaticData);
 
                 Vector3 spawnPos = new Vector3(999,999,999);
                 InventoryItemView itemView = Instantiate(itemStaticData.InventoryData.Prefab, spawnPos, Quaternion.identity, _itemsParent);
-                itemView.Setup(itemName);
+                itemView.Setup(itemId);
 
                 if (_leftHandView.IsHandBusy)
                 {
@@ -157,34 +157,34 @@ namespace Dev.Scripts.Items
         {
             if (collider.TryGetComponent<InventoryItemView>(out var itemView))
             {
-                string itemName = itemView.ItemName;
+                int itemName = itemView.ItemId;
                 
                 ReturnWorldItemAlive(itemName);
                 RemoveItemFromInventory(itemName);
             }    
         }
 
-        private void RemoveItemFromInventory(string itemName)
+        private void RemoveItemFromInventory(int itemId)
         {
-            InventoryItemView itemView = _itemViews.First(x => x.ItemName == itemName);
+            InventoryItemView itemView = _itemViews.First(x => x.ItemId == itemId);
             Destroy(itemView.gameObject);
             _itemViews.Remove(itemView);
 
-            ToRemoveItemFromInventory.OnNext(itemName);
+            ToRemoveItemFromInventory.OnNext(itemId);
         }
 
-        private void ReturnWorldItemAlive(string itemName)
+        private void ReturnWorldItemAlive(int itemId)
         {
-            ItemData itemData = _items.First(x => x.ItemNameNet.Value == itemName);
+            ItemData itemData = _items.First(x => x.ItemId == itemId);
 
-            _itemsDataService.RPC_ReturnItemToWorldFromInventory(itemName);
+            _itemsDataService.RPC_ReturnItemToWorldFromInventory(itemId);
         }
         
         private void OnCraftZoneEntered(Collider collider)
         {
             if (collider.TryGetComponent<InventoryItemView>(out var itemView))
             {
-                _craftStation.AddToCraftingTable(itemView.ItemName);
+                _craftStation.AddToCraftingTable(itemView.ItemId);
             }
         }
 
@@ -192,9 +192,9 @@ namespace Dev.Scripts.Items
         {
             if (collider.TryGetComponent<InventoryItemView>(out var itemView))
             {
-                _itemStaticDataContainer.TryGetItemStaticDataByName(itemView.ItemName, out var itemStaticData);
+                _itemStaticDataContainer.TryGetItemStaticDataById(itemView.ItemId, out var itemStaticData);
                 
-                string itemInfo = $"{itemView.ItemName}\n{itemStaticData.ItemDescription}";
+                string itemInfo = $"{itemView.ItemId}\n{itemStaticData.ItemDescription}";
                 _inventoryItemInfoView.Show(itemInfo);
             }
         }

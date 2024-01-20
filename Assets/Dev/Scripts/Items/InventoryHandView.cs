@@ -21,7 +21,7 @@ namespace Dev.Scripts.Items
 
         public struct HandChangedEventContext
         {
-            public string ItemName;
+            public int ItemId;
             public bool ToRemove;
         }
 
@@ -97,7 +97,7 @@ namespace Dev.Scripts.Items
 
         public void PutItem(InventoryItemView itemView, bool isInitialization = false)
         {
-            Debug.Log($"Put item {itemView.ItemName} to {name} hand");
+            Debug.Log($"Put item {itemView.ItemId} to {name} hand");
 
             _holdingItemView = itemView;
             itemView.transform.position = _hand.transform.position;
@@ -106,7 +106,7 @@ namespace Dev.Scripts.Items
             if(isInitialization) return;
             
             var handChangedEventContext = new HandChangedEventContext();
-            handChangedEventContext.ItemName = itemView.ItemName;
+            handChangedEventContext.ItemId = itemView.ItemId;
             handChangedEventContext.ToRemove = false;
             
             ItemChanged.OnNext(handChangedEventContext);
@@ -114,13 +114,13 @@ namespace Dev.Scripts.Items
 
         public void FreeHand()
         {
-            var itemName = _holdingItemView.ItemName;
+            var itemName = _holdingItemView.ItemId;
 
             _holdingItemView.DraggableObject.SetFreezeState(false);
             _holdingItemView = null;
             
             var handChangedEventContext = new HandChangedEventContext();
-            handChangedEventContext.ItemName = itemName;
+            handChangedEventContext.ItemId = itemName;
             handChangedEventContext.ToRemove = true;
             
             ItemChanged.OnNext(handChangedEventContext);
