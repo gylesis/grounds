@@ -1,5 +1,5 @@
-
 using System;
+using Dev.Infrastructure;
 using Dev.PlayerLogic;
 using Dev.Scripts.Items;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
@@ -18,21 +18,22 @@ namespace Dev.Scripts.PlayerLogic
         protected Tween _activeTween;
 
         protected ItemsDataService _itemsDataService;
-   
-        [Inject]
-        public virtual void Construct(DiContainer diContainer, ItemsDataService itemsDataService, PlayersSpawner playersSpawner)
-        {
-            _itemsDataService = itemsDataService;
-            _player = playersSpawner.GetPlayer(Runner.LocalPlayer);
+        private DamageAreaSpawner _damageAreaSpawner;
+        private PlayersDataService _playersDataService;
 
-            _camera = _player.CameraController.CharacterCamera;
-        }
 
         [Inject]
-        private void Construct(ItemsDataService itemsDataService, DamageAreaSpawner damageAreaSpawner)
+        private void Construct(ItemsDataService itemsDataService, PlayersDataService playersDataService, DamageAreaSpawner damageAreaSpawner)
         {
             _damageAreaSpawner = damageAreaSpawner;
-            _itemsDataService = itemsDataService;
+            _playersDataService = playersDataService;
+            _itemsDataService = itemsDataService; 
+        }
+
+        public void Start()
+        {
+            _player = _playersDataService.GetPlayer(Runner.LocalPlayer);
+            _camera = _player.CameraController.CharacterCamera;
         }
 
         public virtual void PrepareToSwing()
