@@ -1,27 +1,28 @@
-﻿using System;
-using Dev.Infrastructure;
+﻿using Dev.Infrastructure;
 using Dev.PlayerLogic;
 using Dev.Scripts.Items;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
 using DG.Tweening;
 using Fusion;
 using UnityEngine;
+using Zenject;
 
 namespace Dev.Scripts.PlayerLogic
 {
     public class HandAbilities : ItemContainer
     {
-        [SerializeField] private PlayerCharacter _player;
+        private PlayerCharacter _player;
 
         private Camera _camera;
         protected Tween _activeTween;
         
         protected ItemsDataService _itemsDataService;
-
-        public override void Spawned()
+        
+        [Inject]
+        public virtual void Construct(DiContainer diContainer, ItemsDataService itemsDataService, PlayersSpawner playersSpawner)
         {
-            base.Spawned();
-            _itemsDataService = DependenciesContainer.Instance.GetDependency<ItemsDataService>();
+            _itemsDataService = itemsDataService;
+            _player = playersSpawner.GetPlayer(Runner.LocalPlayer);
 
             _camera = _player.CameraController.CharacterCamera;
         }
@@ -97,7 +98,11 @@ namespace Dev.Scripts.PlayerLogic
             Vector3 direction =
                 (raycastSuccess ? hit.point : _camera.transform.position + _camera.transform.forward * 100) -
                 transform.position;
-            ContainingItem.NetRigidbody.Rigidbody.AddForce(direction.normalized * 10, ForceMode.Impulse);
+
+            var throwForce = direction.normalized * 10;
+            var playerVelocity = _player.Kcc.Data.RealVelocity * 0.5f;
+            Debug.Log(playerVelocity);
+            ContainingItem.NetRigidbody.Rigidbody.AddForce(throwForce + playerVelocity, ForceMode.Impulse);
             
 
             RPC_SetEmpty();

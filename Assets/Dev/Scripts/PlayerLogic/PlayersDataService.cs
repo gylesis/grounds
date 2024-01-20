@@ -15,7 +15,8 @@ namespace Dev.Scripts.PlayerLogic
 
         public PlayerCharacter GetPlayer(PlayerRef playerRef)
         {
-            PlayerCharacter playerCharacter = Runner.GetPlayerObject(playerRef).GetComponent<PlayerCharacter>();
+            var obj = Runner.GetPlayerObject(playerRef);
+            PlayerCharacter playerCharacter = obj.GetComponent<PlayerCharacter>();
 
             return playerCharacter;
         }
