@@ -26,18 +26,19 @@ namespace Dev.Scripts.PlayerLogic
         private bool AllHandsFree => _hands.All(hand => hand.IsFree);
 
 
-        private void Awake()
-        {
-            _activeHand = GetHandByType(HandType.Right);
-        }
-
         [Inject]
         private void Construct(GameInventory gameInventory, ItemsDataService itemsDataService)
         {
             _gameInventory = gameInventory;
             _itemsDataService = itemsDataService;
         }
-        
+
+        protected override void Start()
+        {
+            base.Start();
+            _activeHand = GetHandByType(HandType.Right);
+        }
+
         public override void Spawned()
         {
             if (HasStateAuthority)
