@@ -30,7 +30,7 @@ namespace Dev.Scripts.PlayerLogic
             _itemsDataService = itemsDataService; 
         }
 
-        public virtual void Start()
+        protected virtual void Start()
         {
             _player = _playersDataService.GetPlayer(Runner.LocalPlayer);
             _camera = _player.CameraController.CharacterCamera;
