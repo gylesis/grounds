@@ -1,6 +1,8 @@
 ﻿using System;
 using Sirenix.OdinInspector;
+    #if UNITY_EDITOR
 using UnityEditor;
+    #endif
 using UnityEngine;
 
 namespace Dev.Scripts.Items
@@ -15,6 +17,7 @@ namespace Dev.Scripts.Items
 
         public string ItemName => _itemName;
 
+#if UNITY_EDITOR
         private void Awake()
         {
             TryCreateItemId();
@@ -30,5 +33,8 @@ namespace Dev.Scripts.Items
                 AssetDatabase.SaveAssets();
             }
         }
+
+#endif
+        
     }
 }

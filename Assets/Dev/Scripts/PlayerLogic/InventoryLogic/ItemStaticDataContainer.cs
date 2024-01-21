@@ -87,7 +87,8 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
                 Debug.Log($"Data {data.ItemName} hash {data.WorldData.Prefab.GetHashCode()}");
             }
         }
-
+#if UNITY_EDITOR
+        
         [Button(ButtonSizes.Gigantic,Name = "Find items data and Fill")]
         private void RefreshList()
         {
@@ -109,6 +110,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             AssetDatabase.SaveAssets();
             
         }
+#endif
         
     }   
 }

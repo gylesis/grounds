@@ -4,7 +4,6 @@ using Dev.Scripts.PlayerLogic.InventoryLogic;
 using DG.Tweening;
 using Fusion;
 using UnityEngine;
-using Zenject;
 
 namespace Dev.Scripts.PlayerLogic
 {
@@ -19,7 +18,8 @@ namespace Dev.Scripts.PlayerLogic
         private DamageAreaSpawner _damageAreaSpawner;
         private PlayersDataService _playersDataService;
 
-        protected void Construct(ItemsDataService itemsDataService, PlayersDataService playersDataService, DamageAreaSpawner damageAreaSpawner)
+        protected void Construct(ItemsDataService itemsDataService, PlayersDataService playersDataService,
+            DamageAreaSpawner damageAreaSpawner)
         {
             _damageAreaSpawner = damageAreaSpawner;
             _playersDataService = playersDataService;
@@ -28,13 +28,15 @@ namespace Dev.Scripts.PlayerLogic
 
         protected override void OnDependenciesResolve()
         {
-            _player = _playersDataService.GetPlayer(Runner.LocalPlayer);
-            _camera = _player.CameraController.CharacterCamera;
+            if (Object.HasStateAuthority)
+            {
+                _player = _playersDataService.GetPlayer(Object.InputAuthority);
+                _camera = _player.CameraController.CharacterCamera;
+            }
         }
 
         protected virtual void Start()
         {
-          
         }
 
         public virtual void PrepareToSwing()
@@ -66,6 +68,7 @@ namespace Dev.Scripts.PlayerLogic
             ContainingItem.Use();
         }
 
+        [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         public override void RPC_PutItem(Item item)
         {
             base.RPC_PutItem(item);
@@ -101,7 +104,7 @@ namespace Dev.Scripts.PlayerLogic
 
             bool raycastSuccess =
                 Physics.Raycast(
-                    _camera.ScreenPointToRay(new Vector3((float)Screen.width / 2, (float)Screen.height / 2)),
+                    _camera.ScreenPointToRay(new Vector3((float) Screen.width / 2, (float) Screen.height / 2)),
                     out var hit);
 
             Vector3 direction =
@@ -112,7 +115,6 @@ namespace Dev.Scripts.PlayerLogic
             var playerVelocity = _player.Kcc.Data.RealVelocity * 0.5f;
             Debug.Log(playerVelocity);
             ContainingItem.NetRigidbody.Rigidbody.AddForce(throwForce + playerVelocity, ForceMode.Impulse);
-            
 
 
             RPC_SetEmpty();
