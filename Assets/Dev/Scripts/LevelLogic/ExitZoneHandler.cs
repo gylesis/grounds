@@ -40,7 +40,11 @@ namespace Dev.Levels.Interactions
         public override async void Spawned()
         {
             await UniTask.Delay(TimeSpan.FromSeconds(2));
-            SpawnExitZones(_exitZonesAmount);
+            
+            if (HasStateAuthority)
+            {
+                SpawnExitZones(_exitZonesAmount);
+            }
         }
 
         public void SpawnExitZones(int amount)
