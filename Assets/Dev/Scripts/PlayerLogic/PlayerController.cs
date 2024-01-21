@@ -1,4 +1,5 @@
-﻿using Dev.Infrastructure;
+﻿using System;
+using Dev.Infrastructure;
 using Dev.Scripts.PlayerLogic;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
 using Dev.UI.PopUpsAndMenus;
@@ -41,17 +42,25 @@ namespace Dev.PlayerLogic
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
         }
-
+        
         [Inject]
         private void Construct(GameInventory gameInventory)
         {
             _gameInventory = gameInventory;
         }
 
+        private void Start()
+        {
+            var gameObjectContext = GetComponent<GameObjectContext>();
+            DiContainerSingleton.Instance.Inject(gameObjectContext);
+        }
 
         public override void Spawned()
         {
-            if (HasInputAuthority == false)
+            if (HasInputAuthority)
+            {
+            }
+            else
             {
                 GetComponentInChildren<Camera>(true).gameObject.SetActive(false);
             }

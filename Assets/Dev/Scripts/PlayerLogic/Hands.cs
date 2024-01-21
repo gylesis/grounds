@@ -80,8 +80,8 @@ namespace Dev.Scripts.PlayerLogic
 
             return null;
         }
-        
-        public override void Spawned()
+
+        protected override void OnDependenciesResolve()
         {
             if (HasStateAuthority)
             {

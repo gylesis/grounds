@@ -41,6 +41,8 @@ namespace Dev.Infrastructure
             
             Container.Bind<DamageAreaSpawner>().FromInstance(_damageAreaSpawner).AsSingle();
             Container.Bind<ImpactApplier>().FromInstance(_impactApplier).AsSingle();
+            
+            Container.Bind<DiContainerSingleton>().AsSingle().NonLazy();
         }
     }
 }

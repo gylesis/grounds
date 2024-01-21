@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using Fusion;
 using UnityEngine;
 
@@ -10,11 +11,18 @@ namespace Dev.Infrastructure
         [Networked]
         public NetworkBool IsActive { get; private set; } = true;
 
-        public override void Spawned()
+        public override async void Spawned()
         {
             IsActive = true;
             CorrectState();
             ServerSubscriptions();
+
+            await UniTask.DelayFrame(5);
+            OnDependenciesResolve();
+        }
+
+        protected virtual void OnDependenciesResolve()
+        {
         }
 
         protected virtual void ServerSubscriptions()

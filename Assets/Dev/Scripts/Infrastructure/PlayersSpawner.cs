@@ -42,7 +42,7 @@ namespace Dev.Infrastructure
             PlayerCharacter playerCharacter = Runner.Spawn(playerCharacterPrefab, spawnPos,
                 quaternion.identity, playerRef, ((runner, o) =>
                 {
-                    _diContainer.Inject(o.GetComponent<GameObjectContext>());
+                    //_diContainer.Inject(o.GetComponent<GameObjectContext>());
                 }));
 
             NetworkObject playerNetObj = playerCharacter.Object;

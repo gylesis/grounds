@@ -41,10 +41,10 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             _playersDataService = playersDataService;
         }
 
-        private void Start()
+        protected override void OnDependenciesResolve()
         {
             _popUpService.TryGetPopUp<BazookaQuickChooseMenu>(out var bazookaQuickChooseMenu);
-            bazookaQuickChooseMenu.ItemChosen.Subscribe((itemId => OnQuickTabChosen(itemId, Runner.LocalPlayer)));
+            bazookaQuickChooseMenu.ItemChosen.Subscribe((itemId => OnQuickTabChosen(itemId, Runner.LocalPlayer))); 
         }
 
         public override void Render()
