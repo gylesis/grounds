@@ -155,17 +155,24 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 
         private void OnQuickTabChosen(int itemId, PlayerRef playerRef)
         {
+            Debug.Log($"On quick tab chosen");
+            
             if(HasStateAuthority == false) return;
 
-            if(_playersLastQuickTabItems.ContainsKey(playerRef) == false) return;
+            if (_playersLastQuickTabItems.ContainsKey(playerRef) == false)
+            {
+                Debug.Log($"No info about last items");
+                return;
+            }
 
             List<int> itemsList = _playersLastQuickTabItems[playerRef];
 
             bool playerHadThisItem = itemsList.Contains(itemId);
 
+            Debug.Log($"Quick tab validation {playerHadThisItem}");
+
             if (playerHadThisItem)
             {
-                Debug.Log($"Quick tab validation success");
                 _itemStaticDataContainer.TryGetItemStaticDataById(itemId, out var itemStaticData);
 
                 var player = _playersDataService.GetPlayer(playerRef);
