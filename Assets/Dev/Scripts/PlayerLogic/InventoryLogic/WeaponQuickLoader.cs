@@ -165,16 +165,23 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 
             if (playerHadThisItem)
             {
+                Debug.Log($"Quick tab validation success");
                 _itemStaticDataContainer.TryGetItemStaticDataById(itemId, out var itemStaticData);
 
                 var player = _playersDataService.GetPlayer(playerRef);
                 player.PlayerController.Hands.GetHandWithThisItemType(ItemType.Firearm).GetComponent<Hand>().TryGetFirearm(out var firearm);
 
-                if (firearm.AbleToReload(itemId))
+                var ableToReload = firearm.AbleToReload(itemId);
+
+                Debug.Log($"Firearm ready to reload {ableToReload}");
+                
+                if (ableToReload)
                 {
                     Item item = _itemsDataService.SpawnItem(itemId, Vector3.zero);
 
-                    firearm.ReloadWith(item);
+                    var reloadWith = firearm.ReloadWith(item);
+
+                    Debug.Log($"Firearm reloaded {reloadWith}");
 
                     _gameInventory.RemoveItemFromInventory(playerRef, itemId);
                 }

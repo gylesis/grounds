@@ -23,9 +23,10 @@ namespace Dev.Scripts.PlayerLogic
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         public virtual void RPC_PutItem(Item item)
         {
-            Debug.Log("PutItem");
             if (IsFree == false) return;
             
+            Debug.Log("Put Item");
+
             SetItem(item);
             ContainingItem.RPC_ChangeState(true);
             ContainingItem.RPC_SetParent(_itemMountPoint);

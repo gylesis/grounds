@@ -28,14 +28,10 @@ namespace Dev.Scripts.PlayerLogic
             _damageAreaSpawner = damageAreaSpawner;
             _playersDataService = playersDataService;
             _itemsDataService = itemsDataService;
-
-            Debug.Log($"construct");
         }
 
         protected override void OnDependenciesResolve()
         {
-            Debug.Log($"OnDependenciesResolve");
-
             _player = _playersDataService.GetPlayer(Runner.LocalPlayer);
             _camera = _player.CameraController.CharacterCamera;
         }
