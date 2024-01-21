@@ -4,6 +4,7 @@ using System.Linq;
 using Dev.UI.PopUpsAndMenus;
 using DG.Tweening;
 using TMPro;
+using UniRx;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -35,6 +36,8 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         private float _swapTimer;
         private int TabsCount => _quickTabs.Count;
 
+        public Subject<int> ItemChosen { get; } = new Subject<int>();
+        
         [Inject]
         private void Construct(ItemStaticDataContainer itemStaticDataContainer)
         {
@@ -96,7 +99,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 
         private void Update()
         {
-            if(IsActive == false && _quickTabs.Count != 0) return;
+            if(IsActive == false || _quickTabs.Count == 0) return;
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -118,7 +121,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         private void ApplyCurrentTabItem()
         {
             SelectTab(_currentTabIndex);
-            
+            ItemChosen.OnNext(_currentSelectedTab.ItemId);
         }
 
         private void SelectTab(int tabId)

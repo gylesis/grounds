@@ -1,5 +1,4 @@
-﻿using System;
-using Dev.Scripts.PlayerLogic.InventoryLogic;
+﻿using Dev.Scripts.PlayerLogic.InventoryLogic;
 using UnityEngine;
 using Zenject;
 using Random = UnityEngine.Random;

@@ -1,25 +1,50 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using Dev.Infrastructure;
+using Dev.Scripts.Items;
+using Dev.Scripts.PlayerLogic.InventoryLogic;
 using Fusion;
 using UnityEngine;
+using Zenject;
 
 namespace Dev.Scripts.PlayerLogic
 {
     public class Firearm : ItemContainer
     {
         [SerializeField] private Item _correspondingItem;
-        [SerializeField] private List<ItemEnumeration> _allowedAmmunition;
+        [SerializeField] private List<ItemType> _allowedAmmunition;
         [SerializeField] private int _magazineSize;
         [SerializeField] private float _itemAcceleration = 25;
 
         private int _magazineAmmoAmount;
+        private ItemsDataService _itemsDataService;
         private Camera PlayerCamera => _correspondingItem.ItemDynamicData.PlayerCharacter.CameraController.CharacterCamera;
 
+        [Inject]
+        private void Construct(ItemsDataService itemsDataService)
+        {
+            _itemsDataService = itemsDataService;
+        }
+        
         public override void Spawned()
         {
             base.Spawned();
             _correspondingItem.UpdateUseAction(RPC_Shoot);
+        }
+
+        public bool AbleToReload(int itemId)
+        {
+            if (_magazineAmmoAmount >= _magazineSize)
+            {
+                Debug.Log("Больше не лезет");
+                return false;
+            }   
+
+            if (CheckAmmunitionCompatibility(itemId))
+            {
+                Debug.Log("Снаряд не подходит");
+                return false;
+            }
+            
+            return true;
         }
 
         public bool ReloadWith(Item item)
@@ -29,27 +54,29 @@ namespace Dev.Scripts.PlayerLogic
                 Debug.Log("Не суй руку в дуло");
                 return false;
             }
-
-            if (CheckAmmunitionCompatibility(item))
+            
+            if (AbleToReload(item.ItemId) == false)
             {
-                Debug.Log("Снаряд не подходит");
-                return false;
-            }
-
-            if (_magazineAmmoAmount >= _magazineSize)
-            {
-                Debug.Log("Больше не лезет");
                 return false;
             }
             
             _magazineAmmoAmount += 1;
             RPC_PutItem(item);
+
+            Debug.Log($"Item {item} loaded into weapon");
             return true;
         }
 
-        public bool CheckAmmunitionCompatibility(Item item)
+        public bool CheckAmmunitionCompatibility(int itemId)
         {
-            return _allowedAmmunition.Any(enumeration => item.ItemEnumeration == enumeration);
+            ItemStaticData itemStaticData = _itemsDataService.GetItemStaticData(itemId);
+
+            foreach (var itemType in _allowedAmmunition)
+            {
+                if (itemStaticData.ItemTypes.Contains(itemType)) return true;
+            }
+
+            return false;
         }
         
         [Rpc]

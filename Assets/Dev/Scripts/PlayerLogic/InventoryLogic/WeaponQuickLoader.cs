@@ -2,8 +2,10 @@
 using System.Linq;
 using Dev.Infrastructure;
 using Dev.PlayerLogic;
+using Dev.Scripts.Items;
 using Dev.UI.PopUpsAndMenus;
 using Fusion;
+using UniRx;
 using UnityEngine;
 using Zenject;
 
@@ -16,23 +18,35 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         private PopUpService _popUpService;
         private GameInventory _gameInventory;
 
-        [Networked] private NetworkBool IsShown { get; set; }
+        private bool _isShown;
 
-        private TickTimer _showTimer;
+        private TickTimer _showTimer;   
         private PlayersDataService _playersDataService;
         private ItemStaticDataContainer _itemStaticDataContainer;
 
         private TickTimer _showQuickTabsTimer;
+
+        private Dictionary<PlayerRef, List<int>> _playersLastQuickTabItems = new Dictionary<PlayerRef, List<int>>();
+        private ItemsDataService _itemsDataService;
+
+        [Networked] private NetworkBool WasArmed { get; set; } // TODO мб нужно дополнительно соблюдать это. например при переключении предмета ставить в
         
         [Inject]
-        private void Construct(ItemStaticDataContainer itemStaticDataContainer, PlayersDataService playersDataService, GameInventory gameInventory, PopUpService popUpService)
+        private void Construct(ItemStaticDataContainer itemStaticDataContainer, PlayersDataService playersDataService, GameInventory gameInventory, PopUpService popUpService, ItemsDataService itemsDataService)
         {
+            _itemsDataService = itemsDataService;
             _itemStaticDataContainer = itemStaticDataContainer;
             _popUpService = popUpService;
             _gameInventory = gameInventory;
             _playersDataService = playersDataService;
         }
-        
+
+        private void Start()
+        {
+            _popUpService.TryGetPopUp<BazookaQuickChooseMenu>(out var bazookaQuickChooseMenu);
+            bazookaQuickChooseMenu.ItemChosen.Subscribe((itemId => OnQuickTabChosen(itemId, Runner.LocalPlayer)));
+        }
+
         public override void Render()
         {
             if(HasInputAuthority == false) return;
@@ -46,7 +60,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             {
                 if (_showQuickTabsTimer.Expired(Runner))
                 {
-                    if (IsShown == false)
+                    if (_isShown == false)
                     {
                         RPC_ShowQuickMenuRequest(Object.InputAuthority);
                     }
@@ -54,7 +68,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             }
             else
             {
-                if (IsShown)
+                if (_isShown)
                 {
                     Hide();
                 }
@@ -70,6 +84,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         [Rpc(RpcSources.All,RpcTargets.StateAuthority)]
         private void RPC_ShowQuickMenuRequest(PlayerRef playerRef)
         {
+            Debug.Log($"Show menu");
             var inventoryData = _gameInventory.GetInventoryData(playerRef);
 
             PlayerController playerController = _playersDataService.GetPlayer(playerRef).PlayerController;
@@ -87,7 +102,16 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
                     itemDatas.Add(itemData);
                 }
             }
+
+            if (_playersLastQuickTabItems.ContainsKey(playerRef) == false)
+            {
+                _playersLastQuickTabItems.Add(playerRef, new List<int>());
+            }
+
+            _playersLastQuickTabItems[playerRef] = itemDatas.Select(x => x.ItemId).ToList();
             
+            _playersDataService.GetPlayer(playerRef).PlayerController.SetAllowToAim(false);
+
             RPC_ShowQuickMenu(playerRef, itemDatas.ToArray());
         }
 
@@ -120,17 +144,53 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 
             quickChooseMenu.Setup(quickMenuSetupContext);
 
-            _playersDataService.GetPlayer(playerRef).PlayerController.SetAllowToAim(false);
+            _isShown = true;
+        }
 
-            IsShown = true;
+        [Rpc(RpcSources.All,RpcTargets.StateAuthority)]
+        private void RPC_HideQuickMenu(PlayerRef playerRef)
+        {
+            _playersDataService.GetPlayer(playerRef).PlayerController.SetAllowToAim(true);
+        }
+
+        private void OnQuickTabChosen(int itemId, PlayerRef playerRef)
+        {
+            if(HasStateAuthority == false) return;
+
+            if(_playersLastQuickTabItems.ContainsKey(playerRef) == false) return;
+
+            List<int> itemsList = _playersLastQuickTabItems[playerRef];
+
+            bool playerHadThisItem = itemsList.Contains(itemId);
+
+            if (playerHadThisItem)
+            {
+                _itemStaticDataContainer.TryGetItemStaticDataById(itemId, out var itemStaticData);
+
+                var player = _playersDataService.GetPlayer(playerRef);
+                player.PlayerController.Hands.GetHandWithThisItemType(ItemType.Firearm).GetComponent<Hand>().TryGetFirearm(out var firearm);
+
+                if (firearm.AbleToReload(itemId))
+                {
+                    Item item = _itemsDataService.SpawnItem(itemId, Vector3.zero);
+
+                    firearm.ReloadWith(item);
+
+                    _gameInventory.RemoveItemFromInventory(playerRef, itemId);
+                }
+            }
+            
+            Hide();
         }
 
         private void Hide()
         {
+            Debug.Log($"Hide quick menu");
             _popUpService.HidePopUp<BazookaQuickChooseMenu>();
-            IsShown = false;
+            _isShown = false;
             
-            _playersDataService.GetPlayer(Object.InputAuthority).PlayerController.SetAllowToAim(true);
+            RPC_HideQuickMenu(Object.InputAuthority);
         }
     }
+    
 }

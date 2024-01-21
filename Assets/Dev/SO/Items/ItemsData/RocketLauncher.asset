@@ -15,7 +15,7 @@ MonoBehaviour:
   _itemNameTag: {fileID: 11400000, guid: 5e5794258a242234da795ef878b65814, type: 2}
   ItemIcon: {fileID: 0}
   ItemDescription: Imba 100%
-  _itemTypes: 03000000
+  _itemTypes: 04000000
   WorldData:
     Prefab: {fileID: 9174568892185717520, guid: a9823f2e5301e58418ed7e945f174b56,
       type: 3}

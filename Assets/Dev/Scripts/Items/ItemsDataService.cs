@@ -7,6 +7,10 @@ using Unity.Collections;
 using UnityEngine;
 using Zenject;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace Dev.Scripts.Items
 {
     public class ItemsDataService : NetworkContext
@@ -91,7 +95,7 @@ namespace Dev.Scripts.Items
 
             Item item = Runner.Spawn(itemStaticData.WorldData.Prefab, pos, Quaternion.identity);
 
-            _diContainer.Inject(item);
+            _diContainer.Inject(item.GameObjectContext);
             item.Setup(itemStaticData.ItemId);
 
             return item;
@@ -125,6 +129,14 @@ namespace Dev.Scripts.Items
         {
             _itemStaticDataContainer.TryGetItemStaticDataById(itemId, out var itemStaticData);
             return itemStaticData;
+        }
+
+        public void SaveItemStaticDataContainer()
+        {
+#if UNITY_EDITOR
+            EditorUtility.SetDirty(_itemStaticDataContainer);
+            AssetDatabase.SaveAssets();
+#endif
         }
         
     }

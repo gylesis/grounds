@@ -140,7 +140,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             _playersInventoryDatas[indexOf] = inventoryData;
         }
             
-         private void RemoveItemFromInventory(PlayerRef playerRef, int itemId)
+        public void RemoveItemFromInventory(PlayerRef playerRef, int itemId)
         {
             InventoryData inventoryData = GetInventoryData(playerRef);
             var indexOf = _playersInventoryDatas.IndexOf(inventoryData);
@@ -152,7 +152,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             inventoryData.InventoryItems.Remove(data);
             _playersInventoryDatas[indexOf] = inventoryData;
 
-            Debug.Log($"Remove item {itemId} from Player {playerRef}");
+            Debug.Log($"Removed item {itemId} from Player {playerRef}");
         }   
         
         private void OnItemTakenToHands(ItemData itemData, PlayerRef playerRef)

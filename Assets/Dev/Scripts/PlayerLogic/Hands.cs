@@ -64,6 +64,22 @@ namespace Dev.Scripts.PlayerLogic
 
             return false;
         }
+
+        public HandAbilities GetHandWithThisItemType(ItemType itemType)
+        {
+            foreach (var hand in _allHands)
+            {
+                if (hand.IsFree == false)
+                {
+                    if (_itemsDataService.GetItemStaticData(hand.ContainingItem.ItemId).ItemTypes.Contains(itemType))
+                    {
+                        return hand;    
+                    }
+                }
+            }
+
+            return null;
+        }
         
         public override void Spawned()
         {

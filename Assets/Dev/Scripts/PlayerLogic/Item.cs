@@ -7,13 +7,13 @@ using Fusion;
 using Sirenix.OdinInspector;
 using UniRx;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Zenject;
 
 namespace Dev.Scripts.PlayerLogic
 {
     [SelectionBase]
     [OrderAfter(typeof(Hands))]
+    [RequireComponent(typeof(GameObjectContext))]
     public class Item : NetworkContext
     {
         [SerializeField] private HitboxRoot _hitboxRoot;
@@ -23,7 +23,10 @@ namespace Dev.Scripts.PlayerLogic
         [SerializeField] private ItemSizeType _itemSizeType;
         [SerializeField] private ItemEnumeration _itemEnumeration;
         [SerializeField] private ItemNameTag _itemNameTag;
-        
+        [SerializeField] private GameObjectContext _gameObjectContext;
+
+        public GameObjectContext GameObjectContext => _gameObjectContext;
+
         [Networked, ReadOnly]
         public int ItemId { get; private set; }
         
@@ -123,6 +126,8 @@ namespace Dev.Scripts.PlayerLogic
             
             itemStaticData.PositionInHand = transform.localPosition;
             itemStaticData.RotationInHand = transform.localRotation.eulerAngles;
+            
+            _itemsDataService.SaveItemStaticDataContainer();
         }
     }
 }
