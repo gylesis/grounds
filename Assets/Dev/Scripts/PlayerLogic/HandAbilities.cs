@@ -47,10 +47,8 @@ namespace Dev.Scripts.PlayerLogic
         {
             _activeTween?.Kill();
             _activeTween = AnimateSwing();
-            var itemEnumeration = ContainingItem == null ? ItemEnumeration.EmptyHand : ContainingItem.ItemEnumeration;
-            var point = _camera.transform.position + _camera.transform.forward * 4f;
-
-            _damageAreaSpawner.RPC_SpawnBox(itemEnumeration, point, _player.Health);
+            
+            RPC_Swing();
         }
 
         public virtual void Throw()
@@ -118,6 +116,16 @@ namespace Dev.Scripts.PlayerLogic
 
 
             RPC_SetEmpty();
+        }
+
+        [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+        private void RPC_Swing()
+        {
+            var itemEnumeration =
+                ContainingItem == null ? ItemEnumeration.EmptyHand : ContainingItem.ItemEnumeration;
+            var point = _camera.transform.position + _camera.transform.forward * 4f;
+            
+            _damageAreaSpawner.RPC_SpawnBox(itemEnumeration, point, _player.Health);
         }
 
         public virtual Tween AnimatePrepare()
