@@ -35,6 +35,15 @@ namespace Dev.Scripts.PlayerLogic
             _itemsDataService = itemsDataService;
             base.Construct(itemsDataService, playersDataService, damageAreaSpawner);
         }
+        
+        protected override void OnDependenciesResolve()
+        {
+            base.OnDependenciesResolve();
+            if (HasStateAuthority)
+            {
+                _gameInventory.RPC_OnPlayerSpawned(Object.InputAuthority);
+            }
+        }
 
         protected override void Start()
         {
@@ -82,13 +91,7 @@ namespace Dev.Scripts.PlayerLogic
             return null;
         }
 
-        protected override void OnDependenciesResolve()
-        {
-            if (HasStateAuthority)
-            {
-                _gameInventory.RPC_OnPlayerSpawned(Object.InputAuthority);
-            }
-        }
+
 
         protected override void CorrectState()
         {

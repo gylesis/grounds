@@ -1,4 +1,5 @@
 ﻿using Dev.PlayerLogic;
+using Dev.Scripts.Items;
 using DG.Tweening;
 using UnityEngine;
 using Zenject;
@@ -15,6 +16,12 @@ namespace Dev.Scripts.PlayerLogic
         private Tween _activeTween;
         private Vector3 _initialArmRotation;
 
+        [Inject]
+        private new void Construct(ItemsDataService itemsDataService, PlayersDataService playersDataService, DamageAreaSpawner damageAreaSpawner)
+        {
+            base.Construct(itemsDataService, playersDataService, damageAreaSpawner);
+        }
+        
         protected override void Start()
         {
             base.Start();

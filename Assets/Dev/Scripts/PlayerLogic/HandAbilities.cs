@@ -4,6 +4,7 @@ using Dev.Scripts.PlayerLogic.InventoryLogic;
 using DG.Tweening;
 using Fusion;
 using UnityEngine;
+using Zenject;
 
 namespace Dev.Scripts.PlayerLogic
 {
@@ -18,8 +19,7 @@ namespace Dev.Scripts.PlayerLogic
         private DamageAreaSpawner _damageAreaSpawner;
         private PlayersDataService _playersDataService;
 
-        
-        protected new void Construct(ItemsDataService itemsDataService, PlayersDataService playersDataService, DamageAreaSpawner damageAreaSpawner)
+        protected void Construct(ItemsDataService itemsDataService, PlayersDataService playersDataService, DamageAreaSpawner damageAreaSpawner)
         {
             _damageAreaSpawner = damageAreaSpawner;
             _playersDataService = playersDataService;
