@@ -9,6 +9,7 @@ using Fusion.Sockets;
 using UniRx;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Zenject;
 
 namespace Dev.Infrastructure
 {
@@ -19,18 +20,24 @@ namespace Dev.Infrastructure
         
         private NetworkRunner _networkRunner;
         private SceneLoader _sceneLoader;
+        private PlayersSpawner _playersSpawner;
 
         private void Awake()
         {
-            _sceneLoader = FindObjectOfType<SceneLoader>();
             _playerTriggerZone.PlayerEntered.TakeUntilDestroy(this).Subscribe((OnPlayerEntered));
+        }
+
+        [Inject]
+        private void Construct(SceneLoader sceneLoader, PlayersSpawner playersSpawner)
+        {
+            _playersSpawner = playersSpawner;
+            _sceneLoader = sceneLoader;
         }
 
         public override void Spawned()
         {
-            _networkRunner = FindObjectOfType<NetworkRunner>();
-            _networkRunner.AddCallbacks(this);
             base.Spawned();
+            Runner.AddCallbacks(this);
         }
 
         private void OnPlayerEntered(PlayerCharacter playerCharacter)
@@ -40,7 +47,6 @@ namespace Dev.Infrastructure
             PlayersGameData.PutPlayerInQueue(playerCharacter.Object.InputAuthority);
             OnReadyPlayersUpdate();
         }
-        
         
         private async void OnReadyPlayersUpdate()
         {
@@ -83,23 +89,26 @@ namespace Dev.Infrastructure
         }
         
         
-        public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
+        public async void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
         {
-            Debug.Log($"Player {player} joined");
-
             if (runner.IsServer)
             {
-                /*PlayersGameData.PutPlayerInQueue(player);
-
-                if (PlayersGameData.CountPlayersInQueue > 0)
-                {
-                    Debug.Log($"Enough players are connected, starting game");
-                    _sceneLoader.LoadScene("MainScene");
-                }*/
+                Debug.Log($"Player joined, Spawning");
+                _playersSpawner.SpawnPlayer(player);
             }
         }
 
-        public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) { }
+        public async void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
+        {
+            Debug.Log($"On Player Left");
+
+            if (runner.IsServer)
+            {
+                _playersSpawner.DespawnPlayer(player);
+                Debug.Log($"Despawning player");
+            }
+        }
+
 
         public void OnInput(NetworkRunner runner, NetworkInput input) { }
 
@@ -132,13 +141,10 @@ namespace Dev.Infrastructure
         public void OnSceneLoadDone(NetworkRunner runner)
         {
             Debug.Log($"Scene load done 1");
-
         }
 
         public void OnSceneLoadStart(NetworkRunner runner)
         {
-            //Runner.RemoveCallbacks(this);
-
             Debug.Log($"Scene load started 1");
         }
     }
