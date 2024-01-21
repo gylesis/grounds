@@ -95,7 +95,7 @@ namespace Dev.Scripts.Items
 
             Item item = Runner.Spawn(itemStaticData.WorldData.Prefab, pos, Quaternion.identity);
 
-            _diContainer.Inject(item.GameObjectContext);
+            // _diContainer.Inject(item.GameObjectContext);
             item.Setup(itemStaticData.ItemId);
 
             return item;

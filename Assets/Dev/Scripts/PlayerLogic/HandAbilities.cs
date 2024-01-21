@@ -1,12 +1,9 @@
-using System;
-using Dev.Infrastructure;
 using Dev.PlayerLogic;
 using Dev.Scripts.Items;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
 using DG.Tweening;
 using Fusion;
 using UnityEngine;
-using Zenject;
 
 namespace Dev.Scripts.PlayerLogic
 {
@@ -21,21 +18,17 @@ namespace Dev.Scripts.PlayerLogic
         private DamageAreaSpawner _damageAreaSpawner;
         private PlayersDataService _playersDataService;
 
-
-        [Inject]
-        private void Construct(ItemsDataService itemsDataService, PlayersDataService playersDataService, DamageAreaSpawner damageAreaSpawner)
+        
+        protected new void Construct(ItemsDataService itemsDataService, PlayersDataService playersDataService, DamageAreaSpawner damageAreaSpawner)
         {
             _damageAreaSpawner = damageAreaSpawner;
             _playersDataService = playersDataService;
             _itemsDataService = itemsDataService;
 
-            Debug.Log($"construct");
         }
 
         protected override void OnDependenciesResolve()
         {
-            Debug.Log($"OnDependenciesResolve");
-
             _player = _playersDataService.GetPlayer(Runner.LocalPlayer);
             _camera = _player.CameraController.CharacterCamera;
         }

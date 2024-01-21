@@ -29,10 +29,11 @@ namespace Dev.Scripts.PlayerLogic
         private List<HandAbilities> _allHands = new List<HandAbilities>(3);
 
         [Inject]
-        private void Construct(GameInventory gameInventory, ItemsDataService itemsDataService)
+        private void Construct(GameInventory gameInventory, ItemsDataService itemsDataService, PlayersDataService playersDataService, DamageAreaSpawner damageAreaSpawner)
         {
             _gameInventory = gameInventory;
             _itemsDataService = itemsDataService;
+            base.Construct(itemsDataService, playersDataService, damageAreaSpawner);
         }
 
         protected override void Start()
