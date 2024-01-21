@@ -39,7 +39,10 @@ namespace Dev.Scripts.Items
 
         public void AddItemSpawnPlace(ItemSpawnPlace itemSpawnPlace)
         {
-            _itemSpawnPlaces.Add(itemSpawnPlace);
+            if (HasStateAuthority)
+            {
+                _itemSpawnPlaces.Add(itemSpawnPlace);
+            }
         }
         
         public string GetItemNameById(int itemId)

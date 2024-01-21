@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Dev.Levels.Interactions;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
 using DG.Tweening;
 using Fusion;
@@ -38,6 +39,25 @@ namespace Dev.Utils
                Quaternion targetRotation = Quaternion.Euler(0, 0, angle);
    
                transform.rotation = targetRotation;
+           }
+           
+           public static SpawnPoint GetFreeSpawnPoint(this SpawnPoint[] spawnPoints)
+           {
+               for (var i = 0; i < spawnPoints.Length; i++)
+               {
+                   var spawnPoint = spawnPoints[Random.Range(i, spawnPoints.Length)];
+                
+                   if(spawnPoint.IsBusy) continue;
+
+                   spawnPoint.UseSpawnPoint();
+                   return spawnPoint;
+               }
+
+               Debug.LogError("No free spawn points left");
+               var freeSpawnPoint = spawnPoints.First();
+               freeSpawnPoint.UseSpawnPoint();
+
+               return freeSpawnPoint;
            }
            
            public static int GetRandom(int maxNum, params int[] expectNums)
