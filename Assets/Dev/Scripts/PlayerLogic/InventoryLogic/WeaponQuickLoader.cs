@@ -47,6 +47,11 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             bazookaQuickChooseMenu.ItemChosen.Subscribe((itemId => OnQuickTabChosen(itemId, Runner.LocalPlayer))); 
         }
 
+        private void OnQuickTabChosen(int itemId, PlayerRef playerRef)
+        {
+            RPC_QuickTabHandle(itemId, playerRef);
+        }
+
         public override void Render()
         {
             if(HasInputAuthority == false) return;
@@ -153,12 +158,11 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             _playersDataService.GetPlayer(playerRef).PlayerController.SetAllowToAim(true);
         }
 
-        private void OnQuickTabChosen(int itemId, PlayerRef playerRef)
+        [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+        private void RPC_QuickTabHandle(int itemId, PlayerRef playerRef)
         {
             Debug.Log($"On quick tab chosen");
             
-            if(HasStateAuthority == false) return;
-
             if (_playersLastQuickTabItems.ContainsKey(playerRef) == false)
             {
                 Debug.Log($"No info about last items");
