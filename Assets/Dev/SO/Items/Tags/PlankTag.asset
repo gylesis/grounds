@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: PlankTag
   m_EditorClassIdentifier: 
   _itemName: Plank
+  _itemId: -865489422

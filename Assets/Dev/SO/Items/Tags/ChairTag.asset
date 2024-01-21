@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: ChairTag
   m_EditorClassIdentifier: 
   _itemName: Chair
+  _itemId: 164626700

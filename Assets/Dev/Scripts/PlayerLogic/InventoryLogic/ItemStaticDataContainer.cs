@@ -17,10 +17,17 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 
             return itemStaticData != null;
         }
-
-        public bool IsItemThisTypeof(string itemName, params ItemType[] itemTypes)
+        
+        public bool TryGetItemStaticDataById(int itemId, out ItemStaticData itemStaticData)
         {
-            ItemStaticData staticData = _items.FirstOrDefault(x => x.ItemName == itemName);
+            itemStaticData = _items.FirstOrDefault(x => x.ItemId == itemId);
+
+            return itemStaticData != null;
+        }
+
+        public bool IsItemOfThisType(int itemId, params ItemType[] itemTypes)
+        {
+            ItemStaticData staticData = _items.FirstOrDefault(x => x.ItemId == itemId);
 
             if (staticData != null)
             {
@@ -34,6 +41,24 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
                 return true;
             }
             
+            return false;   
+        }
+
+        public bool TryGetItemByType(out ItemStaticData itemStaticData, params ItemType[] itemTypes)
+        {
+            itemStaticData = null;
+            
+            foreach (ItemType itemType in itemTypes)
+            {
+                ItemStaticData staticData = _items.FirstOrDefault(x => x.ItemTypes.Contains(itemType));
+
+                if (staticData)
+                {
+                    itemStaticData = staticData;
+                    return true;
+                }
+            }
+
             return false;
         }
         

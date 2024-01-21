@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Dev.Infrastructure;
 using Dev.Scripts.Items;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
@@ -25,6 +26,7 @@ namespace Dev.Scripts.PlayerLogic
         //Там подразумевалось, что в случае, если предмет ложится в обе руки, каждая будет иметь ссылку на этот предмет, но это пока не так, что может вызвать некоторые логические конфликты
         private bool AllHandsFree => _hands.All(hand => hand.IsFree);
 
+        private List<HandAbilities> _allHands = new List<HandAbilities>(3);
 
         [Inject]
         private void Construct(GameInventory gameInventory, ItemsDataService itemsDataService)
@@ -37,8 +39,48 @@ namespace Dev.Scripts.PlayerLogic
         {
             base.Start();
             _activeHand = GetHandByType(HandType.Right);
+            
+            _allHands.Add(this);
+            _allHands.AddRange(_hands);
         }
 
+        public bool IsAnyHandBusy()
+        {
+            return _allHands.Any(x => x.IsFree == false);
+        }
+
+        public bool HasThisItemInHands(int itemId)
+        {
+            foreach (var hand in _allHands)
+            {
+                if (hand.IsFree == false)
+                {
+                    if (hand.ContainingItem.ItemId == itemId)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public HandAbilities GetHandWithThisItemType(ItemType itemType)
+        {
+            foreach (var hand in _allHands)
+            {
+                if (hand.IsFree == false)
+                {
+                    if (_itemsDataService.GetItemStaticData(hand.ContainingItem.ItemId).ItemTypes.Contains(itemType))
+                    {
+                        return hand;    
+                    }
+                }
+            }
+
+            return null;
+        }
+        
         public override void Spawned()
         {
             if (HasStateAuthority)
@@ -126,7 +168,7 @@ namespace Dev.Scripts.PlayerLogic
             PlayerRef playerRef = Object.InputAuthority;
             Item item = leftHand.ContainingItem;
 
-            var itemData = new ItemData(item.ItemName);
+            var itemData = new ItemData(item.ItemId);
 
             RPC_PutItemInInventory(itemData, playerRef);
 

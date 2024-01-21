@@ -15,6 +15,7 @@ MonoBehaviour:
   _itemNameTag: {fileID: 11400000, guid: 9107ff392b5d9554985313aca644920f, type: 2}
   ItemIcon: {fileID: 21300000, guid: c9862fddedba55541a1e80107deb9fb1, type: 3}
   ItemDescription: Just plank
+  _itemTypes: 
   WorldData:
     Prefab: {fileID: 3333041202985477319, guid: c7f5be248db638c40a7f655b830dff98,
       type: 3}

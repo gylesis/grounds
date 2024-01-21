@@ -32,16 +32,16 @@ namespace Dev.Scripts.PlayerLogic
             ContainingItem.RPC_SetLocalPos(Vector3.zero);
             ContainingItem.RPC_SetLocalRotation(Vector3.zero);
             
-            var itemData = new ItemData();
-            itemData.ItemNameNet = item.ItemName;
+            var itemData = new ItemData(item.ItemId);
+            
             ItemTaken.OnNext(itemData);
         }
 
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         public void RPC_SetEmpty()
         {
-            var itemData = new ItemData();
-            itemData.ItemNameNet = ContainingItem.ItemName;
+            var itemData = new ItemData(ContainingItem.ItemId);
+
             ItemDropped.OnNext(itemData);
             
             SetItem(null);

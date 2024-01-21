@@ -1,7 +1,9 @@
 ﻿using System;
 using Dev.PlayerLogic;
+using Dev.Scripts.Items;
 using TMPro;
 using UnityEngine;
+using Zenject;
 
 namespace Dev.Scripts.PlayerLogic
 {
@@ -13,13 +15,21 @@ namespace Dev.Scripts.PlayerLogic
 
         private Item _targetItem;
         private Camera _camera;
+        
+        private ItemsDataService _itemsDataService;
 
+        [Inject]
+        private void Construct(ItemsDataService itemsDataService)
+        {
+            _itemsDataService = itemsDataService;
+        }
+        
         public void ShowItem(Item item, PlayerCharacter playerCharacter)
         {
             _camera = playerCharacter.CameraController.CharacterCamera; // TODO temp
             _targetItem = item;
             
-            _itemName.text = item.ItemName;
+            _itemName.text = _itemsDataService.GetItemNameById(item.ItemId);
             _canvasGroup.alpha = 1;
         }
 

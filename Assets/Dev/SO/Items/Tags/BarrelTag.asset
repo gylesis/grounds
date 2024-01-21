@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: BarrelTag
   m_EditorClassIdentifier: 
   _itemName: Barrel
+  _itemId: -2032730922

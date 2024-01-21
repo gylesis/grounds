@@ -15,11 +15,11 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             _draggableObject = GetComponent<DraggableObject>();
         }
 
-        public string ItemName { get; private set; }
+        public int ItemId { get; private set; }
 
-        public void Setup(string itemName)
+        public void Setup(int itemId)
         {
-            ItemName = itemName;
+            ItemId = itemId;
         }
         
     }

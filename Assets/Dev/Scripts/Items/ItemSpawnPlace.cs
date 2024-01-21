@@ -1,6 +1,7 @@
 ﻿using Dev.Scripts.PlayerLogic.InventoryLogic;
 using UnityEngine;
 using Zenject;
+using Random = UnityEngine.Random;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -21,12 +22,17 @@ namespace Dev.Scripts.Items
         {
             _itemsDataService = itemsDataService;
         }
-        
-        public string GetRandomItemNameToSpawn()
+
+        private void Start()
         {
-            return _itemsToSpawn[Random.Range(0, _itemsToSpawn.Length)].ItemName;
+            _itemsDataService.AddItemSpawnPlace(this);
         }
-        
+
+        public int GetRandomItemNameToSpawn()
+        {
+            return _itemsToSpawn[Random.Range(0, _itemsToSpawn.Length)].ItemId;
+        }
+            
         #if UNITY_EDITOR
        
         private void OnDrawGizmos()

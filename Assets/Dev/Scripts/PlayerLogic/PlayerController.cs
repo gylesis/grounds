@@ -1,6 +1,4 @@
-﻿using System;
-using Cysharp.Threading.Tasks;
-using Dev.Infrastructure;
+﻿using Dev.Infrastructure;
 using Dev.Scripts.PlayerLogic;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
 using Dev.UI.PopUpsAndMenus;
@@ -49,6 +47,7 @@ namespace Dev.PlayerLogic
         {
             _gameInventory = gameInventory;
         }
+
 
         public override void Spawned()
         {

@@ -8,7 +8,7 @@ namespace Dev.Scripts.Items
 {
     public class CraftStation : NetworkContext
     {
-        private List<string> _currentItemsToCraft = new List<string>(4);
+        private List<int> _currentItemsToCraft = new List<int>(4);
         private List<InventoryItemView> _itemViews = new List<InventoryItemView>(4);
 
         public List<InventoryItemView> ItemViews => _itemViews;
@@ -17,26 +17,26 @@ namespace Dev.Scripts.Items
 
         public void AddToCraftingTable(InventoryItemView itemView)
         {
-            string itemName = itemView.ItemName;
+            int itemId = itemView.ItemId;
 
-            var addToCraftingTable = AddToCraftingTable(itemName);
-
+            var addToCraftingTable = AddToCraftingTable(itemId);
+    
             if (addToCraftingTable)
             {
                 _itemViews.Add(itemView);
             }
-        }
+        }   
         
-        public bool AddToCraftingTable(string item)
+        public bool AddToCraftingTable(int itemId)
         {
-            if (_currentItemsToCraft.Contains(item))
+            if (_currentItemsToCraft.Contains(itemId))
             {
-                Debug.Log($"Item {item} already added to craft recipe!");
+                Debug.Log($"Item {itemId} already added to craft recipe!");
                 return false;
             }
-            Debug.Log($"Item {item} added to craft recipe");
+            Debug.Log($"Item {itemId} added to craft recipe");
            
-            _currentItemsToCraft.Add(item);
+            _currentItemsToCraft.Add(itemId);
             return true;
         }
 

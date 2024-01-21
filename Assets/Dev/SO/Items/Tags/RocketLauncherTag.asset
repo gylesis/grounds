@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: RocketLauncherTag
   m_EditorClassIdentifier: 
   _itemName: Rocket Launcher
+  _itemId: 542901610
