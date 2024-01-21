@@ -24,7 +24,6 @@ namespace Dev.Scripts.PlayerLogic
             _damageAreaSpawner = damageAreaSpawner;
             _playersDataService = playersDataService;
             _itemsDataService = itemsDataService;
-
         }
 
         protected override void OnDependenciesResolve()

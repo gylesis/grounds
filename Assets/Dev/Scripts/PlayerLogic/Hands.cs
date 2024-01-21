@@ -99,7 +99,7 @@ namespace Dev.Scripts.PlayerLogic
                 if (hand.IsFree == false)
                 {
                     hand.ContainingItem.RPC_SetParentAndSetZero(hand.ItemMountPoint);
-                    Debug.Log($"Set parent for {hand.ContainingItem.name}", hand.ContainingItem);
+                    //Debug.Log($"Set parent for {hand.ContainingItem.name}", hand.ContainingItem);
                 }
             }
         }

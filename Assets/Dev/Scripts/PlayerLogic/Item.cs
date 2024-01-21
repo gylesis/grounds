@@ -52,6 +52,7 @@ namespace Dev.Scripts.PlayerLogic
         private void Start()
         {
             DiContainerSingleton.Instance.Inject(_gameObjectContext);
+           // _itemsDataService.RegisterItem(this);
         }
 
         public override void Spawned()

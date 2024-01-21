@@ -14,7 +14,8 @@ namespace Dev.Scripts.PlayerLogic
         [SerializeField] private int _magazineSize;
         [SerializeField] private float _itemAcceleration = 25;
 
-        private int _magazineAmmoAmount;
+        [Networked] private int MagazineAmmoAmount { get; set; }
+        
         private ItemsDataService _itemsDataService;
         private Camera PlayerCamera => _correspondingItem.ItemDynamicData.PlayerCharacter.CameraController.CharacterCamera;
 
@@ -32,7 +33,7 @@ namespace Dev.Scripts.PlayerLogic
 
         public bool AbleToReload(int itemId)
         {
-            if (_magazineAmmoAmount >= _magazineSize)
+            if (MagazineAmmoAmount >= _magazineSize)
             {
                 Debug.Log("Больше не лезет");
                 return false;
@@ -60,7 +61,7 @@ namespace Dev.Scripts.PlayerLogic
                 return false;
             }
             
-            _magazineAmmoAmount += 1;
+            MagazineAmmoAmount += 1;
             RPC_PutItem(item);
 
             Debug.Log($"Item {item} loaded into weapon");
@@ -84,7 +85,7 @@ namespace Dev.Scripts.PlayerLogic
         {
             if (IsFree == true) return;
 
-            _magazineAmmoAmount -= 1;
+            MagazineAmmoAmount -= 1;
             ContainingItem.RPC_SetParent(null);
             ContainingItem.RPC_ChangeState(false);
 
