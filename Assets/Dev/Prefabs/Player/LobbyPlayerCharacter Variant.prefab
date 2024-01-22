@@ -8,11 +8,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1250431998838343502, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: bbe6db0a96cf05642b23604d17f8850d, type: 2}
+    - target: {fileID: 2970536021772967972, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: bbe6db0a96cf05642b23604d17f8850d, type: 2}
     - target: {fileID: 3706882407202003477, guid: 599fcb043fbbe214e94d513216740986,
         type: 3}
       propertyPath: m_Name
       value: LobbyPlayerCharacter Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 4281096227737677035, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: bbe6db0a96cf05642b23604d17f8850d, type: 2}
     - target: {fileID: 4293811721154807533, guid: 599fcb043fbbe214e94d513216740986,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -62,6 +77,146 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6373390615862119969, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: bbe6db0a96cf05642b23604d17f8850d, type: 2}
+    - target: {fileID: 7294372747777048904, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: bbe6db0a96cf05642b23604d17f8850d, type: 2}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: TotalWords
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: StateHashes.Array.size
+      value: 21
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: TriggerHashes.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: StateHashes.Array.data[1]
+      value: -62492939
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: StateHashes.Array.data[2]
+      value: -1149146648
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: StateHashes.Array.data[3]
+      value: 646380074
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: StateHashes.Array.data[4]
+      value: -1546996312
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: StateHashes.Array.data[5]
+      value: 125937960
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: StateHashes.Array.data[6]
+      value: 788460410
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: StateHashes.Array.data[7]
+      value: 378386247
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: StateHashes.Array.data[8]
+      value: 2005207359
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: StateHashes.Array.data[9]
+      value: -499022955
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: StateHashes.Array.data[10]
+      value: 1444117612
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: StateHashes.Array.data[11]
+      value: -484510748
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: StateHashes.Array.data[12]
+      value: 667675555
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: StateHashes.Array.data[13]
+      value: 1979272496
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: StateHashes.Array.data[14]
+      value: -1045712183
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: StateHashes.Array.data[15]
+      value: -1233783956
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: StateHashes.Array.data[16]
+      value: -281789040
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: StateHashes.Array.data[17]
+      value: 1740614436
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: StateHashes.Array.data[18]
+      value: -1377630548
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: StateHashes.Array.data[19]
+      value: -542986255
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: StateHashes.Array.data[20]
+      value: 368968313
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: TriggerHashes.Array.data[1]
+      value: 1740614436
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: TriggerHashes.Array.data[2]
+      value: 646380074
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333621857625742653, guid: 599fcb043fbbe214e94d513216740986,
+        type: 3}
+      propertyPath: TriggerHashes.Array.data[3]
+      value: 125937960
       objectReference: {fileID: 0}
     - target: {fileID: 8489570213778661667, guid: 599fcb043fbbe214e94d513216740986,
         type: 3}

@@ -29,6 +29,7 @@ namespace Dev.PlayerLogic
         public override void Spawned()
         {
             Debug.Log($"Player character spawned");
+            _playerView.Initialize(this);
             base.Spawned();
         }
     }

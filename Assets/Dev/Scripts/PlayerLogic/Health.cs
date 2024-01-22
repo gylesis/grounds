@@ -7,10 +7,12 @@ namespace Dev.Scripts.PlayerLogic
 {
     public class Health : NetworkContext, IDamageInflictor, IDamageVictim
     {
-        [Networked] [SerializeField] private float _health { get; set; } = 100;
+        [SerializeField] private float _maxHealth = 100;
+        [Networked] private float CurrentHealth { get; set; }
         [SerializeField] private Rigidbody _rigidbody;
 
-        public Action<float> Changed;
+        public Action<float, float> Changed;
+        
         public Action Depleted;
 
         public string GameObjectName => gameObject.name;
@@ -18,6 +20,12 @@ namespace Dev.Scripts.PlayerLogic
         private void Awake()
         {
             if (_rigidbody == null) _rigidbody = GetComponent<Rigidbody>();
+        }
+
+        public override void Spawned()
+        {
+            base.Spawned();
+            CurrentHealth = _maxHealth;
         }
 
         private void OnCollisionEnter(Collision other)
@@ -37,10 +45,10 @@ namespace Dev.Scripts.PlayerLogic
 
         public void TakeDamage(float value, IDamageInflictor damageInflictor)
         {
-            _health -= value;
-            Changed?.Invoke(value);
-            Debug.Log($"<color=green>{transform.name}</color> was damaged by <color=yellow>{value}</color> by <color=red>{damageInflictor.GameObjectName}</color>. Health: {_health}");
-            if (_health <= 0)
+            CurrentHealth -= value;
+            Changed?.Invoke(CurrentHealth ,_maxHealth);
+            Debug.Log($"<color=green>{transform.name}</color> was damaged by <color=yellow>{value}</color> by <color=red>{damageInflictor.GameObjectName}</color>. Health: {_maxHealth}");
+            if (_maxHealth <= 0)
             {
                 Depleted?.Invoke();
             }

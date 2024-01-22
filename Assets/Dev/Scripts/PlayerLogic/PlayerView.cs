@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Dev.Infrastructure;
+using Dev.PlayerLogic;
+using DG.Tweening;
 using Fusion;
 using UnityEngine;
 
@@ -11,12 +14,18 @@ namespace Dev.Scripts.PlayerLogic
         [SerializeField] private Transform _bodyTransform;
 
         [SerializeField] private NetworkMecanimAnimator _animator;
+
+        [SerializeField] private List<MeshRenderer> _meshRenderers;
+        
+        private static readonly int CrackStrengthName = Shader.PropertyToID("_CrackStrength");
+        private static readonly int EmissionStrengthName = Shader.PropertyToID("_EmissionStrength");
         
         private static readonly int MoveX = Animator.StringToHash("MoveX");
         private static readonly int MoveY = Animator.StringToHash("MoveY");
         private static readonly int LeftHand = Animator.StringToHash("LeftHand");
         private static readonly int RightHand = Animator.StringToHash("RightHand");
         private static readonly int CenterHand = Animator.StringToHash("CenterHand");
+        private Action _onDestroy;
 
 
         public override void Spawned()
@@ -48,6 +57,41 @@ namespace Dev.Scripts.PlayerLogic
             }
         }
         
+        public void Initialize(PlayerCharacter playerCharacter)
+        {
+            TrySubscribeToHealth(playerCharacter.Health);
+        }
+        
+        private void TrySubscribeToHealth(Health health)
+        {
+            health.Changed += UpdateView;
+
+            _onDestroy += () => { health.Changed -= UpdateView;};
+        }
+
+        private void OnDestroy()
+        {
+            _onDestroy?.Invoke();
+        }
+        
+        
+        private void UpdateView(float currentHealth, float maxHealth)
+        {
+            var ratio = 1 - (currentHealth / maxHealth);
+            var rescaledRatio = ratio * 2;
+            var aaaaa = rescaledRatio * rescaledRatio;
+            var crackStrength = rescaledRatio;
+            Debug.Log($"{currentHealth}/{maxHealth}");
+
+            foreach (var meshRenderer in _meshRenderers)
+            {
+                DOTween.Sequence()
+                    .Append(meshRenderer.material.DOFloat(crackStrength * 2f, CrackStrengthName, 0.20f))
+                    .Join(meshRenderer.material.DOFloat(3, EmissionStrengthName, 0.20f))
+                    .Append(meshRenderer.material.DOFloat(crackStrength * 1f, CrackStrengthName, 0.80f))
+                    .Join(meshRenderer.material.DOFloat(0, EmissionStrengthName, 0.20f));
+            }
+        }
         
         [Rpc]
         public void RPC_OnInput(Vector2 moveDirection)

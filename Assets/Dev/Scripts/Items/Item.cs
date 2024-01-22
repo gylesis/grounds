@@ -24,6 +24,8 @@ namespace Dev.Scripts.PlayerLogic
         [SerializeField] private ItemEnumeration _itemEnumeration;
         [SerializeField] private ItemNameTag _itemNameTag;
         [SerializeField] private GameObjectContext _gameObjectContext;
+        [SerializeField] private ItemView _itemView;
+        
 
         public GameObjectContext GameObjectContext => _gameObjectContext;
 
@@ -52,7 +54,7 @@ namespace Dev.Scripts.PlayerLogic
         private void Start()
         {
             DiContainerSingleton.Instance.Inject(_gameObjectContext);
-           // _itemsDataService.RegisterItem(this);
+            _itemView.Initialize(this);
         }
 
         public override void Spawned()
