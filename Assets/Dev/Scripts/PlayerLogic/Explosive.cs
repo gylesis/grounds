@@ -30,7 +30,7 @@ namespace Dev.Scripts.PlayerLogic
 
         private void Start()
         {
-            _correspondingItem.Health.HealthDepleted += Explode;
+            _correspondingItem.Health.Depleted += Explode;
             _correspondingItem.UpdateUseAction(StartDetonation);
         }
 
@@ -57,7 +57,7 @@ namespace Dev.Scripts.PlayerLogic
         
         private void OnDestroy()
         {
-            _correspondingItem.Health.HealthDepleted -= Explode;
+            _correspondingItem.Health.Depleted -= Explode;
         }
     }
 }
