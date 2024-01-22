@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Dev.Levels.Interactions;
 using Dev.PlayerLogic;
 using Dev.Scripts;
@@ -24,6 +25,8 @@ namespace Dev.Infrastructure
         
         public int PlayersCount => PlayersList.Count;
 
+        public List<PlayerCharacter> AllPlayers => PlayersList.Select(x => x.Value).ToList();
+        
         [Inject]
         private void Construct(DiContainer diContainer)
         {
@@ -141,10 +144,8 @@ namespace Dev.Infrastructure
 
         public Vector3 GetPlayerPos(PlayerRef playerRef) => GetPlayer(playerRef).transform.position;
 
-        [Rpc]
         private void RPC_OnPlayerSpawnedInvoke(PlayerCharacter playerCharacter)
         {
-            // Debug.Log($"[RPC] Player spawned");
             PlayerSpawned.OnNext(playerCharacter.Object.InputAuthority);
         }
     }

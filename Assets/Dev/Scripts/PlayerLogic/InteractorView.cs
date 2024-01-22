@@ -18,11 +18,11 @@ namespace Dev.Scripts.PlayerLogic
         
         private ItemsDataService _itemsDataService;
 
-        /*[Inject]
+        [Inject]
         private void Construct(ItemsDataService itemsDataService)
         {
             _itemsDataService = itemsDataService;
-        }*/
+        }
         
         public void ShowItem(Item item, PlayerCharacter playerCharacter)
         {

@@ -65,11 +65,16 @@ namespace Dev.Infrastructure
         private async UniTask<StartGameResult> StartGame(StartGameArgs startGameArgs)
         {
             _networkRunner.gameObject.SetActive(true);
+            
             var startGameResult = await _networkRunner.StartGame(startGameArgs);
 
             if (startGameResult.Ok == false)
             {
                 Debug.LogError($"{startGameResult.ErrorMessage}");
+            }
+            else
+            {
+                DontDestroyOnLoad(_networkRunner.gameObject);
             }
 
             LastGameStartResult(startGameResult);

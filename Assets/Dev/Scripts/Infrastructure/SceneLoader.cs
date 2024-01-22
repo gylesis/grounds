@@ -10,7 +10,7 @@ namespace Dev.Infrastructure
     public class SceneLoader : NetworkSceneManagerBase
     {
         [SerializeField] private string _sceneName = "Main";
-        
+
         private NetworkRunner _networkRunner;
         private Scene _loadedScene;
         private NetworkRunner _runner;
@@ -22,10 +22,10 @@ namespace Dev.Infrastructure
 
         private void TryGetNetRunner()
         {
-            if(_networkRunner == null)
+            if (_networkRunner == null)
                 _networkRunner = FindObjectOfType<NetworkRunner>();
         }
-        
+
         [ContextMenu(nameof(LoadScene))]
         private void LoadScene()
         {
@@ -35,21 +35,22 @@ namespace Dev.Infrastructure
 
         public void LoadScene(string sceneName)
         {
-            if(SceneManager.GetActiveScene().name == sceneName) return;
+            if (SceneManager.GetActiveScene().name == sceneName) return;
 
             TryGetNetRunner();
-            
+            Debug.Log($"Setting active scene: {sceneName}");
             _networkRunner.SetActiveScene(sceneName);
         }
-        
+
         protected override IEnumerator SwitchScene(SceneRef prevScene, SceneRef newScene,
             FinishedLoadingDelegate finished)
         {
             Debug.Log($"Switching Scene from {prevScene} to {newScene}");
 
-            if (newScene <= 0)
+            if (newScene == _loadedScene.buildIndex)
             {
-                finished(FindNetworkObjects(SceneManager.GetActiveScene()));
+                var activeScene = SceneManager.GetActiveScene();
+                finished(FindNetworkObjects(activeScene));
                 yield break;
             }
 
@@ -62,12 +63,12 @@ namespace Dev.Infrastructure
                 /*foreach (Player player in _playersSpawner.Players)
                 {
                     PlayerRef playerRef = player.PlayerRef;
-                    
+
                     //Debug.Log($"De-spawning player {_playersDataService.GetNickname(playerRef)}");
                     Debug.Log($"De-spawning player {playerRef}");
-                    
+
                     _playersSpawner.SetPlayerActiveState(playerRef, false);
-                    
+
                     yield return new WaitForSeconds(0.1f);
                 }*/
 
@@ -77,29 +78,36 @@ namespace Dev.Infrastructure
             }
 
             yield return null;
-            //Debug.Log($"Start loading scene {newScene} in single peer mode");
+            Debug.Log($"Start loading scene {newScene} in single peer mode");
 
+            /*
+            if (_loadedScene != default)
+            {
+                Debug.Log($"Unloading Scene {_loadedScene.buildIndex}");
+                yield return SceneManager.UnloadSceneAsync(_loadedScene);
+            }
+            */
+            
             _loadedScene = default;
-            //Debug.Log($"Loading scene {newScene}");
+            Debug.Log($"Loading scene {newScene}");
 
             List<NetworkObject> sceneObjects = new List<NetworkObject>();
-
             if (newScene >= 0)
             {
                 yield return SceneManager.LoadSceneAsync(newScene, LoadSceneMode.Additive);
+                
                 _loadedScene = SceneManager.GetSceneByBuildIndex(newScene);
-               // Debug.Log($"Loaded scene {newScene}: {_loadedScene}");
+                Debug.Log($"Loaded scene {newScene}: {_loadedScene}");
                 sceneObjects = FindNetworkObjects(_loadedScene, disable: false);
             }
 
             // Delay one frame
             yield return null;
 
-            //Debug.Log($"Switched Scene from {prevScene} to {newScene} - loaded {sceneObjects.Count} scene objects");
+            Debug.Log($"Switched Scene from {prevScene} to {newScene} - loaded {sceneObjects.Count} scene objects");
             finished(sceneObjects);
 
-
-            // Debug.Log($"Unloading Scene {0}");
+            //yield return new WaitForSeconds(5);
             SceneManager.UnloadSceneAsync(0);
         }
     }

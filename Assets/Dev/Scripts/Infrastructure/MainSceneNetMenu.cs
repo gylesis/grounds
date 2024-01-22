@@ -57,6 +57,13 @@ namespace Dev.Infrastructure
                 _connectionManager.StartClient();
             }
             
+             position.position += Vector2.down * _height;
+            if (GUI.Button(position, "Start Server"))
+            {
+                _isConnecting = true;
+                _connectionManager.StartServer();
+            }
+            
         }
     }
 }

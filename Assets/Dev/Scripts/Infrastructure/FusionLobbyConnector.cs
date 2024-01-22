@@ -18,9 +18,9 @@ namespace Dev.Infrastructure
         [SerializeField] private PlayerTriggerZone _playerTriggerZone;
         [SerializeField] private int _neededPlayersAmountToStartGame = 1;
         
-        private NetworkRunner _networkRunner;
         private SceneLoader _sceneLoader;
         private PlayersSpawner _playersSpawner;
+        private SceneCameraController _sceneCameraController;
 
         private void Awake()
         {
@@ -28,8 +28,9 @@ namespace Dev.Infrastructure
         }
 
         [Inject]
-        private void Construct(SceneLoader sceneLoader, PlayersSpawner playersSpawner)
+        private void Construct(SceneLoader sceneLoader, PlayersSpawner playersSpawner, SceneCameraController sceneCameraController)
         {
+            _sceneCameraController = sceneCameraController;
             _playersSpawner = playersSpawner;
             _sceneLoader = sceneLoader;
         }
@@ -63,28 +64,30 @@ namespace Dev.Infrastructure
         [Rpc]
         private async void RPC_StartNewGame()
         {
-            if (_networkRunner.State == NetworkRunner.States.Running)
-            {
-                await _networkRunner.Shutdown(false, ShutdownReason.GameClosed);
+            NetworkRunner networkRunner = Runner;
 
+            if (Runner.State == NetworkRunner.States.Running)
+            {
+                await Runner.Shutdown(false, ShutdownReason.GameClosed);
                 await UniTask.DelayFrame(5);
             }
                 
             var startGameArgs = new StartGameArgs();
-            startGameArgs.GameMode = GameMode.AutoHostOrClient;
+            startGameArgs.GameMode = GameMode.Client;
             startGameArgs.SceneManager = _sceneLoader;
-            startGameArgs.Scene = SceneManager.GetSceneByName("MainScene").buildIndex;
+            startGameArgs.Scene = SceneManager.GetActiveScene().buildIndex;
 
-            StartGameResult gameResult = await _networkRunner.StartGame(startGameArgs);
+            StartGameResult gameResult = await networkRunner.StartGame(startGameArgs);
 
             if (gameResult.Ok)
             {
+                networkRunner.RemoveCallbacks(this);
                 _sceneLoader.LoadScene("MainScene");
                 Debug.Log($"Game started, loading main level");
             }
             else
             {
-                Debug.LogError($"Game not started {gameResult.ErrorMessage}");
+                Debug.LogError($"Game not started {gameResult.ErrorMessage}. Probably server isn't started");
             }
         }
         
@@ -140,6 +143,7 @@ namespace Dev.Infrastructure
 
         public void OnSceneLoadDone(NetworkRunner runner)
         {
+            _sceneCameraController.Camera.gameObject.SetActive(false);
             Debug.Log($"Scene load done 1");
         }
 

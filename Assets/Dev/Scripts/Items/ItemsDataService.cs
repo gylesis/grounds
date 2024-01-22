@@ -30,7 +30,7 @@ namespace Dev.Scripts.Items
         {
             base.Spawned();
 
-            if(SceneManager.GetActiveScene().buildIndex == 0) return;
+            if(SceneManager.GetActiveScene().name != "MainScene") return;
 
             if (HasStateAuthority)
             {
@@ -40,10 +40,9 @@ namespace Dev.Scripts.Items
 
         public void AddItemSpawnPlace(ItemSpawnPlace itemSpawnPlace)
         {
-            if (HasStateAuthority)
-            {
-                _itemSpawnPlaces.Add(itemSpawnPlace);
-            }
+            if(Runner) return; // invokes only on server at first laucnh
+            
+            _itemSpawnPlaces.Add(itemSpawnPlace);
         }
         
         public string GetItemNameById(int itemId)
