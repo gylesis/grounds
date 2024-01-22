@@ -10,7 +10,7 @@ namespace Dev.Infrastructure
         
         private async void Awake()
         {
-            if (Application.platform == RuntimePlatform.WindowsServer || _simulateServer)
+            if (Application.platform == RuntimePlatform.WindowsServer || Application.platform == RuntimePlatform.LinuxServer || _simulateServer)
             {
                 Debug.Log($"Hello. I am dedicated server, I am going to host a server!");
                 Debug.Log($"___________________________________________________________________________");
