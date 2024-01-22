@@ -1,5 +1,9 @@
-﻿using Dev.PlayerLogic;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Dev.Levels.Interactions;
+using Dev.PlayerLogic;
 using Dev.Scripts;
+using Dev.Utils;
 using Fusion;
 using UniRx;
 using Unity.Mathematics;
@@ -10,10 +14,10 @@ namespace Dev.Infrastructure
 {
     public class PlayersSpawner : NetworkContext
     {
-        [SerializeField] private Transform _spawnPoint;
+        [SerializeField] private SpawnPoint[] _spawnPoints;
         [SerializeField] private PlayerCharacter _playerCharacterPrefab;
         private DiContainer _diContainer;
-
+    
         public Subject<PlayerRef> PlayerSpawned { get; } = new Subject<PlayerRef>();
         public Subject<PlayerRef> PlayerDeSpawned { get; } = new Subject<PlayerRef>();
         
@@ -21,6 +25,8 @@ namespace Dev.Infrastructure
         
         public int PlayersCount => PlayersList.Count;
 
+        public List<PlayerCharacter> AllPlayers => PlayersList.Select(x => x.Value).ToList();
+        
         [Inject]
         private void Construct(DiContainer diContainer)
         {
@@ -37,13 +43,16 @@ namespace Dev.Infrastructure
             
             PlayerCharacter playerCharacterPrefab = _playerCharacterPrefab;
 
-            Vector3 spawnPos = _spawnPoint.position;
 
+            Vector3 spawnPos = _spawnPoints.GetFreeSpawnPoint().SpawnPos;
+
+            if (Runner.IsSinglePlayer)
+            {
+                spawnPos = _spawnPoints.First().SpawnPos;
+            }
+            
             PlayerCharacter playerCharacter = Runner.Spawn(playerCharacterPrefab, spawnPos,
-                quaternion.identity, playerRef, ((runner, o) =>
-                {
-                    //_diContainer.Inject(o.GetComponent<GameObjectContext>());
-                }));
+                quaternion.identity, playerRef);
 
             NetworkObject playerNetObj = playerCharacter.Object;
 
@@ -135,10 +144,8 @@ namespace Dev.Infrastructure
 
         public Vector3 GetPlayerPos(PlayerRef playerRef) => GetPlayer(playerRef).transform.position;
 
-        [Rpc]
         private void RPC_OnPlayerSpawnedInvoke(PlayerCharacter playerCharacter)
         {
-            // Debug.Log($"[RPC] Player spawned");
             PlayerSpawned.OnNext(playerCharacter.Object.InputAuthority);
         }
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Dev.Infrastructure
 {
-    public class NetMenu : MonoBehaviour
+    public class MainSceneNetMenu : MonoBehaviour
     {
         [SerializeField] private ConnectionManager _connectionManager;
         [SerializeField] private float _width = 300;
@@ -55,6 +55,13 @@ namespace Dev.Infrastructure
             {
                 _isConnecting = true;
                 _connectionManager.StartClient();
+            }
+            
+             position.position += Vector2.down * _height;
+            if (GUI.Button(position, "Start Server"))
+            {
+                _isConnecting = true;
+                _connectionManager.StartServer();
             }
             
         }

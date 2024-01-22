@@ -16,7 +16,7 @@ namespace Dev.Scripts.PlayerLogic
         protected override void CheckForTargets()
         {
             _hits.Clear();
-            int hitCount = Runner.LagCompensation.OverlapSphere(transform.position, _radius, Object.InputAuthority, _hits, _affectMask);            
+            int hitCount = Runner.LagCompensation.OverlapSphere(transform.position, _radius, Runner.LocalPlayer, _hits, _affectMask);            
 
             for (var i = 0; i < hitCount; i++)
             {

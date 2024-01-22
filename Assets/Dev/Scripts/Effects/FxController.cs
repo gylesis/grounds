@@ -30,7 +30,7 @@ namespace Dev.Effects
 
             if (hasEffect)
             {
-                Effect effect = Runner.Spawn(effectPrefab, pos, rotation, Object.InputAuthority);
+                Effect effect = Runner.Spawn(effectPrefab, pos, rotation, Runner.LocalPlayer);
 
                 effect.RPC_SetPos(pos);
 

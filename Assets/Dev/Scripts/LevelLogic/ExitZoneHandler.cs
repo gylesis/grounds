@@ -6,6 +6,7 @@ using Dev.Infrastructure;
 using Dev.PlayerLogic;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
 using Dev.UI.PopUpsAndMenus;
+using Dev.Utils;
 using Fusion;
 using UniRx;
 using UnityEngine;
@@ -16,10 +17,10 @@ namespace Dev.Levels.Interactions
 {
     public class ExitZoneHandler : NetworkContext
     {
-        [SerializeField] private Transform[] _spawnPoints;
+        [SerializeField] private SpawnPoint[] _spawnPoints;
         [SerializeField] private ExitZone _exitZonePrefab;
         [SerializeField] private int _exitZonesAmount;
-        
+            
         private List<PlayerRef> _playersInExitZone = new List<PlayerRef>();
        // private List<TickTimer> _timers = new List<TickTimer>();
 
@@ -37,9 +38,9 @@ namespace Dev.Levels.Interactions
             _markersHandler = markersHandler;
         }
 
-        public override async void Spawned()
+        public override void Spawned()
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(2));
+            base.Spawned();
             
             if (HasStateAuthority)
             {
@@ -51,9 +52,10 @@ namespace Dev.Levels.Interactions
         {   
             for (int i = 0; i < amount; i++)
             {
-                Vector3 spawnPos = _spawnPoints[Random.Range(i, _spawnPoints.Length)].position;
+                SpawnPoint freeSpawnPoint = _spawnPoints.GetFreeSpawnPoint();
+                Vector3 spawnPos = freeSpawnPoint.SpawnPos;
                 ExitZone exitZone = Runner.Spawn(_exitZonePrefab, spawnPos, Quaternion.identity);
-
+                
                 _markersHandler.SpawnWorldMarkerAt(exitZone.transform.position);
                 
                 exitZone.PlayerEntered.TakeUntilDestroy(this).Subscribe((character => OnExitZoneEntered(character, exitZone)));
@@ -94,10 +96,5 @@ namespace Dev.Levels.Interactions
             }
         }
         
-        public override void FixedUpdateNetwork()
-        {
-            
-            
-        }
     }
 }

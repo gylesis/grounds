@@ -22,7 +22,7 @@ namespace Dev.Scripts.Items
         {
             _itemsDataService = itemsDataService;
         }
-
+        
         private void Start()
         {
             _itemsDataService.AddItemSpawnPlace(this);

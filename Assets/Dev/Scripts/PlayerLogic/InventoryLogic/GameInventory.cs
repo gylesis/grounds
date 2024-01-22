@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Cysharp.Threading.Tasks;
 using Dev.Infrastructure;
 using Dev.PlayerLogic;
 using Dev.Scripts.Items;
@@ -14,11 +13,12 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
     public class GameInventory : NetworkContext
     {
         private List<InventoryData> _playersInventoryDatas = new List<InventoryData>();
-        private bool _invOpened = false;
         private InventoryView _inventoryView;
         private PlayersDataService _playersDataService;
         private ItemsDataService _itemsDataService;
 
+        public Subject<bool> InventoryOpened { get; } = new Subject<bool>();
+            
         private void Start()
         {
             _inventoryView.ToRemoveItemFromInventory
@@ -43,7 +43,48 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             _inventoryView = inventoryView;
             _playersDataService = playersDataService;
         }
-        
+
+        protected override void OnDependenciesResolve()
+        {
+            base.OnDependenciesResolve();
+            
+            if (Runner.IsServer)
+            {
+                _playersDataService.PlayerSpawned.TakeUntilDestroy(this).Subscribe((OnPlayerSpawned));
+                _playersDataService.PlayerDeSpawned.TakeUntilDestroy(this).Subscribe((OnPlayerDeSpawned));
+            }
+        }
+
+        private void OnPlayerSpawned(PlayerRef playerRef)   
+        {
+            PlayerCharacter playerCharacter = _playersDataService.GetPlayer(playerRef);
+            playerCharacter.BasePlayerController.Hands.PutItemInInventory += OnPutItemInInventory;
+
+            void OnPutItemInInventory(ItemData itemData, PlayerRef playerRef)
+            {
+                PutItemInInventory(itemData, playerRef);
+            }
+                
+            var inventoryData = new InventoryData(playerRef);
+            _playersInventoryDatas.Add(inventoryData);
+
+            foreach (Hand hand in playerCharacter.BasePlayerController.Hands.HandsList)
+            {
+                hand.ItemTaken.TakeUntilDestroy(this).Subscribe((s => OnItemTakenToHands(s, playerRef)));
+                hand.ItemDropped.TakeUntilDestroy(this)
+                    .Subscribe((s => OnItemDroppedFromHands(s, playerRef)));
+            }
+        }
+
+        private void OnPlayerDeSpawned(PlayerRef playerRef)
+        {
+            if (_playersInventoryDatas.Any(x => x.Player == playerRef))
+            {
+                InventoryData inventoryData = _playersInventoryDatas.FirstOrDefault(x => x.Player == playerRef);
+                _playersInventoryDatas.Remove(inventoryData);
+            }
+        }
+
         private void OnInventoryHandItemChanged(PlayerRef playerRef, InventoryHandView.HandChangedEventContext context,
             bool isLeftHand)
         {
@@ -56,19 +97,19 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             
             if (isLeftHand)
             {
-                targetHand = playerCharacter.PlayerController.Hands.GetHandByType(HandType.Left);
+                targetHand = playerCharacter.BasePlayerController.Hands.GetHandByType(HandType.Left);
             }
             else
             {
-                targetHand = playerCharacter.PlayerController.Hands.GetHandByType(HandType.Right);
+                targetHand = playerCharacter.BasePlayerController.Hands.GetHandByType(HandType.Right);
             }
 
             Debug.Log($"Item {context.ItemId} to remove - {context.ToRemove}, is left hand {isLeftHand}");
                 
             if (context.ToRemove)
             {
-                var leftHand = playerCharacter.PlayerController.Hands.GetHandByType(HandType.Left);
-                var rightHand = playerCharacter.PlayerController.Hands.GetHandByType(HandType.Right);
+                var leftHand = playerCharacter.BasePlayerController.Hands.GetHandByType(HandType.Left);
+                var rightHand = playerCharacter.BasePlayerController.Hands.GetHandByType(HandType.Right);
                 
                 if (leftHand.IsFree == false)
                 {
@@ -99,25 +140,6 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
                 targetHand.RPC_PutItem(item);
             }
             
-        }
-
-        public override async void Spawned()
-        {
-            base.Spawned();
-
-            await UniTask.Delay(1000);
-
-            if (HasStateAuthority)
-            {
-                PlayerCharacter playerCharacter = _playersDataService.GetPlayer(Runner.LocalPlayer);
-
-                foreach (Hand hand in playerCharacter.PlayerController.Hands.HandsList)
-                {
-                    hand.ItemTaken.TakeUntilDestroy(this).Subscribe((s => OnItemTakenToHands(s, Runner.LocalPlayer)));
-                    hand.ItemDropped.TakeUntilDestroy(this)
-                        .Subscribe((s => OnItemDroppedFromHands(s, Runner.LocalPlayer)));
-                }
-            }
         }
 
         private void OnItemDroppedFromHands(ItemData itemData, PlayerRef playerRef)
@@ -179,14 +201,6 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             RemoveItemFromInventory(itemOwner, itemId);
         }
 
-        [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-        public void RPC_OnPlayerSpawned(PlayerRef playerRef)
-        {
-            var inventoryData = new InventoryData(playerRef);
-
-            _playersInventoryDatas.Add(inventoryData);
-        }
-
         public InventoryData GetInventoryData(PlayerRef playerRef)
         {
             return _playersInventoryDatas.First(x => x.Player == playerRef);
@@ -200,7 +214,6 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             data.InventoryItems.Add(itemData);
 
             _playersInventoryDatas[indexOf] = data;
-            
             Debug.Log($"Item {itemData.ItemId} added to Player {playerRef}");
         }
 
@@ -213,7 +226,9 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         private void RPC_RequestShowInventory(PlayerRef playerRef)
         {
-            //Debug.Log($"[Server] Requested to show inventory for player {playerRef}");
+            if(playerRef == PlayerRef.None) return;
+
+            Debug.Log($"[Server] Requested to show inventory for player {playerRef}");
             InventoryData inventoryData = _playersInventoryDatas.First(x => x.Player == playerRef);
 
             RPC_ShowInventory(playerRef, inventoryData);
@@ -222,11 +237,12 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         [Rpc]
         private void RPC_ShowInventory([RpcTarget] PlayerRef playerRef, InventoryData inventoryData)
         {
+           // Debug.Log($"RPC SHOW INVENTORY FOR player {playerRef}");
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
 
-            _playersDataService.GetPlayer(playerRef).PlayerController.SetAllowToMove(false);
-            _playersDataService.GetPlayer(playerRef).PlayerController.SetAllowToAim(false);
+            _playersDataService.GetPlayer(playerRef).BasePlayerController.SetAllowToMove(false);
+            _playersDataService.GetPlayer(playerRef).BasePlayerController.SetAllowToAim(false);
 
             var inventoryItems = inventoryData.InventoryItems.ToArray();
             var handsItems = inventoryData.HandItems.ToArray();
@@ -234,15 +250,23 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             _inventoryView.Show(inventoryItems, handsItems);
         }
 
-        public void Hide()
+        public void HideInventory(PlayerRef playerRef)
         {
+            RPC_HideInventoryRequest(playerRef);
+            
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-
-            _playersDataService.GetPlayer(Runner.LocalPlayer).PlayerController.SetAllowToMove(true);
-            _playersDataService.GetPlayer(Runner.LocalPlayer).PlayerController.SetAllowToAim(true);
-
             _inventoryView.Hide();
         }
+        [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+        private void RPC_HideInventoryRequest(PlayerRef playerRef)
+        {
+            if(playerRef == PlayerRef.None) return;
+
+           // Debug.Log($"Hide inventory request from {playerRef}");
+            _playersDataService.GetPlayer(playerRef).BasePlayerController.SetAllowToMove(true);
+            _playersDataService.GetPlayer(playerRef).BasePlayerController.SetAllowToAim(true);
+        }
+
     }
 }

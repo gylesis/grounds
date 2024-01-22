@@ -1,6 +1,8 @@
-﻿using Dev.Infrastructure;
+﻿using System.Collections.Generic;
+using Dev.Infrastructure;
 using Dev.PlayerLogic;
 using Fusion;
+using UniRx;
 using Zenject;
 
 namespace Dev.Scripts.PlayerLogic
@@ -9,10 +11,18 @@ namespace Dev.Scripts.PlayerLogic
     {
         private PlayersSpawner _playersSpawner;
 
+        public Subject<PlayerRef> PlayerSpawned => _playersSpawner.PlayerSpawned;
+        public Subject<PlayerRef> PlayerDeSpawned => _playersSpawner.PlayerDeSpawned;
+
         [Inject]
         private void Construct(PlayersSpawner playersSpawner)
         {
             _playersSpawner = playersSpawner;
+        }
+
+        public List<PlayerCharacter> GetAllPlayers()
+        {
+            return _playersSpawner.AllPlayers;
         }
     
         public PlayerCharacter GetPlayer(PlayerRef playerRef)

@@ -9,6 +9,7 @@ using Fusion.Sockets;
 using UniRx;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Zenject;
 
 namespace Dev.Infrastructure
 {
@@ -17,20 +18,27 @@ namespace Dev.Infrastructure
         [SerializeField] private PlayerTriggerZone _playerTriggerZone;
         [SerializeField] private int _neededPlayersAmountToStartGame = 1;
         
-        private NetworkRunner _networkRunner;
         private SceneLoader _sceneLoader;
+        private PlayersSpawner _playersSpawner;
+        private SceneCameraController _sceneCameraController;
 
         private void Awake()
         {
-            _sceneLoader = FindObjectOfType<SceneLoader>();
             _playerTriggerZone.PlayerEntered.TakeUntilDestroy(this).Subscribe((OnPlayerEntered));
+        }
+
+        [Inject]
+        private void Construct(SceneLoader sceneLoader, PlayersSpawner playersSpawner, SceneCameraController sceneCameraController)
+        {
+            _sceneCameraController = sceneCameraController;
+            _playersSpawner = playersSpawner;
+            _sceneLoader = sceneLoader;
         }
 
         public override void Spawned()
         {
-            _networkRunner = FindObjectOfType<NetworkRunner>();
-            _networkRunner.AddCallbacks(this);
             base.Spawned();
+            Runner.AddCallbacks(this);
         }
 
         private void OnPlayerEntered(PlayerCharacter playerCharacter)
@@ -40,7 +48,6 @@ namespace Dev.Infrastructure
             PlayersGameData.PutPlayerInQueue(playerCharacter.Object.InputAuthority);
             OnReadyPlayersUpdate();
         }
-        
         
         private async void OnReadyPlayersUpdate()
         {
@@ -57,49 +64,54 @@ namespace Dev.Infrastructure
         [Rpc]
         private async void RPC_StartNewGame()
         {
-            if (_networkRunner.State == NetworkRunner.States.Running)
-            {
-                await _networkRunner.Shutdown(false, ShutdownReason.GameClosed);
+            NetworkRunner networkRunner = Runner;
 
+            if (Runner.State == NetworkRunner.States.Running)
+            {
+                await Runner.Shutdown(false, ShutdownReason.GameClosed);
                 await UniTask.DelayFrame(5);
             }
                 
             var startGameArgs = new StartGameArgs();
-            startGameArgs.GameMode = GameMode.AutoHostOrClient;
+            startGameArgs.GameMode = GameMode.Client;
             startGameArgs.SceneManager = _sceneLoader;
-            startGameArgs.Scene = SceneManager.GetSceneByName("MainScene").buildIndex;
+            startGameArgs.Scene = SceneManager.GetActiveScene().buildIndex;
 
-            StartGameResult gameResult = await _networkRunner.StartGame(startGameArgs);
+            StartGameResult gameResult = await networkRunner.StartGame(startGameArgs);
 
             if (gameResult.Ok)
             {
+                networkRunner.RemoveCallbacks(this);
                 _sceneLoader.LoadScene("MainScene");
                 Debug.Log($"Game started, loading main level");
             }
             else
             {
-                Debug.LogError($"Game not started {gameResult.ErrorMessage}");
+                Debug.LogError($"Game not started {gameResult.ErrorMessage}. Probably server isn't started");
             }
         }
         
         
-        public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
+        public async void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
         {
-            Debug.Log($"Player {player} joined");
+            if (runner.IsServer)
+            {
+                Debug.Log($"Player joined, Spawning");
+                _playersSpawner.SpawnPlayer(player);
+            }
+        }
+
+        public async void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
+        {
+            Debug.Log($"On Player Left");
 
             if (runner.IsServer)
             {
-                /*PlayersGameData.PutPlayerInQueue(player);
-
-                if (PlayersGameData.CountPlayersInQueue > 0)
-                {
-                    Debug.Log($"Enough players are connected, starting game");
-                    _sceneLoader.LoadScene("MainScene");
-                }*/
+                _playersSpawner.DespawnPlayer(player);
+                Debug.Log($"Despawning player");
             }
         }
 
-        public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) { }
 
         public void OnInput(NetworkRunner runner, NetworkInput input) { }
 
@@ -131,14 +143,12 @@ namespace Dev.Infrastructure
 
         public void OnSceneLoadDone(NetworkRunner runner)
         {
+            _sceneCameraController.Camera.gameObject.SetActive(false);
             Debug.Log($"Scene load done 1");
-
         }
 
         public void OnSceneLoadStart(NetworkRunner runner)
         {
-            //Runner.RemoveCallbacks(this);
-
             Debug.Log($"Scene load started 1");
         }
     }

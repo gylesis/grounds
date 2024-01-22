@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 48829880395824513}
   - component: {fileID: 9136485767781859342}
   - component: {fileID: 7466654073156308438}
+  - component: {fileID: 5470833230907495432}
   m_Layer: 0
   m_Name: WorldMarker
   m_TagString: Untagged
@@ -57,6 +58,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 7466654073156308438}
+  - {fileID: 5470833230907495432}
   SimulationBehaviours: []
 --- !u!114 &7466654073156308438
 MonoBehaviour:
@@ -73,6 +75,34 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _IsActive:
     _value: 1
+--- !u!114 &5470833230907495432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7087802755329157898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  InterpolationSpace: 0
+  InterpolationTarget: {fileID: 0}
+  InterpolateErrorCorrection: 1
+  InterpolatedErrorCorrectionSettings:
+    MinRate: 3.3
+    MaxRate: 10
+    PosBlendStart: 0.25
+    PosBlendEnd: 1
+    PosMinCorrection: 0.025
+    PosTeleportDistance: 2
+    RotBlendStart: 0.1
+    RotBlendEnd: 0.5
+    RotTeleportRadians: 1.5
+  UseLegacySharedModeInterpolation: 0
+  TargetInterpolationDelay: 0.03
 --- !u!1 &8057139531045274867
 GameObject:
   m_ObjectHideFlags: 0

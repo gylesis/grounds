@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Dev.Infrastructure;
 using Dev.Scripts.Items;
@@ -19,7 +20,6 @@ namespace Dev.Scripts.PlayerLogic
         public Hand[] HandsList => _hands;
     
         private Hand _activeHand;
-        private GameInventory _gameInventory;
 
         public HandAbilities ActiveHand => GetActiveHand();
 
@@ -27,29 +27,20 @@ namespace Dev.Scripts.PlayerLogic
         private bool AllHandsFree => _hands.All(hand => hand.IsFree);
 
         private List<HandAbilities> _allHands = new List<HandAbilities>(3);
+        public event Action<ItemData, PlayerRef> PutItemInInventory; // for GameInventory
 
         [Inject]
-        private void Construct(GameInventory gameInventory, ItemsDataService itemsDataService, PlayersDataService playersDataService, DamageAreaSpawner damageAreaSpawner)
+        private void Construct(ItemsDataService itemsDataService, PlayersDataService playersDataService, DamageAreaSpawner damageAreaSpawner)
         {
-            _gameInventory = gameInventory;
             _itemsDataService = itemsDataService;
             base.Construct(itemsDataService, playersDataService, damageAreaSpawner);
-        }
-        
-        protected override void OnDependenciesResolve()
-        {
-            base.OnDependenciesResolve();
-            if (HasStateAuthority)
-            {
-                _gameInventory.RPC_OnPlayerSpawned(Object.InputAuthority);
-            }
-        }
+        }   
 
         protected override void Start()
         {
             base.Start();
-            _activeHand = GetHandByType(HandType.Right);
             
+            _activeHand = GetHandByType(HandType.Right);
             _allHands.Add(this);
             _allHands.AddRange(_hands);
         }
@@ -184,9 +175,9 @@ namespace Dev.Scripts.PlayerLogic
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         private void RPC_PutItemInInventory(ItemData itemData, PlayerRef playerRef)
         {
-            //itemData.ItemName = leftHand.ContainingItem.TestName;
-            _gameInventory.PutItemInInventory(itemData, playerRef);
+            PutItemInInventory?.Invoke(itemData,playerRef);
         }
+
 
         public void OnInput(PlayerInput input, NetworkButtons wasPressed, NetworkButtons wasReleased)
         {

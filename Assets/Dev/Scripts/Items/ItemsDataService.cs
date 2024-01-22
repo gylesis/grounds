@@ -5,6 +5,7 @@ using Dev.Scripts.PlayerLogic.InventoryLogic;
 using Fusion;
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Zenject;
 
 #if UNITY_EDITOR
@@ -18,18 +19,18 @@ namespace Dev.Scripts.Items
         [SerializeField, ReadOnly] private List<ItemSpawnPlace> _itemSpawnPlaces;
         
         private ItemStaticDataContainer _itemStaticDataContainer;
-        private DiContainer _diContainer;
-
+        
         [Inject]
-        private void Init(ItemStaticDataContainer itemStaticDataContainer, DiContainer diContainer)
+        private void Init(ItemStaticDataContainer itemStaticDataContainer)
         {
-            _diContainer = diContainer;
             _itemStaticDataContainer = itemStaticDataContainer;
         }
 
         public override void Spawned()
         {
             base.Spawned();
+
+            if(SceneManager.GetActiveScene().name != "MainScene") return;
 
             if (HasStateAuthority)
             {
@@ -39,6 +40,8 @@ namespace Dev.Scripts.Items
 
         public void AddItemSpawnPlace(ItemSpawnPlace itemSpawnPlace)
         {
+            if(Runner) return; // invokes only on server at first laucnh
+            
             _itemSpawnPlaces.Add(itemSpawnPlace);
         }
         

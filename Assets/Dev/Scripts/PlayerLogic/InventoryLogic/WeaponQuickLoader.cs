@@ -67,7 +67,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
                 {
                     if (_isShown == false)
                     {
-                        RPC_ShowQuickMenuRequest(Object.InputAuthority);
+                        RPC_ShowQuickMenuRequest(Runner.LocalPlayer);
                     }
                 }
             }
@@ -89,13 +89,16 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         [Rpc(RpcSources.All,RpcTargets.StateAuthority)]
         private void RPC_ShowQuickMenuRequest(PlayerRef playerRef)
         {
-            Debug.Log($"Show menu");
+            if(playerRef == PlayerRef.None) return;
+            
             var inventoryData = _gameInventory.GetInventoryData(playerRef);
 
-            PlayerController playerController = _playersDataService.GetPlayer(playerRef).PlayerController;
-            
+            BasePlayerController playerController = _playersDataService.GetPlayer(playerRef).BasePlayerController;
+                
             if (AllowToShowQuickTabs(playerController.Hands) == false) return;
 
+            Debug.Log($"Show menu");
+            
             var itemDatas = new List<ItemData>();
 
             foreach (ItemData itemData in inventoryData.InventoryItems)
@@ -115,7 +118,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 
             _playersLastQuickTabItems[playerRef] = itemDatas.Select(x => x.ItemId).ToList();
             
-            _playersDataService.GetPlayer(playerRef).PlayerController.SetAllowToAim(false);
+            _playersDataService.GetPlayer(playerRef).BasePlayerController.SetAllowToAim(false);
 
             RPC_ShowQuickMenu(playerRef, itemDatas.ToArray());
         }
@@ -155,12 +158,16 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         [Rpc(RpcSources.All,RpcTargets.StateAuthority)]
         private void RPC_HideQuickMenu(PlayerRef playerRef)
         {
-            _playersDataService.GetPlayer(playerRef).PlayerController.SetAllowToAim(true);
+            if(playerRef == PlayerRef.None) return;
+
+            _playersDataService.GetPlayer(playerRef).BasePlayerController.SetAllowToAim(true);
         }
 
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         private void RPC_QuickTabHandle(int itemId, PlayerRef playerRef)
         {
+            if(playerRef == PlayerRef.None) return;
+
             Debug.Log($"On quick tab chosen");
             
             if (_playersLastQuickTabItems.ContainsKey(playerRef) == false)
@@ -180,7 +187,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
                 _itemStaticDataContainer.TryGetItemStaticDataById(itemId, out var itemStaticData);
 
                 var player = _playersDataService.GetPlayer(playerRef);
-                player.PlayerController.Hands.GetHandWithThisItemType(ItemType.Firearm).GetComponent<Hand>().TryGetFirearm(out var firearm);
+                player.BasePlayerController.Hands.GetHandWithThisItemType(ItemType.Firearm).GetComponent<Hand>().TryGetFirearm(out var firearm);
 
                 var ableToReload = firearm.AbleToReload(itemId);
 
@@ -207,7 +214,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             _popUpService.HidePopUp<BazookaQuickChooseMenu>();
             _isShown = false;
             
-            RPC_HideQuickMenu(Object.InputAuthority);
+            RPC_HideQuickMenu(Runner.LocalPlayer);
         }
     }
     

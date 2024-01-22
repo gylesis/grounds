@@ -25,6 +25,8 @@ namespace Dev.Infrastructure
         
         public override void InstallBindings()
         {
+            Container.Bind<DiContainerSingleton>().AsSingle().NonLazy();
+            
             Container.Bind<CraftStation>().FromInstance(_craftStation).AsSingle();
             Container.Bind<InventoryView>().FromInstance(_inventoryView).AsSingle();
             Container.Bind<GameInventory>().FromInstance(_gameInventory).AsSingle();
@@ -42,7 +44,6 @@ namespace Dev.Infrastructure
             Container.Bind<DamageAreaSpawner>().FromInstance(_damageAreaSpawner).AsSingle();
             Container.Bind<ImpactApplier>().FromInstance(_impactApplier).AsSingle();
             
-            Container.Bind<DiContainerSingleton>().AsSingle().NonLazy();
         }
     }
 }
