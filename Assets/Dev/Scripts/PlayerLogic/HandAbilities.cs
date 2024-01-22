@@ -121,11 +121,10 @@ namespace Dev.Scripts.PlayerLogic
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         private void RPC_Swing()
         {
-            var itemEnumeration =
-                ContainingItem == null ? ItemEnumeration.EmptyHand : ContainingItem.ItemEnumeration;
+            var itemId = ContainingItem == null ? -1 : ContainingItem.ItemId;
             var point = _camera.transform.position + _camera.transform.forward * 4f;
             
-            _damageAreaSpawner.RPC_SpawnBox(itemEnumeration, point, _player.Health);
+            _damageAreaSpawner.RPC_SpawnBox(itemId, point, _player.Health);
         }
 
         public virtual Tween AnimatePrepare()

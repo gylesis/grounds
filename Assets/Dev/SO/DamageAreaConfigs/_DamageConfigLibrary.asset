@@ -19,9 +19,8 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 68537295c4b18aa4685bf00c47d24d66, type: 2}
     - {fileID: 11400000, guid: 70e1f0be197f23346ab5e5eb64d6a1ed, type: 2}
     - {fileID: 11400000, guid: 643717f499410064195092e8733876a3, type: 2}
-    - {fileID: 11400000, guid: 05544e410fd8eeb4fa76ddbc8943229a, type: 2}
     - {fileID: 11400000, guid: bd8ce8c7e1ad97a49ae4e75fe3b9fdba, type: 2}
-    - {fileID: 11400000, guid: 66df505ca4334a146b6b14178ced6b56, type: 2}
+    - {fileID: 11400000, guid: 05544e410fd8eeb4fa76ddbc8943229a, type: 2}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -29,31 +28,24 @@ MonoBehaviour:
     SerializationNodes:
     - Name: _configsDictionary
       Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[Dev.Scripts.PlayerLogic.ItemEnumeration,
-        Assembly-CSharp],[Dev.Scripts.PlayerLogic.DamageAreaConfig, Assembly-CSharp]],
-        mscorlib
+      Data: 0|System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib],[Dev.Scripts.PlayerLogic.DamageAreaConfig,
+        Assembly-CSharp]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[Dev.Scripts.PlayerLogic.ItemEnumeration,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
+      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.Int32,
+        mscorlib]], mscorlib
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 12
-      Data: 6
+      Data: 5
     - Name: 
       Entry: 7
       Data: 
     - Name: $k
       Entry: 3
-      Data: 1
+      Data: -865489422
     - Name: $v
       Entry: 10
       Data: 0
@@ -65,7 +57,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 3
-      Data: 2
+      Data: -92338947
     - Name: $v
       Entry: 10
       Data: 1
@@ -77,7 +69,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 3
-      Data: 0
+      Data: 575687925
     - Name: $v
       Entry: 10
       Data: 2
@@ -89,7 +81,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 3
-      Data: 6
+      Data: 542901610
     - Name: $v
       Entry: 10
       Data: 3
@@ -101,22 +93,10 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 3
-      Data: 5
+      Data: 1493892679
     - Name: $v
       Entry: 10
       Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 3
-    - Name: $v
-      Entry: 10
-      Data: 5
     - Name: 
       Entry: 8
       Data: 
@@ -127,15 +107,15 @@ MonoBehaviour:
       Entry: 8
       Data: 
   _configs:
-  - ItemEnumeration: 1
+  - _itemNameTag: {fileID: 11400000, guid: 9107ff392b5d9554985313aca644920f, type: 2}
     DamageAreaConfig: {fileID: 11400000, guid: 68537295c4b18aa4685bf00c47d24d66, type: 2}
-  - ItemEnumeration: 2
+  - _itemNameTag: {fileID: 11400000, guid: bdc401ee9132fca499ea65f2389c3714, type: 2}
     DamageAreaConfig: {fileID: 11400000, guid: 70e1f0be197f23346ab5e5eb64d6a1ed, type: 2}
-  - ItemEnumeration: 0
+  - _itemNameTag: {fileID: 11400000, guid: b89170636ec564740a4d6d2e575de6b4, type: 2}
     DamageAreaConfig: {fileID: 11400000, guid: 643717f499410064195092e8733876a3, type: 2}
-  - ItemEnumeration: 6
-    DamageAreaConfig: {fileID: 11400000, guid: 05544e410fd8eeb4fa76ddbc8943229a, type: 2}
-  - ItemEnumeration: 5
+  - _itemNameTag: {fileID: 11400000, guid: 5e5794258a242234da795ef878b65814, type: 2}
     DamageAreaConfig: {fileID: 11400000, guid: bd8ce8c7e1ad97a49ae4e75fe3b9fdba, type: 2}
-  - ItemEnumeration: 3
+  - _itemNameTag: {fileID: 11400000, guid: 808213744fb65b8469746d337662ae90, type: 2}
+    DamageAreaConfig: {fileID: 11400000, guid: 05544e410fd8eeb4fa76ddbc8943229a, type: 2}
+  - _itemNameTag: {fileID: 11400000, guid: 808213744fb65b8469746d337662ae90, type: 2}
     DamageAreaConfig: {fileID: 11400000, guid: 66df505ca4334a146b6b14178ced6b56, type: 2}

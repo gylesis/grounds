@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cf969e9842e432ea6eda82d1f832526, type: 3}
   m_Name: ItemStaticDataContainer
   m_EditorClassIdentifier: 
+  _emptyTag: {fileID: 11400000, guid: b89170636ec564740a4d6d2e575de6b4, type: 2}
   _items:
   - {fileID: 11400000, guid: 6632f95e035a2ab43958a2923252314c, type: 2}
   - {fileID: 11400000, guid: 5a3f081551f25814fbc61a1c1b10f0c2, type: 2}

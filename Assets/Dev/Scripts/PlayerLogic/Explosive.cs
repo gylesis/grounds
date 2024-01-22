@@ -20,10 +20,12 @@ namespace Dev.Scripts.PlayerLogic
 
         private ImpactApplier _impactApplier;
         private DamageAreaSpawner _damageAreaSpawner;
+        private ItemStaticDataContainer _itemStaticDataContainer;
 
         [Inject]
-        private void Construct(ImpactApplier impactApplier, DamageAreaSpawner damageAreaSpawner)
+        private void Construct(ImpactApplier impactApplier, DamageAreaSpawner damageAreaSpawner, ItemStaticDataContainer itemStaticDataContainer)
         {
+            _itemStaticDataContainer = itemStaticDataContainer;
             _damageAreaSpawner = damageAreaSpawner;
             _impactApplier = impactApplier;
         }
@@ -43,7 +45,9 @@ namespace Dev.Scripts.PlayerLogic
         private void Explode()
         {
             RPC_ExplodeVisuals();
-            _damageAreaSpawner.RPC_SpawnSphere(ItemEnumeration.DynamiteExplosion, transform.position, _correspondingItem.ItemDynamicData.LastOwner);
+
+            _itemStaticDataContainer.TryGetItemByType(out var itemStaticData, ItemType.Explosive);
+            _damageAreaSpawner.RPC_SpawnSphere(itemStaticData.ItemId, transform.position, _correspondingItem.ItemDynamicData.LastOwner);
             _impactApplier.RPC_ApplyInSphere(transform.position, 4, 200);
             DOTween.Sequence().AppendInterval(2).OnComplete(() =>  Runner.Despawn(Object));
         }

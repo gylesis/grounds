@@ -21,27 +21,24 @@ namespace Dev.Scripts.PlayerLogic
         [SerializeField] private Collider _collider;
         [SerializeField] private Health _health;
         [SerializeField] private ItemSizeType _itemSizeType;
-        [SerializeField] private ItemEnumeration _itemEnumeration;
         [SerializeField] private ItemNameTag _itemNameTag;
         [SerializeField] private GameObjectContext _gameObjectContext;
-
+        [ReadOnly][SerializeField] private int _itemId;
+        
         public GameObjectContext GameObjectContext => _gameObjectContext;
 
-        [Networked, ReadOnly]
-        public int ItemId { get; private set; }
-        
         private Subject<Unit> _useAction = new();
         private ItemDynamicData _itemDynamicData = new();
         private IDisposable _disposable;
         private ItemsDataService _itemsDataService;
         [Networked] private NetworkBool IsCarrying { get; set; }
 
+        public int ItemId => _itemNameTag.ItemId;
+        
         public ItemSizeType ItemSizeType => _itemSizeType;
         public NetworkRigidbody NetRigidbody => _rigidbody;
-        public ItemEnumeration ItemEnumeration => _itemEnumeration;
         public Health Health => _health;
         public ItemDynamicData ItemDynamicData => _itemDynamicData;
-
 
         [Inject]
         private void Construct(ItemsDataService itemsDataService)
@@ -49,25 +46,24 @@ namespace Dev.Scripts.PlayerLogic
             _itemsDataService = itemsDataService;
         }
 
-        private void Start()
+        public void Setup(int itemId)
         {
-            DiContainerSingleton.Instance.Inject(_gameObjectContext);
-           // _itemsDataService.RegisterItem(this);
+            _itemId = itemId;
         }
 
-        public override void Spawned()
+        private void Start()
         {
-            base.Spawned();
-
-            if (HasStateAuthority)
+            if (_itemsDataService == null) // true only if object not spawned in ItemsDataService and already was on scene
             {
-                if (ItemId == 0)
-                {
-                    ItemId = _itemNameTag.ItemId;
-                }
+                DiContainerSingleton.Instance.Inject(_gameObjectContext);
             }
+        }
+
+        protected override void OnDependenciesResolve()
+        {
+            base.OnDependenciesResolve();
             
-            
+            _itemsDataService.RegisterItem(this);
         }
 
         protected override void CorrectState()
@@ -77,11 +73,6 @@ namespace Dev.Scripts.PlayerLogic
             SetItemState(IsCarrying);
         }
 
-        public void Setup(int itemId)
-        {
-            ItemId = itemId;
-        }
-        
         [Rpc]
         public virtual void RPC_ChangeState(bool isCarrying)
         {

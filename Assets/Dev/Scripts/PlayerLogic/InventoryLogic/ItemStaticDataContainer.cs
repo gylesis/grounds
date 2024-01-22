@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Dev.Scripts.Items;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
@@ -9,6 +10,8 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
     [CreateAssetMenu(menuName = "StaticData/ItemStaticDataContainer", fileName = "ItemStaticDataContainer", order = 0)]
     public class ItemStaticDataContainer : ScriptableObject
     {
+        [SerializeField] private ItemNameTag _emptyTag;
+        
         [SerializeField] private ItemStaticData[] _items;
 
         public bool TryGetItemStaticDataByName(string itemName, out ItemStaticData itemStaticData)
@@ -22,6 +25,10 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         {
             itemStaticData = _items.FirstOrDefault(x => x.ItemId == itemId);
 
+            if(itemId == _emptyTag.ItemId)
+                Debug.LogError($"Using empty tag");
+            
+            
             return itemStaticData != null;
         }
 
@@ -31,6 +38,9 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 
             if (staticData != null)
             {
+                if(itemId == _emptyTag.ItemId)
+                    Debug.LogError($"Using empty tag");
+                
                 foreach (ItemType itemType in itemTypes)
                 {
                     var contains = staticData.ItemTypes.Contains(itemType);

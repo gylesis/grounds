@@ -12,9 +12,9 @@ namespace Dev.Scripts.PlayerLogic
                 
 
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-        public void RPC_SpawnBox(ItemEnumeration itemEnumeration, Vector3 point, Health inflictor)
+        public void RPC_SpawnBox(int itemId, Vector3 point, Health inflictor)
         {
-            var config = (BoxDamageAreaConfig) _damageConfigLibrary.GetConfig(itemEnumeration);
+            var config = (BoxDamageAreaConfig) _damageConfigLibrary.GetConfig(itemId);
             SpawnBox(config, point, inflictor);
         }
 
@@ -25,9 +25,9 @@ namespace Dev.Scripts.PlayerLogic
         }
         
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-        public void RPC_SpawnSphere(ItemEnumeration itemEnumeration, Vector3 point, Health inflictor)
+        public void RPC_SpawnSphere(int itemId, Vector3 point, Health inflictor)
         {
-            var config = (SphereDamageAreaConfig)_damageConfigLibrary.GetConfig(itemEnumeration);
+            var config = (SphereDamageAreaConfig)_damageConfigLibrary.GetConfig(itemId);
             SpawnSphere(config, point, inflictor);
         }
 

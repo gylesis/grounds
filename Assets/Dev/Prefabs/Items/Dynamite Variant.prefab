@@ -128,6 +128,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dynamite Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 4499176733960800270, guid: 6cfe8c4945c041d4f89d26bd16a1fc11,
+        type: 3}
+      propertyPath: _itemNameTag
+      value: 
+      objectReference: {fileID: 11400000, guid: 808213744fb65b8469746d337662ae90,
+        type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 6069363072241411150, guid: 6cfe8c4945c041d4f89d26bd16a1fc11, type: 3}

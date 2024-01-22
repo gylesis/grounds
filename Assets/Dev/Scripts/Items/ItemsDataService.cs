@@ -17,6 +17,7 @@ namespace Dev.Scripts.Items
     public class ItemsDataService : NetworkContext
     {
         [SerializeField, ReadOnly] private List<ItemSpawnPlace> _itemSpawnPlaces;
+        private List<Item> _spawnedItems = new List<Item>();
         
         private ItemStaticDataContainer _itemStaticDataContainer;
         
@@ -80,6 +81,8 @@ namespace Dev.Scripts.Items
         
         public void RegisterItem(Item item)
         {
+            _spawnedItems.Add(item);
+            
             /*if (item.ItemName == String.Empty)
             {
                 _itemStaticDataContainer.Find(item);
@@ -98,6 +101,7 @@ namespace Dev.Scripts.Items
 
             Item item = Runner.Spawn(itemStaticData.WorldData.Prefab, pos, Quaternion.identity);
 
+            _spawnedItems.Add(item);
             //_diContainer.Inject(item.GameObjectContext);
             item.Setup(itemStaticData.ItemId);
 
