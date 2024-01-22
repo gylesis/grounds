@@ -1,9 +1,9 @@
-﻿using UnityEngine;
+﻿using Fusion;
 
 namespace Dev.Scripts.PlayerLogic
 {
     public interface IDamageInflictor
     {
-        public string GameObjectName { get;}
+        public PlayerRef PlayerRef { get;}
     }
 }

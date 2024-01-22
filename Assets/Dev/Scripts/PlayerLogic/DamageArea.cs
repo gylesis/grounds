@@ -66,7 +66,7 @@ namespace Dev.Scripts.PlayerLogic
 
         protected void TryDealDamage(IDamageVictim victim)
         {
-            if (_damageInflictor.GameObjectName == victim.GameObjectName) return;
+            if (_damageInflictor.PlayerRef == victim.PlayerRef) return;
             
             if (_damagePeriod == 0)
             {

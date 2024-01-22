@@ -5,6 +5,7 @@ using Dev.PlayerLogic;
 using DG.Tweening;
 using Fusion;
 using UnityEngine;
+using Zenject;
 
 namespace Dev.Scripts.PlayerLogic
 {
@@ -26,6 +27,7 @@ namespace Dev.Scripts.PlayerLogic
         private static readonly int RightHand = Animator.StringToHash("RightHand");
         private static readonly int CenterHand = Animator.StringToHash("CenterHand");
         private Action _onDestroy;
+        private PlayerCharacter _playerCharacter;
 
 
         public override void Spawned()
@@ -56,16 +58,23 @@ namespace Dev.Scripts.PlayerLogic
                     break;
             }
         }
-        
-        public void Initialize(PlayerCharacter playerCharacter)
+
+        [Inject]
+        private void Construct(PlayerCharacter playerCharacter)
         {
-            TrySubscribeToHealth(playerCharacter.Health);
+            _playerCharacter = playerCharacter;
         }
-        
+
+        protected override void OnDependenciesResolve()
+        {
+            base.OnDependenciesResolve();
+            
+            TrySubscribeToHealth(_playerCharacter.Health);
+        }
+
         private void TrySubscribeToHealth(Health health)
         {
             health.Changed += UpdateView;
-
             _onDestroy += () => { health.Changed -= UpdateView;};
         }
 
@@ -73,7 +82,6 @@ namespace Dev.Scripts.PlayerLogic
         {
             _onDestroy?.Invoke();
         }
-        
         
         private void UpdateView(float currentHealth, float maxHealth)
         {

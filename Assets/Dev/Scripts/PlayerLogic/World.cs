@@ -1,4 +1,6 @@
-﻿namespace Dev.Scripts.PlayerLogic
+﻿using Fusion;
+
+namespace Dev.Scripts.PlayerLogic
 {
     public class World : IDamageInflictor
     {
@@ -15,6 +17,6 @@
             }
         }
 
-        public string GameObjectName => "World";
+        public PlayerRef PlayerRef => PlayerRef.None;
     }
 }

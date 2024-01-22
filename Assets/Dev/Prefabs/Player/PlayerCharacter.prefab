@@ -1395,13 +1395,13 @@ GameObject:
   - component: {fileID: 8256951257243662499}
   - component: {fileID: 2126260200385715225}
   - component: {fileID: 5652419671481334003}
-  - component: {fileID: 5596677390300365247}
   - component: {fileID: 6597301466496107700}
   - component: {fileID: 3247660848140748017}
   - component: {fileID: 105226013070390239}
   - component: {fileID: 2732512652579133688}
   - component: {fileID: 7286655123904594909}
   - component: {fileID: 2936169146516550440}
+  - component: {fileID: 3121228544129984785}
   m_Layer: 0
   m_Name: PlayerCharacter
   m_TagString: Player
@@ -1460,9 +1460,9 @@ MonoBehaviour:
   - {fileID: 8256951257243662499}
   - {fileID: 2126260200385715225}
   - {fileID: 5652419671481334003}
-  - {fileID: 5596677390300365247}
   - {fileID: 3247660848140748017}
   - {fileID: 2732512652579133688}
+  - {fileID: 3121228544129984785}
   SimulationBehaviours: []
 --- !u!54 &8693975321453458857
 Rigidbody:
@@ -1512,7 +1512,8 @@ MonoBehaviour:
   _interactor: {fileID: 7211773567437665188}
   _cameraController: {fileID: 6263212912454288206}
   _inputService: {fileID: 5652419671481334003}
-  _health: {fileID: 5596677390300365247}
+  _health: {fileID: 3121228544129984785}
+  _rigidbody: {fileID: 8693975321453458857}
 --- !u!114 &8738784936676509605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1624,23 +1625,6 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _IsActive:
     _value: 1
---- !u!114 &5596677390300365247
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3706882407202003477}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c85ed8110a1543ab9e1e747e432314db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _interpolationDataSource: 0
-  _IsActive:
-    _value: 1
-  __health: 100
-  _rigidbody: {fileID: 0}
 --- !u!136 &6597301466496107700
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1746,6 +1730,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38e3dd868d6c4aab846afa06aa8e37bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3121228544129984785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3706882407202003477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d78de6b28bef4a58a741ec2c0067371b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  _IsActive:
+    _value: 1
+  _maxHealth: 100
+  _rigidbody: {fileID: 0}
 --- !u!1 &3741360720669758293
 GameObject:
   m_ObjectHideFlags: 0
@@ -2128,6 +2129,7 @@ MonoBehaviour:
   _armsTransform: {fileID: 8691674876951342374}
   _bodyTransform: {fileID: 5101487468817938199}
   _animator: {fileID: 7333621857625742653}
+  _meshRenderers: []
 --- !u!114 &4128722260976826700
 MonoBehaviour:
   m_ObjectHideFlags: 0

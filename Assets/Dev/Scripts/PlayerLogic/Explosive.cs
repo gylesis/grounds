@@ -1,5 +1,4 @@
 ﻿using Dev.Infrastructure;
-using Dev.Scripts.Items;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
 using DG.Tweening;
 using Fusion;
@@ -32,15 +31,35 @@ namespace Dev.Scripts.PlayerLogic
 
         private void Start()
         {
-            _correspondingItem.Health.Depleted += Explode;
-            _correspondingItem.UpdateUseAction(StartDetonation);
+            _correspondingItem.UpdateUseAction(OnUseAction);
         }
 
-        private void StartDetonation()
+        public override void Spawned()
+        {
+            base.Spawned();
+
+            if (HasStateAuthority)
+            {
+                _correspondingItem.Health.Depleted += Explode;
+            }
+        }
+
+        private void OnUseAction()
         {
             _sparkles.Play();
-            DOTween.Sequence().AppendInterval(_detonationTime).OnComplete(Explode);
-        }   
+            
+            if (HasStateAuthority)
+            {
+                RPC_OnUseAction();
+                DOTween.Sequence().AppendInterval(_detonationTime).OnComplete(Explode);
+            }
+        }
+
+        [Rpc(InvokeLocal = false)]
+        private void RPC_OnUseAction()
+        {
+            _sparkles.Play();
+        }
 
         private void Explode()
         {

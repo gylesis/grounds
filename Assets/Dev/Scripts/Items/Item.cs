@@ -24,6 +24,8 @@ namespace Dev.Scripts.PlayerLogic
         [SerializeField] private ItemNameTag _itemNameTag;
         [SerializeField] private GameObjectContext _gameObjectContext;
         [ReadOnly][SerializeField] private int _itemId;
+        [SerializeField] private ItemView _itemView;
+        
         
         public GameObjectContext GameObjectContext => _gameObjectContext;
 
@@ -34,7 +36,6 @@ namespace Dev.Scripts.PlayerLogic
         [Networked] private NetworkBool IsCarrying { get; set; }
 
         public int ItemId => _itemNameTag.ItemId;
-        
         public ItemSizeType ItemSizeType => _itemSizeType;
         public NetworkRigidbody NetRigidbody => _rigidbody;
         public Health Health => _health;
@@ -57,6 +58,8 @@ namespace Dev.Scripts.PlayerLogic
             {
                 DiContainerSingleton.Instance.Inject(_gameObjectContext);
             }
+            
+            _itemView.Initialize(this);
         }
 
         protected override void OnDependenciesResolve()
