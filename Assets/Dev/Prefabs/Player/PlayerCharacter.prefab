@@ -1513,7 +1513,6 @@ MonoBehaviour:
   _cameraController: {fileID: 6263212912454288206}
   _inputService: {fileID: 5652419671481334003}
   _health: {fileID: 3121228544129984785}
-  _rigidbody: {fileID: 8693975321453458857}
 --- !u!114 &8738784936676509605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2129,7 +2128,11 @@ MonoBehaviour:
   _armsTransform: {fileID: 8691674876951342374}
   _bodyTransform: {fileID: 5101487468817938199}
   _animator: {fileID: 7333621857625742653}
-  _meshRenderers: []
+  _meshRenderers:
+  - {fileID: 7294372747777048904}
+  - {fileID: 5291727473235652331}
+  - {fileID: 7730963442445012630}
+  - {fileID: 6486917870517016586}
 --- !u!114 &4128722260976826700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3288,7 +3291,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6c2cbe9d9d9c18f4ca37c70960f410e9, type: 2}
+  - {fileID: 2100000, guid: bbe6db0a96cf05642b23604d17f8850d, type: 2}
   - {fileID: 2100000, guid: 742e6525fc65f9a49812bcb24e24fce8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
