@@ -1,4 +1,4 @@
-﻿namespace Dev.UI.PopUpsAndMenus
+﻿namespace Dev.Scripts.UI.PopUpsAndMenus
 {
     public class LoadingScreenPopUp : PopUp
     {

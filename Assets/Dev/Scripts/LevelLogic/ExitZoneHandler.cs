@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Cysharp.Threading.Tasks;
-using Dev.Infrastructure;
-using Dev.PlayerLogic;
+using Dev.Scripts.Infrastructure;
+using Dev.Scripts.PlayerLogic;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
-using Dev.UI.PopUpsAndMenus;
-using Dev.Utils;
+using Dev.Scripts.UI.PopUpsAndMenus;
+using Dev.Scripts.Utils;
 using Fusion;
 using UniRx;
 using UnityEngine;
 using Zenject;
-using Random = UnityEngine.Random;
 
-namespace Dev.Levels.Interactions
+namespace Dev.Scripts.LevelLogic
 {
     public class ExitZoneHandler : NetworkContext
     {

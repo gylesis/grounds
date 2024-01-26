@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Dev.Infrastructure
+namespace Dev.Scripts.Infrastructure
 {
     public class SceneCameraController : MonoBehaviour
     {

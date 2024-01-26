@@ -1,11 +1,10 @@
-﻿using Dev.Infrastructure;
-using Dev.Scripts.PlayerLogic;
+﻿using Dev.Scripts.Infrastructure;
 using Fusion;
 using Fusion.KCC;
 using UnityEngine;
 using Zenject;
 
-namespace Dev.PlayerLogic
+namespace Dev.Scripts.PlayerLogic
 {
     public abstract class BasePlayerController : NetworkContext
     {

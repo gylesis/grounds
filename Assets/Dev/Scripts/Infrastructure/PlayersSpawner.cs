@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Dev.Levels.Interactions;
-using Dev.PlayerLogic;
-using Dev.Scripts;
-using Dev.Utils;
+using Dev.Scripts.LevelLogic;
+using Dev.Scripts.PlayerLogic;
+using Dev.Scripts.Utils;
 using Fusion;
 using UniRx;
 using Unity.Mathematics;
 using UnityEngine;
 using Zenject;
 
-namespace Dev.Infrastructure
+namespace Dev.Scripts.Infrastructure
 {
     public class PlayersSpawner : NetworkContext
     {

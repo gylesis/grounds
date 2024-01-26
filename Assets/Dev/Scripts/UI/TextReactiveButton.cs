@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace Dev.UI
+namespace Dev.Scripts.UI
 {
     public class TextReactiveButton : DefaultReactiveButton
     {

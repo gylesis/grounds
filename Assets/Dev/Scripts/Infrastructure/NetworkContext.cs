@@ -3,7 +3,7 @@ using DG.Tweening;
 using Fusion;
 using UnityEngine;
 
-namespace Dev.Infrastructure
+namespace Dev.Scripts.Infrastructure
 {
     [RequireComponent(typeof(NetworkObject))]
     public abstract class NetworkContext : NetworkBehaviour

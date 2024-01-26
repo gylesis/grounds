@@ -1,6 +1,6 @@
 ﻿using Fusion;
 
-namespace Dev.PlayerLogic
+namespace Dev.Scripts.Infrastructure
 {
     public struct Team : INetworkStruct
     {

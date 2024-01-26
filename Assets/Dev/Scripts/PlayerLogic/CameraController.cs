@@ -1,4 +1,4 @@
-﻿using Dev.Infrastructure;
+﻿using Dev.Scripts.Infrastructure;
 using UnityEngine;
 
 namespace Dev.Scripts.PlayerLogic

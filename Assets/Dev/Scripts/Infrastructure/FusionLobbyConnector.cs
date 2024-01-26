@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using Dev.Levels.Interactions;
-using Dev.PlayerLogic;
-using Dev.Scripts;
+using Dev.Scripts.LevelLogic;
+using Dev.Scripts.PlayerLogic;
 using Fusion;
 using Fusion.Sockets;
 using UniRx;
@@ -11,7 +10,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
 
-namespace Dev.Infrastructure
+namespace Dev.Scripts.Infrastructure
 {
     public class FusionLobbyConnector : NetworkContext, INetworkRunnerCallbacks
     {

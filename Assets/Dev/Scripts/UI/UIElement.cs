@@ -1,6 +1,6 @@
 ﻿using UniRx;
 
-namespace Dev.UI
+namespace Dev.Scripts.UI
 {
     public abstract class UIElement<TBaseType> : UIElementBase where TBaseType : UIElementBase
     {

@@ -1,11 +1,11 @@
-﻿using Dev.Infrastructure;
+﻿using Dev.Scripts.Infrastructure;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
 using Fusion;
 using Sirenix.OdinInspector;
 using UniRx;
 using UnityEngine;
 
-namespace Dev.Scripts.PlayerLogic
+namespace Dev.Scripts.Items
 {
     public class ItemContainer : NetworkContext
     {

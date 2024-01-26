@@ -1,6 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
-using Dev.Infrastructure;
-using Dev.PlayerLogic;
+using Dev.Scripts.Infrastructure;
 using Dev.Scripts.Items;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
 using Fusion;

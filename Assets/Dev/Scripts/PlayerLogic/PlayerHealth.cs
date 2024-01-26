@@ -1,5 +1,4 @@
-﻿using Dev.PlayerLogic;
-using Zenject;
+﻿using Zenject;
 
 namespace Dev.Scripts.PlayerLogic
 {

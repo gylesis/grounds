@@ -1,6 +1,6 @@
 ﻿using Fusion;
 
-namespace Dev.Infrastructure
+namespace Dev.Scripts.Infrastructure
 {
     public interface IInputListener
     {

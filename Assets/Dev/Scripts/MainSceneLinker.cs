@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Dev.Infrastructure;
+using Dev.Scripts.Infrastructure;
 using Fusion;
 using Fusion.Sockets;
 using UnityEngine;

@@ -3,7 +3,7 @@ using DG.Tweening;
 using UniRx;
 using UnityEngine;
 
-namespace Dev.UI.PopUpsAndMenus
+namespace Dev.Scripts.UI.PopUpsAndMenus
 {
     [RequireComponent(typeof(CanvasGroup))]
     public abstract class PopUp : MonoBehaviour

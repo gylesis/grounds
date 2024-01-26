@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Dev.Levels.Interactions;
-using Dev.Scripts.PlayerLogic.InventoryLogic;
+using Dev.Scripts.LevelLogic;
 using DG.Tweening;
 using Fusion;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-namespace Dev.Utils
+namespace Dev.Scripts.Utils
 {
     public static class Extensions
        {

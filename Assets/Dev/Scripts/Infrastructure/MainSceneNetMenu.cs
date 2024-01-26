@@ -1,8 +1,7 @@
-﻿using System;
-using Fusion;
+﻿using Fusion;
 using UnityEngine;
 
-namespace Dev.Infrastructure
+namespace Dev.Scripts.Infrastructure
 {
     public class MainSceneNetMenu : MonoBehaviour
     {

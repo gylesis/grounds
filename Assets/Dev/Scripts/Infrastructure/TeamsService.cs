@@ -1,9 +1,7 @@
 ﻿using System.Linq;
-using Dev.Infrastructure;
 using Fusion;
-using UnityEngine;
 
-namespace Dev.PlayerLogic
+namespace Dev.Scripts.Infrastructure
 {
     public class TeamsService : NetworkContext
     {

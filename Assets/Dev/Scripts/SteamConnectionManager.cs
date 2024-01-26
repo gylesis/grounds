@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Dev.Utils;
+using Dev.Scripts.Utils;
 using Steamworks;
 using Steamworks.Data;
 using UnityEngine;

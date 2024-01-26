@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using Dev.Scripts;
-using Dev.UI.PopUpsAndMenus;
+using Dev.Scripts.UI.PopUpsAndMenus;
 using Fusion;
 using Fusion.Sockets;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
 
-namespace Dev.Infrastructure
+namespace Dev.Scripts.Infrastructure
 {
     public class ConnectionManager : NetworkContext, INetworkRunnerCallbacks
     {

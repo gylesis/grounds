@@ -2,7 +2,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace Dev.Utils
+namespace Dev.Scripts.Utils
 {
     public class FPSCounter : MonoBehaviour
     {

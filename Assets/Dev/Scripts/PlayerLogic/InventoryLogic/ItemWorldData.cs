@@ -1,4 +1,5 @@
 ﻿using System;
+using Dev.Scripts.Items;
 
 namespace Dev.Scripts.PlayerLogic.InventoryLogic
 {

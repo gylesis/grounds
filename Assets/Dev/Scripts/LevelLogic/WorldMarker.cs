@@ -1,6 +1,6 @@
-﻿using Dev.Infrastructure;
+﻿using Dev.Scripts.Infrastructure;
 
-namespace Dev.Levels.Interactions
+namespace Dev.Scripts.LevelLogic
 {
     public class WorldMarker : NetworkContext
     {

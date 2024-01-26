@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Dev.Levels.Interactions
+namespace Dev.Scripts.LevelLogic
 {
     public struct WorldMarkerSetupContext
     {

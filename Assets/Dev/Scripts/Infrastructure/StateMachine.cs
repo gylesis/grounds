@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UniRx;
 
-namespace Dev.Infrastructure
+namespace Dev.Scripts.Infrastructure
 {
     public class StateMachine<TState> where TState : IState
     {

@@ -1,8 +1,8 @@
-﻿using Dev.Infrastructure;
+﻿using Dev.Scripts.Infrastructure;
 using UniRx;
 using UnityEngine;
 
-namespace Dev.Levels.Interactions
+namespace Dev.Scripts.LevelLogic
 {
     [RequireComponent(typeof(Collider))]
     public class TriggerZone : NetworkContext

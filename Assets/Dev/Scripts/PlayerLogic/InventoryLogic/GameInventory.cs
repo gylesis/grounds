@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Dev.Infrastructure;
-using Dev.PlayerLogic;
+using Dev.Scripts.Infrastructure;
 using Dev.Scripts.Items;
 using Fusion;
 using UniRx;

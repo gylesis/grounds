@@ -1,13 +1,8 @@
-﻿using Dev.Infrastructure;
-using Dev.Scripts.PlayerLogic;
-using Dev.Scripts.PlayerLogic.InventoryLogic;
-using Dev.UI.PopUpsAndMenus;
+﻿using Dev.Scripts.Infrastructure;
 using Fusion;
-using Fusion.KCC;
 using UnityEngine;
-using Zenject;
 
-namespace Dev.PlayerLogic
+namespace Dev.Scripts.PlayerLogic
 {
     public class LobbyPlayerController : BasePlayerController
     {   

@@ -1,12 +1,12 @@
-﻿using Dev.Levels.Interactions;
-using Dev.Scripts.Items;
+﻿using Dev.Scripts.Items;
+using Dev.Scripts.LevelLogic;
 using Dev.Scripts.PlayerLogic;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
-using Dev.UI.PopUpsAndMenus;
+using Dev.Scripts.UI.PopUpsAndMenus;
 using UnityEngine;
 using Zenject;
 
-namespace Dev.Infrastructure
+namespace Dev.Scripts.Infrastructure.Installers
 {
     public class MainSceneInstaller : MonoInstaller
     {

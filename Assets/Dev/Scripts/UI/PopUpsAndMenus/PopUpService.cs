@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UniRx;
 using UnityEngine;
 
-namespace Dev.UI.PopUpsAndMenus
+namespace Dev.Scripts.UI.PopUpsAndMenus
 {
     public class PopUpService : MonoBehaviour
     {

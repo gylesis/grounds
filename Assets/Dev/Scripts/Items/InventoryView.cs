@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Dev.Levels.Interactions;
+using Dev.Scripts.LevelLogic;
 using Dev.Scripts.PlayerLogic;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
-using Dev.UI.PopUpsAndMenus;
-using Dev.Utils;
+using Dev.Scripts.Utils;
 using DG.Tweening;
 using Fusion;
 using Fusion.KCC;

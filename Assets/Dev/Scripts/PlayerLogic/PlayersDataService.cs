@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using Dev.Infrastructure;
-using Dev.PlayerLogic;
+using Dev.Scripts.Infrastructure;
 using Fusion;
 using UniRx;
 using Zenject;

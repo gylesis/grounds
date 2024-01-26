@@ -1,6 +1,6 @@
 using System;
 
-namespace Dev.Effects
+namespace Dev.Scripts.Effects
 {
     [Serializable]
     public class EffectStaticData

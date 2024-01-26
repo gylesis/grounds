@@ -1,4 +1,4 @@
-namespace Dev.Utils
+namespace Dev.Scripts.Utils
 {
     public static class Constants
     {

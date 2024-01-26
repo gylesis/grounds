@@ -3,7 +3,7 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Dev.UI
+namespace Dev.Scripts.UI
 {
     public class DefaultReactiveButton : MonoBehaviour
     {
