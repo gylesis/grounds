@@ -15,7 +15,7 @@ namespace Dev.Scripts.Infrastructure
     {
         [SerializeField] private SpawnPoint[] _spawnPoints;
         [SerializeField] private PlayerCharacter _playerCharacterPrefab;
-        private DiContainer _diContainer;
+        
     
         public Subject<PlayerRef> PlayerSpawned { get; } = new Subject<PlayerRef>();
         public Subject<PlayerRef> PlayerDeSpawned { get; } = new Subject<PlayerRef>();
@@ -25,12 +25,6 @@ namespace Dev.Scripts.Infrastructure
         public int PlayersCount => PlayersList.Count;
 
         public List<PlayerCharacter> AllPlayers => PlayersList.Select(x => x.Value).ToList();
-        
-        [Inject]
-        private void Construct(DiContainer diContainer)
-        {
-            _diContainer = diContainer;
-        }
         
         public void SpawnPlayer(PlayerRef playerRef, bool firstSpawn = true)
         {
@@ -111,7 +105,6 @@ namespace Dev.Scripts.Infrastructure
             PlayerCharacter playerCharacter = GetPlayer(playerRef);
 
             playerCharacter.gameObject.SetActive(isOn);
-
         }
 
         public void RespawnPlayerCharacter(PlayerRef playerRef)
@@ -138,7 +131,12 @@ namespace Dev.Scripts.Infrastructure
         
         public PlayerCharacter GetPlayer(PlayerRef playerRef)
         {
-            return PlayersList[playerRef];
+            if (PlayersList.ContainsKey(playerRef))
+            {
+                return PlayersList[playerRef];
+            }
+            
+            return null;
         }
 
         public Vector3 GetPlayerPos(PlayerRef playerRef) => GetPlayer(playerRef).transform.position;

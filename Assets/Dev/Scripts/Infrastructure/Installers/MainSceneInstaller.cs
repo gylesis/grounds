@@ -22,6 +22,7 @@ namespace Dev.Scripts.Infrastructure.Installers
         [SerializeField] private CraftStation _craftStation;
         [SerializeField] private ItemsDataService _itemsDataService;
         [SerializeField] private PlayersDataService _playersDataService;
+        [SerializeField] private PlayersDeathController _playersDeathController;
         
         public override void InstallBindings()
         {
@@ -40,6 +41,7 @@ namespace Dev.Scripts.Infrastructure.Installers
             
             Container.Bind<PlayersDataService>().FromInstance(_playersDataService).AsSingle();
             Container.Bind<PlayersSpawner>().FromInstance(_playersSpawner).AsSingle();
+            Container.Bind<PlayersDeathController>().FromInstance(_playersDeathController).AsSingle();
             
             Container.Bind<DamageAreaSpawner>().FromInstance(_damageAreaSpawner).AsSingle();
             Container.Bind<ImpactApplier>().FromInstance(_impactApplier).AsSingle();

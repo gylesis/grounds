@@ -31,8 +31,7 @@ namespace Dev.Scripts.PlayerLogic
 
         private void Awake()
         {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
+            CursorController.SetActiveState(false);
         }
         
         [Inject]
@@ -53,7 +52,7 @@ namespace Dev.Scripts.PlayerLogic
             
             if (HasInputAuthority == false)
             {
-                _playerCharacter.CameraController.CharacterCamera.gameObject.SetActive(false);
+                _playerCharacter.CameraController.SetActiveState(false);
             }
         }
 

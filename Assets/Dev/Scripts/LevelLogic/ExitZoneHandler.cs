@@ -79,11 +79,10 @@ namespace Dev.Scripts.LevelLogic
         private void RPC_OnPlayerExit([RpcTarget] PlayerRef playerRef, PlayerCharacter playerCharacter,
             InventoryData inventoryData)
         {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
+            CursorController.SetActiveState(true);
             
-            _sceneCameraController.Camera.gameObject.SetActive(true); 
-            playerCharacter.CameraController.CharacterCamera.gameObject.SetActive(false);
+            _sceneCameraController.SetActiveState(true);
+            playerCharacter.CameraController.SetActiveState(false);
             
             var tryGetPopUp = _popUpService.TryGetPopUp<WinPopUp>(out var winPopUp);
 

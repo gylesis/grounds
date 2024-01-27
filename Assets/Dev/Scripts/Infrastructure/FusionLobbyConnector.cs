@@ -142,7 +142,7 @@ namespace Dev.Scripts.Infrastructure
 
         public void OnSceneLoadDone(NetworkRunner runner)
         {
-            _sceneCameraController.Camera.gameObject.SetActive(false);
+            _sceneCameraController.SetActiveState(false);
             Debug.Log($"Scene load done 1");
         }
 

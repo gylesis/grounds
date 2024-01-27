@@ -10,6 +10,5 @@ namespace Dev.Scripts.Infrastructure
         [SerializeField] private bool _isFriendlyFireOn;
             
         public bool IsFriendlyFireOn => _isFriendlyFireOn;
-
     }
 }

@@ -7,5 +7,13 @@ namespace Dev.Scripts.Infrastructure
         [SerializeField] private Camera _camera;
 
         public Camera Camera => _camera;
+
+        public bool IsActive { get; private set; }
+        
+        public void SetActiveState(bool isActive)
+        {
+            IsActive = isActive;
+            _camera.gameObject.SetActive(isActive);
+        }
     }
 }

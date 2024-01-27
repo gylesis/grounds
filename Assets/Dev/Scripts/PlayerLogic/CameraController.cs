@@ -8,5 +8,12 @@ namespace Dev.Scripts.PlayerLogic
         [SerializeField] private Camera _characterCamera;
 
         public Camera CharacterCamera => _characterCamera;
+
+
+        public void SetActiveState(bool isActive)
+        {
+            _characterCamera.gameObject.SetActive(isActive);
+        }
+        
     }
-}
+}   

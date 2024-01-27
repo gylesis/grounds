@@ -2164,7 +2164,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
   Animator: {fileID: 7368471915985917799}
-  TotalWords: 4
+  TotalWords: 5
   SyncSettings: 79
   FloatAccuracy:
     _value: 0
@@ -2178,8 +2178,8 @@ MonoBehaviour:
     _value: 0
     _inverse: 0
     _hash: -814817977
-  StateHashes: 000000008a18fce4b9abd9d3958341e26c7c1356e4f31ee3a3ebcb27304df975c9b2abc16cf375b6903d34ef
-  TriggerHashes: 00000000
+  StateHashes: 00000000f56e46fce86981bb2afa8626a8b5caa328a981077af3fe2e47b78d163f098577958341e26c7c1356e4f31ee3a3ebcb27304df975c9b2abc16cf375b6903d34ef24abbf67ac06e3adf1afa2df7902fe15
+  TriggerHashes: 0000000024abbf672afa862628a98107
 --- !u!1 &4851267037826556427
 GameObject:
   m_ObjectHideFlags: 0

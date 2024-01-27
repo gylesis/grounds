@@ -64,5 +64,4 @@ namespace Dev.Scripts.UI.PopUpsAndMenus
 
         }
     }
-    
 }

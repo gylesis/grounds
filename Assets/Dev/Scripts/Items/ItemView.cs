@@ -1,6 +1,7 @@
 ﻿using System;
 using Dev.Scripts.PlayerLogic;
 using DG.Tweening;
+using UniRx;
 using UnityEngine;
 
 namespace Dev.Scripts.Items
@@ -23,9 +24,7 @@ namespace Dev.Scripts.Items
         private void TrySubscribeToHealth(Item item)
         {
             Health health = item.Health;
-            health.Changed += UpdateView;
-
-            _onDestroy += () => { health.Changed -= UpdateView; };
+            health.Changed.TakeUntilDestroy(this).Subscribe(UpdateView);
         }
 
         private void OnDestroy()
@@ -34,8 +33,11 @@ namespace Dev.Scripts.Items
         }
 
 
-        private void UpdateView(float currentHealth, float maxHealth)
+        private void UpdateView(HealthChangedContext changedContext)
         {
+            float currentHealth = changedContext.CurrentHealth;
+            float maxHealth = changedContext.MaxHealth;
+
             var ratio = 1 - (currentHealth / maxHealth);
             var rescaledRatio = ratio * 2;
             var aaaaa = rescaledRatio * rescaledRatio;

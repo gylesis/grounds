@@ -1,7 +1,9 @@
-﻿using Dev.Infrastructure;
+﻿using Dev.Scripts.Infrastructure;
+using Dev.Scripts.Items;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
 using DG.Tweening;
 using Fusion;
+using UniRx;
 using UnityEngine;
 using Zenject;
 
@@ -40,7 +42,7 @@ namespace Dev.Scripts.PlayerLogic
 
             if (HasStateAuthority)
             {
-                _correspondingItem.Health.Depleted += Explode;
+                _correspondingItem.Health.ZeroHealth.TakeUntilDestroy(this).Subscribe((unit => Explode()));
             }
         }
 
@@ -77,10 +79,6 @@ namespace Dev.Scripts.PlayerLogic
             _explosion.Play();
             _view.SetActive(false); 
         }
-        
-        private void OnDestroy()
-        {
-            _correspondingItem.Health.Depleted -= Explode;
-        }
+      
     }
 }

@@ -10,12 +10,13 @@ namespace Dev.Scripts
     public class SteamConnectionManager : MonoBehaviour
     {
         [SerializeField] private string _lobbyName = "TestingS";
-    
+        [Min(0)][SerializeField] private int _appId = 480;
+            
         private void Awake()
         {
             try
             {
-                SteamClient.Init(480);
+                SteamClient.Init((uint)_appId);
             }
             catch (Exception e)
             {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Dev.Infrastructure;
-using Dev.PlayerLogic;
+using Dev.Scripts.Infrastructure;
 using DG.Tweening;
 using Fusion;
+using UniRx;
 using UnityEngine;
 using Zenject;
 
@@ -26,9 +26,23 @@ namespace Dev.Scripts.PlayerLogic
         private static readonly int LeftHand = Animator.StringToHash("LeftHand");
         private static readonly int RightHand = Animator.StringToHash("RightHand");
         private static readonly int CenterHand = Animator.StringToHash("CenterHand");
-        private Action _onDestroy;
+        
         private PlayerCharacter _playerCharacter;
+        private static readonly int Death = Animator.StringToHash("Death");
 
+
+        [Inject]
+        private void Construct(PlayerCharacter playerCharacter)
+        {
+            _playerCharacter = playerCharacter;
+        }
+
+        protected override void OnDependenciesResolve()
+        {
+            base.OnDependenciesResolve();
+            
+            TrySubscribeToHealth(_playerCharacter.Health);
+        }
 
         public override void Spawned()
         {
@@ -59,36 +73,21 @@ namespace Dev.Scripts.PlayerLogic
             }
         }
 
-        [Inject]
-        private void Construct(PlayerCharacter playerCharacter)
-        {
-            _playerCharacter = playerCharacter;
-        }
-
-        protected override void OnDependenciesResolve()
-        {
-            base.OnDependenciesResolve();
-            
-            TrySubscribeToHealth(_playerCharacter.Health);
-        }
-
         private void TrySubscribeToHealth(Health health)
         {
-            health.Changed += UpdateView;
-            _onDestroy += () => { health.Changed -= UpdateView;};
+            health.Changed.TakeUntilDestroy(_playerCharacter).Subscribe(UpdateView);
         }
 
-        private void OnDestroy()
+        private void UpdateView(HealthChangedContext changedContext)
         {
-            _onDestroy?.Invoke();
-        }
-        
-        private void UpdateView(float currentHealth, float maxHealth)
-        {
-            var ratio = 1 - (currentHealth / maxHealth);
-            var rescaledRatio = ratio * 2;
-            var aaaaa = rescaledRatio * rescaledRatio;
-            var crackStrength = rescaledRatio;
+            float currentHealth = changedContext.CurrentHealth;
+            float maxHealth = changedContext.MaxHealth;
+
+            float ratio = 1 - (currentHealth / maxHealth);
+            float rescaledRatio = ratio * 2;
+            float aaaaa = rescaledRatio * rescaledRatio;
+            float crackStrength = rescaledRatio;
+            
             Debug.Log($"{currentHealth}/{maxHealth}");
 
             foreach (var meshRenderer in _meshRenderers)
@@ -106,6 +105,12 @@ namespace Dev.Scripts.PlayerLogic
         {
             _animator.Animator.SetFloat(MoveX, moveDirection.x);
             _animator.Animator.SetFloat(MoveY, moveDirection.y);
+        }
+
+        [Rpc]
+        public void RPC_OnDeath()
+        {
+            _animator.Animator.SetTrigger(Death);
         }
         
     }

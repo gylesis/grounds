@@ -1,5 +1,5 @@
 ﻿using System;
-using Dev.Infrastructure;
+using Dev.Scripts.Infrastructure;
 using DG.Tweening;
 using Fusion;
 using UniRx;
@@ -9,15 +9,15 @@ namespace Dev.Scripts.PlayerLogic
 {
     public class Health : NetworkContext, IDamageInflictor, IDamageVictim
     {
-        [SerializeField] private float _maxHealth = 100;
+        [SerializeField] protected float _maxHealth = 100;
         
         [Header("Dont attach if this is Player")]
         [SerializeField] private NetworkRigidbody _rigidbody;
         
-        private float _currentHealth;
+        protected float _currentHealth;
 
-        public Action<float, float> Changed;
-        public Action Depleted;
+        public Subject<HealthChangedContext> Changed { get; } = new Subject<HealthChangedContext>();
+        public Subject<Unit> ZeroHealth { get; } = new Subject<Unit>();
 
         protected virtual float Mass => _rigidbody.Rigidbody.mass;
         protected virtual float Speed => _rigidbody.Rigidbody.velocity.magnitude;
@@ -51,16 +51,19 @@ namespace Dev.Scripts.PlayerLogic
             }
         }
 
-        public void TakeDamage(float value, IDamageInflictor damageInflictor)
+        public virtual void TakeDamage(float value, IDamageInflictor damageInflictor = null)
         {
             _currentHealth -= value;
 
             RPC_HealthChanged(_currentHealth, _maxHealth);
-            Debug.Log($"<color=green>{transform.name}</color> was damaged by <color=yellow>{value}</color> by <color=red>{damageInflictor.PlayerRef}</color>. Health: {_currentHealth}");
+
+            string inflictor = damageInflictor != null ? $"{damageInflictor.PlayerRef}" : $"{PlayerRef.None}";
+            
+            Debug.Log($"<color=green>{transform.name}</color> was damaged by <color=yellow>{value}</color> by <color=red>{inflictor}</color>. Health: {_currentHealth}");
             
             if (_currentHealth <= 0)
             {
-                Depleted?.Invoke();
+                ZeroHealth.OnNext(Unit.Default);
 
                 RPC_OnDeath();
 
@@ -70,17 +73,27 @@ namespace Dev.Scripts.PlayerLogic
                 }));
             }
         }
-
+        
         [Rpc]
-        private void RPC_OnDeath()
+        protected void RPC_OnDeath()
         {
             transform.DOScale(0, 0.6f);
         }
 
         [Rpc]
-        private void RPC_HealthChanged(float currentHealth, float maxHealth)    
+        protected void RPC_HealthChanged(float currentHealth, float maxHealth)
         {
-            Changed?.Invoke(currentHealth, maxHealth);
+            var context = new HealthChangedContext();
+            context.CurrentHealth = currentHealth;
+            context.MaxHealth = maxHealth;
+
+            Changed.OnNext(context);
         }
+    }
+    
+    public struct HealthChangedContext
+    {
+        public float CurrentHealth;
+        public float MaxHealth;
     }
 }
