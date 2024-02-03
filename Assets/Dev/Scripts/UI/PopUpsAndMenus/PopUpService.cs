@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Dev.Scripts.UI.PopUpsAndMenus
 {
@@ -17,8 +18,40 @@ namespace Dev.Scripts.UI.PopUpsAndMenus
 
         private void Awake()
         {
-            var popUps = _popUpsParent.GetComponentsInChildren<PopUp>();
+           // var popUps = _popUpsParent.GetComponentsInChildren<PopUp>();
 
+           // AddPopUps(popUps);
+            
+            SceneManager.sceneUnloaded += OnSceneUnLoaded;
+        }
+
+        private void OnDestroy()
+        {
+            SceneManager.sceneUnloaded -= OnSceneUnLoaded;
+        }
+
+        private void OnSceneUnLoaded(Scene scene)
+        {
+            List<Type> popUps = new List<Type>();
+            
+            foreach (var pair in _spawnedPrefabs)
+            {
+                if (pair.Value == null)
+                {
+                    popUps.Add(pair.Key);
+                }
+            }
+            
+            foreach (var popUpType in popUps)
+            {
+                _spawnedPrefabs.Remove(popUpType);
+            }
+
+            Debug.Log($"Unloaded {popUps.Count} popups from scene {scene.name}");
+        }
+
+        public void AddPopUps(PopUp[] popUps)
+        {
             foreach (PopUp popUp in popUps)
             {
                 popUp.InitPopUpService(this);
@@ -72,14 +105,14 @@ namespace Dev.Scripts.UI.PopUpsAndMenus
             if (_spawnedPrefabs.TryGetValue(popUpType, out PopUp prefab))
             {
                 popUp = prefab as TPopUp;
-                return popUp;
+                return true;
             }
 
             _spawnedPrefabs.Add(typeof(TPopUp), popUp);
 
             Debug.Log($"No such PopUp like {popUpType}");
 
-            return popUp;
+            return false;
         }
 
         public void ShowPopUp<TPopUp>() where TPopUp : PopUp

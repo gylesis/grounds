@@ -96,6 +96,7 @@ namespace Dev.Scripts.Infrastructure
             if (runner.IsServer)
             {
                 Debug.Log($"Player joined, Spawning");
+                await UniTask.DelayFrame(6);
                 _playersSpawner.SpawnPlayer(player);
             }
         }

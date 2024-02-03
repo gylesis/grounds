@@ -15,7 +15,6 @@ namespace Dev.Scripts.Infrastructure.Installers
         [SerializeField] private PlayersSpawner _playersSpawner;
         [SerializeField] private DamageAreaSpawner _damageAreaSpawner;
         [SerializeField] private MarkersHandler _markersHandler;
-        [SerializeField] private PopUpService _popUpService;
         [SerializeField] private GameInventory _gameInventory;
         [SerializeField] private ImpactApplier _impactApplier;
         [SerializeField] private InventoryView _inventoryView;
@@ -34,7 +33,6 @@ namespace Dev.Scripts.Infrastructure.Installers
             Container.Bind<ItemsDataService>().FromInstance(_itemsDataService).AsSingle();
             
             Container.Bind<SceneCameraController>().FromInstance(_mainSceneSceneCameraController).AsSingle();
-            Container.Bind<PopUpService>().FromInstance(_popUpService).AsSingle();
             
             Container.Bind<MarkersHandler>().FromInstance(_markersHandler).AsSingle();
             Container.Bind<InteractorView>().FromInstance(_interactorView).AsSingle();

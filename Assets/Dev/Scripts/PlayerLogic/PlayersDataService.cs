@@ -19,7 +19,7 @@ namespace Dev.Scripts.PlayerLogic
         [Inject]
         private void Construct(PlayersSpawner playersSpawner, PlayersDeathController playersDeathController)
         {
-            _playersDeathController = playersDeathController;
+            _playersDeathController = playersDeathController;   
             _playersSpawner = playersSpawner;
         }
 

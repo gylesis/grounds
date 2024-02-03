@@ -42,8 +42,12 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 
         protected override void OnDependenciesResolve()
         {
-            _popUpService.TryGetPopUp<BazookaQuickChooseMenu>(out var bazookaQuickChooseMenu);
-            bazookaQuickChooseMenu.ItemChosen.Subscribe((itemId => OnQuickTabChosen(itemId, Runner.LocalPlayer))); 
+            var tryGetPopUp = _popUpService.TryGetPopUp<BazookaQuickChooseMenu>(out var bazookaQuickChooseMenu);
+            
+            if (tryGetPopUp)
+            {
+                bazookaQuickChooseMenu.ItemChosen.Subscribe((itemId => OnQuickTabChosen(itemId, Runner.LocalPlayer))); 
+            }
         }
 
         private void OnQuickTabChosen(int itemId, PlayerRef playerRef)

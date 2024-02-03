@@ -12,14 +12,25 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
     public class GameInventory : NetworkContext
     {
         private List<InventoryData> _playersInventoryDatas = new List<InventoryData>();
+        
         private InventoryView _inventoryView;
         private PlayersDataService _playersDataService;
         private ItemsDataService _itemsDataService;
 
         public Subject<bool> InventoryOpened { get; } = new Subject<bool>();
-            
-        private void Start()
+
+        [Inject]
+        private void Construct(InventoryView inventoryView, PlayersDataService playersDataService, ItemsDataService itemsDataService)
         {
+            _itemsDataService = itemsDataService;
+            _inventoryView = inventoryView;
+            _playersDataService = playersDataService;
+        }
+
+        protected override void OnDependenciesResolve()
+        {
+            base.OnDependenciesResolve();
+            
             _inventoryView.ToRemoveItemFromInventory
                 .TakeUntilDestroy(this)
                 .Subscribe((OnRemoveItemFromInventoryClient));
@@ -33,19 +44,6 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
                 .TakeUntilDestroy(this)
                 .Subscribe((context =>
                     OnInventoryHandItemChanged(Runner.LocalPlayer, context, false)));
-        }
-
-        [Inject]
-        private void Construct(InventoryView inventoryView, PlayersDataService playersDataService, ItemsDataService itemsDataService)
-        {
-            _itemsDataService = itemsDataService;
-            _inventoryView = inventoryView;
-            _playersDataService = playersDataService;
-        }
-
-        protected override void OnDependenciesResolve()
-        {
-            base.OnDependenciesResolve();
             
             if (Runner.IsServer)
             {
@@ -256,6 +254,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 
             _inventoryView.Hide();
         }
+        
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         private void RPC_HideInventoryRequest(PlayerRef playerRef)
         {
