@@ -34,6 +34,14 @@ namespace Dev.Scripts.PlayerLogic
             }
         }
 
+        public void RestoreHealth()
+        {
+            if(HasStateAuthority == false) return;
+
+            _currentHealth = _maxHealth;
+            RPC_HealthChanged(_currentHealth, _maxHealth);
+        }
+        
         private void OnCollisionEnter(Collision other)
         {
             if(Runner.IsServer == false) return;

@@ -7,7 +7,20 @@ namespace Dev.Scripts.PlayerLogic
         public static void SetActiveState(bool isActive)
         {
             Cursor.visible = isActive;
-            //Cursor.lockState = CursorLockMode.None;
+
+            return;
+#if UNITY_EDITOR
+            if (isActive)
+            {
+                Cursor.lockState = CursorLockMode.None;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+#endif
+
         }
+        
     }
 }

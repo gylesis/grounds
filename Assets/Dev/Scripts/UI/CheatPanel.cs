@@ -57,7 +57,7 @@ namespace Dev.Scripts.UI
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.L) && Input.GetKeyDown(KeyCode.K))
+            if (Input.GetKeyDown(KeyCode.L))
             {
                 if (IsActive)
                 {

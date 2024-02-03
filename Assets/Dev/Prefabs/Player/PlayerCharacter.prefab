@@ -1508,11 +1508,12 @@ MonoBehaviour:
     _value: 1
   _kcc: {fileID: 8738784936676509605}
   _playerView: {fileID: 4925156170821849819}
-  _basePlayerController: {fileID: 2126260200385715225}
+  _playerController: {fileID: 2126260200385715225}
   _interactor: {fileID: 7211773567437665188}
   _cameraController: {fileID: 6263212912454288206}
   _inputService: {fileID: 5652419671481334003}
   _health: {fileID: 3121228544129984785}
+  _hitboxRoot: {fileID: 3247660848140748017}
 --- !u!114 &8738784936676509605
 MonoBehaviour:
   m_ObjectHideFlags: 0

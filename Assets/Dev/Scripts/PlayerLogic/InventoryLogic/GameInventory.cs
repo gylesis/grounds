@@ -57,7 +57,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         private void OnPlayerSpawned(PlayerRef playerRef)   
         {
             PlayerCharacter playerCharacter = _playersDataService.GetPlayer(playerRef);
-            playerCharacter.BasePlayerController.Hands.PutItemInInventory += OnPutItemInInventory;
+            playerCharacter.PlayerController.Hands.PutItemInInventory += OnPutItemInInventory;
 
             void OnPutItemInInventory(ItemData itemData, PlayerRef playerRef)
             {
@@ -67,7 +67,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             var inventoryData = new InventoryData(playerRef);
             _playersInventoryDatas.Add(inventoryData);
 
-            foreach (Hand hand in playerCharacter.BasePlayerController.Hands.HandsList)
+            foreach (Hand hand in playerCharacter.PlayerController.Hands.HandsList)
             {
                 hand.ItemTaken.TakeUntilDestroy(this).Subscribe((s => OnItemTakenToHands(s, playerRef)));
                 hand.ItemDropped.TakeUntilDestroy(this)
@@ -96,19 +96,19 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             
             if (isLeftHand)
             {
-                targetHand = playerCharacter.BasePlayerController.Hands.GetHandByType(HandType.Left);
+                targetHand = playerCharacter.PlayerController.Hands.GetHandByType(HandType.Left);
             }
             else
             {
-                targetHand = playerCharacter.BasePlayerController.Hands.GetHandByType(HandType.Right);
+                targetHand = playerCharacter.PlayerController.Hands.GetHandByType(HandType.Right);
             }
 
             Debug.Log($"Item {context.ItemId} to remove - {context.ToRemove}, is left hand {isLeftHand}");
                 
             if (context.ToRemove)
             {
-                var leftHand = playerCharacter.BasePlayerController.Hands.GetHandByType(HandType.Left);
-                var rightHand = playerCharacter.BasePlayerController.Hands.GetHandByType(HandType.Right);
+                var leftHand = playerCharacter.PlayerController.Hands.GetHandByType(HandType.Left);
+                var rightHand = playerCharacter.PlayerController.Hands.GetHandByType(HandType.Right);
                 
                 if (leftHand.IsFree == false)
                 {
@@ -239,8 +239,8 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
            // Debug.Log($"RPC SHOW INVENTORY FOR player {playerRef}");
            CursorController.SetActiveState(true);
 
-            _playersDataService.GetPlayer(playerRef).BasePlayerController.SetAllowToMove(false);
-            _playersDataService.GetPlayer(playerRef).BasePlayerController.SetAllowToAim(false);
+            _playersDataService.GetPlayer(playerRef).PlayerController.SetAllowToMove(false);
+            _playersDataService.GetPlayer(playerRef).PlayerController.SetAllowToAim(false);
 
             var inventoryItems = inventoryData.InventoryItems.ToArray();
             var handsItems = inventoryData.HandItems.ToArray();
@@ -262,8 +262,8 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             if(playerRef == PlayerRef.None) return;
 
            // Debug.Log($"Hide inventory request from {playerRef}");
-            _playersDataService.GetPlayer(playerRef).BasePlayerController.SetAllowToMove(true);
-            _playersDataService.GetPlayer(playerRef).BasePlayerController.SetAllowToAim(true);
+            _playersDataService.GetPlayer(playerRef).PlayerController.SetAllowToMove(true);
+            _playersDataService.GetPlayer(playerRef).PlayerController.SetAllowToAim(true);
         }
 
     }

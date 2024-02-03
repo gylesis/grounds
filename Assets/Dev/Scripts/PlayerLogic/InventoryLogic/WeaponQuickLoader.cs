@@ -92,7 +92,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             
             var inventoryData = _gameInventory.GetInventoryData(playerRef);
 
-            BasePlayerController playerController = _playersDataService.GetPlayer(playerRef).BasePlayerController;
+            BasePlayerController playerController = _playersDataService.GetPlayer(playerRef).PlayerController;
                 
             if (AllowToShowQuickTabs(playerController.Hands) == false) return;
 
@@ -117,7 +117,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 
             _playersLastQuickTabItems[playerRef] = itemDatas.Select(x => x.ItemId).ToList();
             
-            _playersDataService.GetPlayer(playerRef).BasePlayerController.SetAllowToAim(false);
+            _playersDataService.GetPlayer(playerRef).PlayerController.SetAllowToAim(false);
 
             RPC_ShowQuickMenu(playerRef, itemDatas.ToArray());
         }
@@ -159,7 +159,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         {
             if(playerRef == PlayerRef.None) return;
 
-            _playersDataService.GetPlayer(playerRef).BasePlayerController.SetAllowToAim(true);
+            _playersDataService.GetPlayer(playerRef).PlayerController.SetAllowToAim(true);
         }
 
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
@@ -186,7 +186,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
                 _itemStaticDataContainer.TryGetItemStaticDataById(itemId, out var itemStaticData);
 
                 var player = _playersDataService.GetPlayer(playerRef);
-                player.BasePlayerController.Hands.GetHandWithThisItemType(ItemType.Firearm).GetComponent<Hand>().TryGetFirearm(out var firearm);
+                player.PlayerController.Hands.GetHandWithThisItemType(ItemType.Firearm).GetComponent<Hand>().TryGetFirearm(out var firearm);
 
                 var ableToReload = firearm.AbleToReload(itemId);
 

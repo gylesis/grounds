@@ -2,6 +2,7 @@
 using System.Linq;
 using Dev.Scripts.LevelLogic;
 using Dev.Scripts.PlayerLogic;
+using Dev.Scripts.UI.PopUpsAndMenus;
 using Dev.Scripts.Utils;
 using Fusion;
 using UniRx;
@@ -15,17 +16,24 @@ namespace Dev.Scripts.Infrastructure
     {
         [SerializeField] private SpawnPoint[] _spawnPoints;
         [SerializeField] private PlayerCharacter _playerCharacterPrefab;
-        
-    
+        private PopUpService _popUpService;
+
         public Subject<PlayerRef> PlayerSpawned { get; } = new Subject<PlayerRef>();
         public Subject<PlayerRef> PlayerDeSpawned { get; } = new Subject<PlayerRef>();
+        public Subject<PlayerRef> PlayerRespawned { get; } = new ();
         
         [Networked] private NetworkDictionary<PlayerRef, PlayerCharacter> PlayersList { get; }
         
         public int PlayersCount => PlayersList.Count;
 
         public List<PlayerCharacter> AllPlayers => PlayersList.Select(x => x.Value).ToList();
-        
+
+        [Inject]
+        private void Construct(PopUpService popUpService)
+        {
+            _popUpService = popUpService;
+        }
+
         public void SpawnPlayer(PlayerRef playerRef, bool firstSpawn = true)
         {
             /*if (PlayersList.ContainsKey(playerRef))
@@ -65,6 +73,46 @@ namespace Dev.Scripts.Infrastructure
             RPC_OnPlayerSpawnedInvoke(playerCharacter);
             
             //LoadWeapon(player);
+        }
+
+        [Rpc(RpcSources.All,RpcTargets.StateAuthority)]
+        public void RPC_RequestToRespawnPlayer(PlayerRef playerRef)
+        {
+            RespawnPlayer(playerRef);
+        }
+
+        private void RespawnPlayer(PlayerRef playerRef)
+        {
+            if (PlayersList.ContainsKey(playerRef) == false)
+            {
+                Debug.Log($"This player was not spawned");
+                return;
+            }
+
+            PlayerCharacter playerCharacter = GetPlayer(playerRef);
+
+            SpawnPoint freeSpawnPoint = _spawnPoints.GetFreeSpawnPoint();
+            Vector3 spawnPos = freeSpawnPoint.SpawnPos;
+
+            playerCharacter.PlayerView.RPC_OnDeath(false);
+            
+            playerCharacter.Kcc.SetPosition(spawnPos);
+            playerCharacter.Kcc.SetLookRotation(Vector2.zero);
+
+            Debug.Log($"Teleport");
+            playerCharacter.PlayerController.SetAllowToAim(true);
+            playerCharacter.PlayerController.SetAllowToMove(true);
+
+            playerCharacter.Health.RestoreHealth();
+
+            PlayerRespawned.OnNext(playerRef);
+
+            //RPC_OnPlayerRespawned(playerRef);
+        }
+
+        [Rpc]
+        private void RPC_OnPlayerRespawned([RpcTarget] PlayerRef playerRef)
+        {
         }
 
         public void DespawnPlayer(PlayerRef playerRef)
