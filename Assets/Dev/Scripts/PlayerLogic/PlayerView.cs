@@ -16,7 +16,7 @@ namespace Dev.Scripts.PlayerLogic
 
         [SerializeField] private NetworkMecanimAnimator _animator;
 
-        [SerializeField] private List<MeshRenderer> _meshRenderers;
+        [SerializeField] private List<Renderer> _meshRenderers;
         
         private static readonly int CrackStrengthName = Shader.PropertyToID("_CrackStrength");
         private static readonly int EmissionStrengthName = Shader.PropertyToID("_EmissionStrength");
