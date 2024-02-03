@@ -1,4 +1,4 @@
-﻿using Dev.Levels.Interactions;
+﻿using Dev.Scripts.LevelLogic;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
 using UniRx;
 using UnityEngine;

@@ -1,4 +1,6 @@
-﻿using Dev.PlayerLogic;
+﻿using System;
+using UniRx;
+using UnityEngine;
 using Zenject;
 
 namespace Dev.Scripts.PlayerLogic
@@ -14,6 +16,22 @@ namespace Dev.Scripts.PlayerLogic
         private void Construct(PlayerCharacter playerCharacter)
         {
             _playerCharacter = playerCharacter;
+        }
+
+        public override void TakeDamage(float value, IDamageInflictor damageInflictor = null)
+        {
+            _currentHealth -= value;
+
+            RPC_HealthChanged(_currentHealth, _maxHealth);
+
+            string inflictor = damageInflictor != null ? $"{damageInflictor.PlayerRef}" : $"{Fusion.PlayerRef.None}";
+            
+            Debug.Log($"<color=green>{transform.name}</color> was damaged by <color=yellow>{value}</color> by <color=red>{inflictor}</color>. Health: {_currentHealth}");
+            
+            if (_currentHealth <= 0)
+            {
+                ZeroHealth.OnNext(Unit.Default);
+            }
         }
     }
 }

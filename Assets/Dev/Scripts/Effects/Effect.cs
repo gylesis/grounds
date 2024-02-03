@@ -1,6 +1,6 @@
-﻿using Dev.Infrastructure;
+﻿using Dev.Scripts.Infrastructure;
 
-namespace Dev.Effects
+namespace Dev.Scripts.Effects
 {
     public class Effect : NetworkContext { }
 }

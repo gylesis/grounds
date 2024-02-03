@@ -2,7 +2,7 @@
 using UnityEngine;
 using Zenject;
 
-namespace Dev.Infrastructure
+namespace Dev.Scripts.Infrastructure.Installers
 {
     public class InventoryInstaller : MonoInstaller
     {

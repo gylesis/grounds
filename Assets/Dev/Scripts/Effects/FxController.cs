@@ -1,9 +1,9 @@
 using System;
-using Dev.Infrastructure;
+using Dev.Scripts.Infrastructure;
 using UniRx;
 using UnityEngine;
 
-namespace Dev.Effects
+namespace Dev.Scripts.Effects
 {
     public class FxController : NetworkContext
     {

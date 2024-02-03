@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Dev.Infrastructure;
+using Dev.Scripts.Infrastructure;
 using Fusion;
 using UnityEngine;
 

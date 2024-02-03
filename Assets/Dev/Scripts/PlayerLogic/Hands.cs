@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Dev.Infrastructure;
+using Dev.Scripts.Infrastructure;
 using Dev.Scripts.Items;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
 using DG.Tweening;

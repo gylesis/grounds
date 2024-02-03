@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Dev.Effects
+namespace Dev.Scripts.Effects
 {
     [CreateAssetMenu(menuName = "StaticData/FxContainer", fileName = "FxContainer", order = 0)]
     public class FxContainer : ScriptableObject

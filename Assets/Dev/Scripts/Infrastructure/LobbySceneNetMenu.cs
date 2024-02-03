@@ -1,11 +1,10 @@
-﻿using System;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using Fusion;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
 
-namespace Dev.Infrastructure
+namespace Dev.Scripts.Infrastructure
 {
     public class LobbySceneNetMenu : MonoBehaviour
     {

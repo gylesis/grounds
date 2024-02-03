@@ -1,11 +1,10 @@
-﻿using Dev.Infrastructure;
-using Dev.Scripts.PlayerLogic;
+﻿using Dev.Scripts.Infrastructure;
 using Fusion;
 using Fusion.KCC;
 using UnityEngine;
 using Zenject;
 
-namespace Dev.PlayerLogic
+namespace Dev.Scripts.PlayerLogic
 {
     public abstract class BasePlayerController : NetworkContext
     {
@@ -32,8 +31,7 @@ namespace Dev.PlayerLogic
 
         private void Awake()
         {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
+            CursorController.SetActiveState(false);
         }
         
         [Inject]
@@ -54,7 +52,7 @@ namespace Dev.PlayerLogic
             
             if (HasInputAuthority == false)
             {
-                _playerCharacter.CameraController.CharacterCamera.gameObject.SetActive(false);
+                _playerCharacter.CameraController.SetActiveState(false);
             }
         }
 

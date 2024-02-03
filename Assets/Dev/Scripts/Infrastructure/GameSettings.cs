@@ -1,8 +1,6 @@
-﻿using Dev.Utils;
-using UnityEngine;
-using UnityEngine.Serialization;
+﻿using UnityEngine;
 
-namespace Dev.Infrastructure
+namespace Dev.Scripts.Infrastructure
 {
     [CreateAssetMenu(fileName = "GameSettings", menuName = "StaticData/GameSettings", order = 0)]
     public class GameSettings : ScriptableObject
@@ -12,6 +10,5 @@ namespace Dev.Infrastructure
         [SerializeField] private bool _isFriendlyFireOn;
             
         public bool IsFriendlyFireOn => _isFriendlyFireOn;
-
     }
 }

@@ -1,6 +1,7 @@
-﻿using Fusion;
+﻿using Dev.Scripts.PlayerLogic;
+using Fusion;
 
-namespace Dev.Scripts.PlayerLogic
+namespace Dev.Scripts.Infrastructure
 {
     public class World : IDamageInflictor
     {

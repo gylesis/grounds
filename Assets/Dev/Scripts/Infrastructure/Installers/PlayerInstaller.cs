@@ -1,7 +1,7 @@
-﻿using Dev.PlayerLogic;
+﻿using Dev.Scripts.PlayerLogic;
 using Zenject;
 
-namespace Dev.Infrastructure
+namespace Dev.Scripts.Infrastructure.Installers
 {
     public class PlayerInstaller : MonoInstaller
     {

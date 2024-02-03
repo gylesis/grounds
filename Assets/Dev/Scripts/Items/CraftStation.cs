@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Dev.Infrastructure;
+using Dev.Scripts.Infrastructure;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
 using UniRx;
 using UnityEngine;

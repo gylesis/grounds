@@ -1,7 +1,6 @@
 ﻿using System;
-using Dev.Infrastructure;
-using Dev.PlayerLogic;
-using Dev.Scripts.Items;
+using Dev.Scripts.Infrastructure;
+using Dev.Scripts.PlayerLogic;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
 using Fusion;
 using Sirenix.OdinInspector;
@@ -9,7 +8,7 @@ using UniRx;
 using UnityEngine;
 using Zenject;
 
-namespace Dev.Scripts.PlayerLogic
+namespace Dev.Scripts.Items
 {
     [SelectionBase]
     [OrderAfter(typeof(Hands))]

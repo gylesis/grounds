@@ -1,7 +1,7 @@
-﻿using Dev.Infrastructure;
+﻿using Dev.Scripts.Infrastructure;
 using UnityEngine;
 
-namespace Dev.Levels.Interactions
+namespace Dev.Scripts.LevelLogic
 {
     public class MarkersHandler : NetworkContext
     {

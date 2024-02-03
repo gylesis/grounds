@@ -1,5 +1,4 @@
-﻿using Dev.PlayerLogic;
-using Dev.Scripts.Items;
+﻿using Dev.Scripts.Items;
 using DG.Tweening;
 using UnityEngine;
 using Zenject;

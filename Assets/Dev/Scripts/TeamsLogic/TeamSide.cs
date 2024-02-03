@@ -1,4 +1,4 @@
-namespace Dev.PlayerLogic
+namespace Dev.Scripts.Infrastructure
 {
     public enum TeamSide
     {

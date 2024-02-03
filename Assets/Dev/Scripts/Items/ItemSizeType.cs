@@ -1,4 +1,4 @@
-﻿namespace Dev.Scripts.PlayerLogic
+﻿namespace Dev.Scripts.Items
 {
     public enum ItemSizeType
     {

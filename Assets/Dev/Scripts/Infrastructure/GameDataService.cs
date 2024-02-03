@@ -1,8 +1,8 @@
-﻿using Dev.PlayerLogic;
+﻿using Dev.Scripts.PlayerLogic;
 using Fusion;
 using UnityEngine;
 
-namespace Dev.Infrastructure
+namespace Dev.Scripts.Infrastructure
 {
     public class GameDataService : NetworkContext
     {

@@ -1,4 +1,4 @@
-﻿using Dev.UI;
+﻿using Dev.Scripts.UI;
 
 namespace Dev.Scripts.PlayerLogic.InventoryLogic
 {

@@ -1,22 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Dev.Levels.Interactions;
-using Dev.PlayerLogic;
-using Dev.Scripts;
-using Dev.Utils;
+using Dev.Scripts.LevelLogic;
+using Dev.Scripts.PlayerLogic;
+using Dev.Scripts.Utils;
 using Fusion;
 using UniRx;
 using Unity.Mathematics;
 using UnityEngine;
 using Zenject;
 
-namespace Dev.Infrastructure
+namespace Dev.Scripts.Infrastructure
 {
     public class PlayersSpawner : NetworkContext
     {
         [SerializeField] private SpawnPoint[] _spawnPoints;
         [SerializeField] private PlayerCharacter _playerCharacterPrefab;
-        private DiContainer _diContainer;
+        
     
         public Subject<PlayerRef> PlayerSpawned { get; } = new Subject<PlayerRef>();
         public Subject<PlayerRef> PlayerDeSpawned { get; } = new Subject<PlayerRef>();
@@ -26,12 +25,6 @@ namespace Dev.Infrastructure
         public int PlayersCount => PlayersList.Count;
 
         public List<PlayerCharacter> AllPlayers => PlayersList.Select(x => x.Value).ToList();
-        
-        [Inject]
-        private void Construct(DiContainer diContainer)
-        {
-            _diContainer = diContainer;
-        }
         
         public void SpawnPlayer(PlayerRef playerRef, bool firstSpawn = true)
         {
@@ -112,7 +105,6 @@ namespace Dev.Infrastructure
             PlayerCharacter playerCharacter = GetPlayer(playerRef);
 
             playerCharacter.gameObject.SetActive(isOn);
-
         }
 
         public void RespawnPlayerCharacter(PlayerRef playerRef)
@@ -139,7 +131,12 @@ namespace Dev.Infrastructure
         
         public PlayerCharacter GetPlayer(PlayerRef playerRef)
         {
-            return PlayersList[playerRef];
+            if (PlayersList.ContainsKey(playerRef))
+            {
+                return PlayersList[playerRef];
+            }
+            
+            return null;
         }
 
         public Vector3 GetPlayerPos(PlayerRef playerRef) => GetPlayer(playerRef).transform.position;

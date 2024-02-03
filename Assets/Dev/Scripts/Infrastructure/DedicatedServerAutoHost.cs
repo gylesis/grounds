@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Dev.Infrastructure
+namespace Dev.Scripts.Infrastructure
 {
     public class DedicatedServerAutoHost : MonoBehaviour
     {

@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using Dev.Scripts;
-using Dev.UI.PopUpsAndMenus;
+using Dev.Scripts.UI.PopUpsAndMenus;
 using Fusion;
 using Fusion.Sockets;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
 
-namespace Dev.Infrastructure
+namespace Dev.Scripts.Infrastructure
 {
     public class ConnectionManager : NetworkContext, INetworkRunnerCallbacks
     {
@@ -130,6 +129,36 @@ namespace Dev.Infrastructure
 
             StartGame(startGameArgs);
         }
+
+        public async void QuitToLobby()
+        {
+            NetworkRunner networkRunner = Runner;
+
+            if (Runner.State == NetworkRunner.States.Running)
+            {
+                await Runner.Shutdown(false, ShutdownReason.GameClosed);
+                await UniTask.DelayFrame(5);
+            }
+                
+            var startGameArgs = new StartGameArgs();
+            startGameArgs.GameMode = GameMode.AutoHostOrClient;
+            startGameArgs.SceneManager = FindObjectOfType<SceneLoader>();
+            startGameArgs.Scene = SceneManager.GetActiveScene().buildIndex;
+
+            StartGameResult gameResult = await networkRunner.StartGame(startGameArgs);
+
+            if (gameResult.Ok)
+            {
+                networkRunner.RemoveCallbacks(this);
+                FindObjectOfType<SceneLoader>().LoadScene("LobbyScene");
+                Debug.Log($"Loading lobby");
+            }
+            else
+            {
+                Debug.LogError($"Game not started {gameResult.ErrorMessage}. Probably server isn't started");
+            }
+        }
+        
         
         // for new player after lobby started. invokes if game starts from Lobby
         public async void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
@@ -184,7 +213,7 @@ namespace Dev.Infrastructure
 
         public async void OnSceneLoadDone(NetworkRunner runner)
         {
-            _sceneCameraController.Camera.gameObject.SetActive(false);
+            _sceneCameraController.SetActiveState(false);
 
             Debug.Log($"OnSceneLoadDone");
 

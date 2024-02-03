@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using Fusion;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Zenject;
 
-namespace Dev.Infrastructure
+namespace Dev.Scripts.Infrastructure
 {
     public class SceneLoader : NetworkSceneManagerBase
     {

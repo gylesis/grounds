@@ -1,8 +1,11 @@
-﻿public enum ItemType
+﻿namespace Dev.Scripts.Items
 {
-    LoadableInItemLauncher,
-    LoadableInRocketLauncher,
-    Explosive,
-    Edible,
-    Firearm
+    public enum ItemType
+    {
+        LoadableInItemLauncher,
+        LoadableInRocketLauncher,
+        Explosive,
+        Edible,
+        Firearm
+    }
 }

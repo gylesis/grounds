@@ -1,11 +1,11 @@
-﻿using Dev.Infrastructure;
+﻿using Dev.Scripts.Infrastructure;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
 using Fusion;
 using UniRx;
 using UnityEngine;
 using Zenject;
 
-namespace Dev.PlayerLogic
+namespace Dev.Scripts.PlayerLogic
 {
     public class MainPlayerController : BasePlayerController
     {

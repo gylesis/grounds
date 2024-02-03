@@ -1,6 +1,6 @@
-﻿using Dev.PlayerLogic;
+﻿using Dev.Scripts.PlayerLogic;
 
-namespace Dev.Scripts.PlayerLogic
+namespace Dev.Scripts.Items
 {
     public struct ItemDynamicData
     {

@@ -1,10 +1,8 @@
-﻿using Dev.PlayerLogic;
-using Dev.Utils;
+﻿using Dev.Scripts.PlayerLogic;
 using UniRx;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Dev.Levels.Interactions
+namespace Dev.Scripts.LevelLogic
 {
     public class PlayerTriggerZone : TriggerZone
     {

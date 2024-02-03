@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Dev.Infrastructure
+namespace Dev.Scripts.UI
 {
     public class SelectionInfoContainer : MonoBehaviour
     {

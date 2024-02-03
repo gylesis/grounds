@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Dev.Infrastructure;
-using Dev.PlayerLogic;
+using Dev.Scripts.Infrastructure;
 using Dev.Scripts.Items;
 using Fusion;
 using UniRx;
@@ -238,8 +237,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         private void RPC_ShowInventory([RpcTarget] PlayerRef playerRef, InventoryData inventoryData)
         {
            // Debug.Log($"RPC SHOW INVENTORY FOR player {playerRef}");
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
+           CursorController.SetActiveState(true);
 
             _playersDataService.GetPlayer(playerRef).BasePlayerController.SetAllowToMove(false);
             _playersDataService.GetPlayer(playerRef).BasePlayerController.SetAllowToAim(false);
@@ -254,8 +252,8 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
         {
             RPC_HideInventoryRequest(playerRef);
             
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
+            CursorController.SetActiveState(false);
+
             _inventoryView.Hide();
         }
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]

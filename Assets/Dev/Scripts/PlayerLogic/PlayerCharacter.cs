@@ -1,10 +1,8 @@
-﻿using Dev.Infrastructure;
-using Dev.Scripts.PlayerLogic;
+﻿using Dev.Scripts.Infrastructure;
 using Fusion.KCC;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Dev.PlayerLogic
+namespace Dev.Scripts.PlayerLogic
 {
     public class PlayerCharacter : NetworkContext
     {

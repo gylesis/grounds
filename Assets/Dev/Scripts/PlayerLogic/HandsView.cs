@@ -1,5 +1,5 @@
 ﻿using System;
-using Dev.Infrastructure;
+using Dev.Scripts.Infrastructure;
 using DG.Tweening;
 using UnityEngine;
 

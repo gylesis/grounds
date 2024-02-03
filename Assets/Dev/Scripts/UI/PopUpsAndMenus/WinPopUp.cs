@@ -8,7 +8,7 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Dev.UI.PopUpsAndMenus
+namespace Dev.Scripts.UI.PopUpsAndMenus
 {
     public class WinPopUp : PopUp
     {
@@ -64,5 +64,4 @@ namespace Dev.UI.PopUpsAndMenus
 
         }
     }
-    
 }

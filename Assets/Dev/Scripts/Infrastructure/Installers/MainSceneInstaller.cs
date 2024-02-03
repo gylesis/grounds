@@ -1,12 +1,12 @@
-﻿using Dev.Levels.Interactions;
-using Dev.Scripts.Items;
+﻿using Dev.Scripts.Items;
+using Dev.Scripts.LevelLogic;
 using Dev.Scripts.PlayerLogic;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
-using Dev.UI.PopUpsAndMenus;
+using Dev.Scripts.UI.PopUpsAndMenus;
 using UnityEngine;
 using Zenject;
 
-namespace Dev.Infrastructure
+namespace Dev.Scripts.Infrastructure.Installers
 {
     public class MainSceneInstaller : MonoInstaller
     {
@@ -22,6 +22,7 @@ namespace Dev.Infrastructure
         [SerializeField] private CraftStation _craftStation;
         [SerializeField] private ItemsDataService _itemsDataService;
         [SerializeField] private PlayersDataService _playersDataService;
+        [SerializeField] private PlayersDeathController _playersDeathController;
         
         public override void InstallBindings()
         {
@@ -40,6 +41,7 @@ namespace Dev.Infrastructure
             
             Container.Bind<PlayersDataService>().FromInstance(_playersDataService).AsSingle();
             Container.Bind<PlayersSpawner>().FromInstance(_playersSpawner).AsSingle();
+            Container.Bind<PlayersDeathController>().FromInstance(_playersDeathController).AsSingle();
             
             Container.Bind<DamageAreaSpawner>().FromInstance(_damageAreaSpawner).AsSingle();
             Container.Bind<ImpactApplier>().FromInstance(_impactApplier).AsSingle();
