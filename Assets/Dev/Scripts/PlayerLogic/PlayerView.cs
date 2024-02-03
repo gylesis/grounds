@@ -26,9 +26,9 @@ namespace Dev.Scripts.PlayerLogic
         private static readonly int LeftHand = Animator.StringToHash("LeftHand");
         private static readonly int RightHand = Animator.StringToHash("RightHand");
         private static readonly int CenterHand = Animator.StringToHash("CenterHand");
-        
+        private static readonly int Death = Animator.StringToHash("IsDead");
+
         private PlayerCharacter _playerCharacter;
-        private static readonly int Death = Animator.StringToHash("Death");
 
 
         [Inject]
@@ -108,9 +108,9 @@ namespace Dev.Scripts.PlayerLogic
         }
 
         [Rpc]
-        public void RPC_OnDeath()
+        public void RPC_OnDeath(bool isDead)
         {
-            _animator.Animator.SetTrigger(Death);
+            _animator.Animator.SetBool(Death,isDead);
         }
         
     }

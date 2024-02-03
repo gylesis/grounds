@@ -31,6 +31,7 @@ namespace Dev.Scripts.Infrastructure
 
             _playersSpawner.PlayerSpawned.TakeUntilDestroy(this).Subscribe((OnPlayerSpawned));
             _playersSpawner.PlayerDeSpawned.TakeUntilDestroy(this).Subscribe((OnPlayerDeSpawned));
+            _playersSpawner.PlayerRespawned.TakeUntilDestroy(this).Subscribe((OnPlayerRespawned));
         }
 
         private void OnPlayerSpawned(PlayerRef playerRef)
@@ -48,37 +49,65 @@ namespace Dev.Scripts.Infrastructure
 
         private void OnPlayerHealthZero(PlayerRef playerRef)
         {
+            if(HasStateAuthority == false) return;
+            
+            var playerCharacter = _playersSpawner.GetPlayer(playerRef);
+
+            
+                /*Debug.Log($"Teleport");
+                playerCharacter.Kcc.SetPosition(Vector3.zero + Vector3.one * 2);
+                playerCharacter.Kcc.SetLookRotation(Vector2.zero);
+
+                playerCharacter.Kcc.SetDynamicVelocity(Vector3.zero);
+            
+                playerCharacter.Kcc.SetKinematicVelocity(Vector3.zero);*/
+            
+            
             var playerDeathContext = new PlayerDeathContext();
             playerDeathContext.PlayerRef = playerRef;
             
             PlayerDied.OnNext(playerDeathContext);
 
-            var playerCharacter = _playersSpawner.GetPlayer(playerRef);
+           // var playerCharacter = _playersSpawner.GetPlayer(playerRef);
 
-            playerCharacter.BasePlayerController.SetAllowToAim(false);
-            playerCharacter.BasePlayerController.SetAllowToMove(false);
+            playerCharacter.PlayerController.SetAllowToAim(false);
+            playerCharacter.PlayerController.SetAllowToMove(false);
             
-            playerCharacter.PlayerView.RPC_OnDeath();
+            playerCharacter.HitboxRoot.HitboxRootActive = false;
             
-            RPC_SwitchCamera(playerRef);
+            playerCharacter.PlayerView.RPC_OnDeath(true);
+            
+            RPC_SwitchCamera(playerRef, false);
         }
 
-        
+        private void OnPlayerRespawned(PlayerRef playerRef)
+        {
+            Debug.Log($"Player respawned");
+            RPC_SwitchCamera(playerRef, true);
+        }
+
         [Rpc]
-        private void RPC_SwitchCamera([RpcTarget] PlayerRef playerRef)
+        private void RPC_SwitchCamera([RpcTarget] PlayerRef playerRef, bool isOn)
         {
             var playerCharacter = _playersSpawner.GetPlayer(playerRef);
             
-            CursorController.SetActiveState(true);
+            CursorController.SetActiveState(!isOn);
             
-            _sceneCameraController.SetActiveState(true);
-            playerCharacter.CameraController.SetActiveState(false);
+            _sceneCameraController.SetActiveState(!isOn);
+            playerCharacter.CameraController.SetActiveState(isOn);
             
             var tryGetPopUp = _popUpService.TryGetPopUp<DeathPopUp>(out var deathPopUp);
 
             if (tryGetPopUp)
             {
-                _popUpService.ShowPopUp<DeathPopUp>();
+                if (isOn)
+                {
+                    _popUpService.HidePopUp<DeathPopUp>();
+                }
+                else
+                {
+                    _popUpService.ShowPopUp<DeathPopUp>();
+                }
             }   
         }
     }

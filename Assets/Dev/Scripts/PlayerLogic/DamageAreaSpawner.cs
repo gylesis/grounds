@@ -14,6 +14,7 @@ namespace Dev.Scripts.PlayerLogic
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         public void RPC_SpawnBox(int itemId, Vector3 point, Health inflictor)
         {
+            return;
             var config = (BoxDamageAreaConfig) _damageConfigLibrary.GetConfig(itemId);
             SpawnBox(config, point, inflictor);
         }
