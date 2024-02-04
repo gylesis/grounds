@@ -111,7 +111,8 @@ namespace Dev.Scripts.Items
         
         [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
         public void RPC_ReturnItemToWorldFromInventory(int itemId)
-        {   
+        {
+            Debug.Log($"Returning item to world from inventory");
             PlayerRef playerRef = Runner.LocalPlayer;
 
             GameObject playerGo = Runner.GetPlayerObject(playerRef).gameObject;

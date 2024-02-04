@@ -46,6 +46,7 @@ namespace Dev.Scripts.Infrastructure
                 StartSinglePlayer();
             }
             position.position += Vector2.down * _height;
+            
             if (GUI.Button(position, "Start Host"))
             {
                 _isConnecting = true;
@@ -65,6 +66,9 @@ namespace Dev.Scripts.Infrastructure
         {
             _networkRunner.gameObject.SetActive(true);
             
+            Curtains.Instance.SetText("Connecting to the game");
+            Curtains.Instance.Show(0.5f);
+            
             var startGameResult = await _networkRunner.StartGame(startGameArgs);
 
             if (startGameResult.Ok == false)
@@ -74,6 +78,7 @@ namespace Dev.Scripts.Infrastructure
             else
             {
                 DontDestroyOnLoad(_networkRunner.gameObject);
+                Curtains.Instance.HideWithDelay(1);
             }
 
             LastGameStartResult(startGameResult);

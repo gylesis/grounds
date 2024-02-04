@@ -40,11 +40,12 @@ namespace Dev.Scripts.Items
             _isActive = isActive;
             _camera.gameObject.SetActive(isActive);
 
+            _isDragging = false;
+            
             if (isActive == false)
             {
                 _tagetDragObj = null;
             }
-            
         }
         
         private void Update()

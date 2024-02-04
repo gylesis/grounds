@@ -42,22 +42,12 @@ namespace Dev.Scripts.Items
             _inventoryItemsDragHandler.DraggableObjectUp.TakeUntilDestroy(_inventoryItemsDragHandler)
                 .Subscribe((OnItemDragUp));
             
-            _inventoryItemsDragHandler.DraggableObjectDown.TakeUntilDestroy(_inventoryItemsDragHandler)
-                .Subscribe((OnItemDragDown));
-        }
-
-        private void OnItemDragDown(DraggableObject draggableObject)
-        {
-            return;
-            if(IsHandBusy == false) return;
-
-            if(_potentialItemView == null) return;
+            /*_inventoryItemsDragHandler.DraggableObjectDown.TakeUntilDestroy(_inventoryItemsDragHandler)
+                .Subscribe((OnItemDragDown));*/
         }
 
         private void OnItemDragUp(DraggableObject draggableObject)
         {
-            //Debug.Log($"iS hand busy {IsHandBusy}");
-            
             if (IsHandBusy)
             {
                 if (_holdingItemView.gameObject.GetInstanceID() != draggableObject.gameObject.GetInstanceID()) return;

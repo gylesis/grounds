@@ -8,8 +8,6 @@ namespace Dev.Scripts.PlayerLogic
         {
             Cursor.visible = isActive;
 
-            return;
-#if UNITY_EDITOR
             if (isActive)
             {
                 Cursor.lockState = CursorLockMode.None;
@@ -18,7 +16,6 @@ namespace Dev.Scripts.PlayerLogic
             {
                 Cursor.lockState = CursorLockMode.Locked;
             }
-#endif
 
         }
         

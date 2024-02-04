@@ -79,12 +79,23 @@ namespace Dev.Scripts.Infrastructure
         private async UniTask<StartGameResult> StartGame(StartGameArgs startGameArgs)
         {
             _networkRunner.gameObject.SetActive(true);
+            
+            Curtains.Instance.SetText("Starting game");
+            Curtains.Instance.Show();
+            
             var startGameResult = await _networkRunner.StartGame(startGameArgs);
 
-            if (startGameResult.Ok == false)
+            if (startGameResult.Ok)
+            {
+                Curtains.Instance.SetText("Game found, joining");
+                Curtains.Instance.HideWithDelay(1, 1f);
+            }
+            else
             {
                 Debug.LogError($"{startGameResult.ErrorMessage}");
+                Curtains.Instance.SetText($"Game didn't started. The reason: {startGameResult.ErrorMessage}");
             }
+
             LastGameStartResult?.Invoke(startGameResult);
             
             return startGameResult;
@@ -214,8 +225,8 @@ namespace Dev.Scripts.Infrastructure
         public async void OnSceneLoadDone(NetworkRunner runner)
         {
             _sceneCameraController.SetActiveState(false);
-
-            Debug.Log($"OnSceneLoadDone");
+            
+            Curtains.Instance.Hide();
 
             if (runner.IsServer)
             {
@@ -227,7 +238,7 @@ namespace Dev.Scripts.Infrastructure
 
         public void OnSceneLoadStart(NetworkRunner runner)
         {
-            Debug.Log($"OnSceneLoadStart");
+           
         }
     }
 }

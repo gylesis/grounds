@@ -1,12 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Dev.Scripts.LevelLogic;
-using Dev.Scripts.PlayerLogic;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
 using Dev.Scripts.Utils;
 using DG.Tweening;
-using Fusion;
-using Fusion.KCC;
 using UniRx;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -45,6 +42,8 @@ namespace Dev.Scripts.Items
 
         private void Awake()
         {
+            Hide();
+
             _craftTriggerZone.TriggerEntered.TakeUntilDestroy(this).Subscribe((OnCraftZoneEntered));
             _dropItemZone.TriggerEntered.TakeUntilDestroy(this).Subscribe((OnDropItemZoneEntered));
             _itemInfoPiedestalZone.TriggerEntered.TakeUntilDestroy(this).Subscribe((OnItemPiedestalEntered));

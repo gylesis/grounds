@@ -65,6 +65,9 @@ namespace Dev.Scripts.Infrastructure
         {
             NetworkRunner networkRunner = Runner;
 
+            Curtains.Instance.SetText("Starting game");
+            Curtains.Instance.Show();
+            
             if (Runner.State == NetworkRunner.States.Running)
             {
                 await Runner.Shutdown(false, ShutdownReason.GameClosed);
@@ -72,7 +75,8 @@ namespace Dev.Scripts.Infrastructure
             }
                 
             var startGameArgs = new StartGameArgs();
-            startGameArgs.GameMode = GameMode.Client;
+            
+            startGameArgs.GameMode = GameMode.AutoHostOrClient;
             startGameArgs.SceneManager = _sceneLoader;
             startGameArgs.Scene = SceneManager.GetActiveScene().buildIndex;
 
@@ -80,6 +84,8 @@ namespace Dev.Scripts.Infrastructure
 
             if (gameResult.Ok)
             {
+                Curtains.Instance.SetText("Game found, joining map");
+                
                 networkRunner.RemoveCallbacks(this);
                 _sceneLoader.LoadScene("MainScene");
                 Debug.Log($"Game started, loading main level");
