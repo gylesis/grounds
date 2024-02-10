@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Dev.Scripts.LevelLogic;
+using Dev.Scripts.PlayerLogic;
 using Dev.Scripts.PlayerLogic.InventoryLogic;
 using Dev.Scripts.Utils;
 using DG.Tweening;
@@ -21,9 +22,8 @@ namespace Dev.Scripts.Items
         [SerializeField] private TriggerZone _craftTriggerZone;
         [SerializeField] private TriggerZone _dropItemZone;
         [SerializeField] private TriggerZone _itemInfoPiedestalZone;
-        
-        [SerializeField] private InventoryHandView _leftHandView;
-        [SerializeField] private InventoryHandView _rightHandView;
+
+        [SerializeField] private InventoryHandView[] _inventoryHandViews;
             
         [SerializeField] private BoxCollider _spawnBox;
                 
@@ -34,9 +34,8 @@ namespace Dev.Scripts.Items
         private List<ItemData> _items = new List<ItemData>();
         private ItemsDataService _itemsDataService;
 
-        public InventoryHandView LeftHandView => _leftHandView;
-
-        public InventoryHandView RightHandView => _rightHandView;
+        public InventoryHandView LeftHandView => _inventoryHandViews.First(x => x.IsLeftHand);
+        public InventoryHandView RightHandView => _inventoryHandViews.First(x => x.IsLeftHand == false);
 
         public Subject<int> ToRemoveItemFromInventory { get; } = new Subject<int>();
 
@@ -48,8 +47,11 @@ namespace Dev.Scripts.Items
             _dropItemZone.TriggerEntered.TakeUntilDestroy(this).Subscribe((OnDropItemZoneEntered));
             _itemInfoPiedestalZone.TriggerEntered.TakeUntilDestroy(this).Subscribe((OnItemPiedestalEntered));
             _itemInfoPiedestalZone.TriggerExit.TakeUntilDestroy(this).Subscribe((OnItemPiedestalExit));
+            
+            _inventoryItemsDragHandler.DraggableObjectUp.TakeUntilDestroy(_inventoryItemsDragHandler)
+                .Subscribe((OnItemDragUp));
         }
-        
+
         private void Start()
         {
             _craftStation.Crafted.TakeUntilDestroy(this).Subscribe((OnItemCrafted));
@@ -62,7 +64,143 @@ namespace Dev.Scripts.Items
             _itemStaticDataContainer = itemStaticDataContainer;
             _craftStation = craftStation;
         }
-        
+
+        public void Show(ItemData[] inventoryItems, HandItemData[] handsItems)
+        {
+            _items = inventoryItems.ToList();
+            _items.AddRange(handsItems.Select(x => x.ItemData));
+            
+            foreach (ItemData itemData in inventoryItems)
+            {
+                int itemId = itemData.ItemId;
+             
+                _itemStaticDataContainer.TryGetItemStaticDataById(itemId, out var itemStaticData);
+
+                Vector3 spawnPos = _spawnBox.bounds.RandomPointInBounds();
+                InventoryItemView itemView = Instantiate(itemStaticData.InventoryData.Prefab, spawnPos, Quaternion.identity, _itemsParent);
+                itemView.Setup(itemId);
+                
+                _itemViews.Add(itemView);
+            }   
+            
+            foreach (HandItemData itemData in handsItems)
+            {
+                int itemId = itemData.ItemId;
+             
+                _itemStaticDataContainer.TryGetItemStaticDataById(itemId, out var itemStaticData);
+
+                Vector3 spawnPos = new Vector3(999,999,999);
+                InventoryItemView itemView = Instantiate(itemStaticData.InventoryData.Prefab, spawnPos, Quaternion.identity, _itemsParent);
+                itemView.Setup(itemId);
+
+                if (itemData.HandType == HandType.Left)
+                {
+                    LeftHandView.PutItem(itemView, true);
+                }
+                else
+                {
+                    RightHandView.PutItem(itemView, true);
+                }
+                
+                _itemViews.Add(itemView);
+            }
+            
+            _curtain.alpha = 1;
+            _curtain.DOFade(0, 0.2f);
+            _inventoryItemsDragHandler.SetActive(true);
+        }
+
+        private void OnItemDragUp(DraggableObject draggableObject)
+        {
+            if(draggableObject.TryGetComponent<InventoryItemView>(out var itemView) == false) return; 
+            
+            InventoryHandView GetHandView()
+            {
+                foreach (InventoryHandView inventoryHandView in _inventoryHandViews)
+                {
+                    if(inventoryHandView.PotentialItemView == null) continue;
+                
+                    if (inventoryHandView.PotentialItemView.gameObject.GetInstanceID() ==
+                        draggableObject.gameObject.GetInstanceID())
+                    {
+                        return inventoryHandView;
+                    }
+                }
+
+                return null;
+            }
+
+            InventoryHandView handView = GetHandView();
+            
+            if (handView == null) // means: dropped to the floor
+            {
+                if (itemView.HasParent)
+                {
+                    itemView.ParentHandView.FreeHand();
+                }
+                
+                return;
+            }   
+            
+            InventoryHandView otherHandView = _inventoryHandViews.First(x => x.IsLeftHand != handView.IsLeftHand);
+            
+            if (handView.IsHandBusy)
+            {
+                bool sameItems = handView.HoldingItemView.ItemId == itemView.ItemId;
+                
+                if (sameItems)
+                {
+                    if (itemView.HasParent)
+                    {
+                        itemView.ParentHandView.PullItemToHand(itemView);
+                    }
+                    else
+                    {
+                        SendItemBack(itemView);
+                    }
+
+                    Debug.Log($"Items are same, no swap applied");
+                    return;
+                }
+
+                InventoryItemView currentHandItem = handView.HoldingItemView;
+
+                if (otherHandView.IsHandBusy)
+                {
+                    handView.FreeHand();
+                    otherHandView.FreeHand();
+
+                    otherHandView.PutItem(currentHandItem);
+                    handView.PutItem(itemView);
+                }
+                else
+                {
+                    handView.FreeHand();
+
+                    handView.PutItem(itemView);
+
+                    SendItemBack(currentHandItem);
+                }
+            }
+            else
+            {
+                if (handView.PotentialItemView == null) return;
+
+                if (otherHandView.PotentialItemView != null)
+                {
+                    if (otherHandView.PotentialItemView.gameObject.GetInstanceID() ==
+                        itemView.gameObject.GetInstanceID())
+                    {
+                        otherHandView.FreeHand();
+                    }
+                }
+                
+                handView.PutItem(handView.PotentialItemView);
+            }
+            
+            
+        }
+
         private void OnItemCrafted(bool isSuccess)
         {
             if (isSuccess)
@@ -84,51 +222,6 @@ namespace Dev.Scripts.Items
             }
             
             //_craftStation.ItemViews.ForEach(x => x.transform.p);
-        }
-
-        public void Show(ItemData[] inventoryItems, ItemData[] handsItems)
-        {
-            _items = inventoryItems.ToList();
-            _items.AddRange(handsItems);
-            
-            foreach (ItemData itemData in inventoryItems)
-            {
-                int itemId = itemData.ItemId;
-             
-                _itemStaticDataContainer.TryGetItemStaticDataById(itemId, out var itemStaticData);
-
-                Vector3 spawnPos = _spawnBox.bounds.RandomPointInBounds();
-                InventoryItemView itemView = Instantiate(itemStaticData.InventoryData.Prefab, spawnPos, Quaternion.identity, _itemsParent);
-                itemView.Setup(itemId);
-                
-                _itemViews.Add(itemView);
-            }
-            
-            foreach (ItemData itemData in handsItems)
-            {
-                int itemId = itemData.ItemId;
-             
-                _itemStaticDataContainer.TryGetItemStaticDataById(itemId, out var itemStaticData);
-
-                Vector3 spawnPos = new Vector3(999,999,999);
-                InventoryItemView itemView = Instantiate(itemStaticData.InventoryData.Prefab, spawnPos, Quaternion.identity, _itemsParent);
-                itemView.Setup(itemId);
-
-                if (_leftHandView.IsHandBusy)
-                {
-                    _rightHandView.PutItem(itemView, true);
-                }
-                else
-                {
-                    _leftHandView.PutItem(itemView, true);
-                }
-                
-                _itemViews.Add(itemView);
-            }
-            
-            _curtain.alpha = 1;
-            _curtain.DOFade(0, 0.2f);
-            _inventoryItemsDragHandler.SetActive(true);
         }
 
         public void Hide()  

@@ -13,7 +13,8 @@ namespace Dev.Scripts.Items
             Rigidbody.useGravity = false;
             Rigidbody.angularVelocity = Vector3.zero;
             Rigidbody.velocity = Vector3.zero;
-           // Rigidbody.centerOfMass = _raycastHitPoint;
+            Rigidbody.isKinematic = false;
+            // Rigidbody.centerOfMass = _raycastHitPoint;
         }
 
         public void SetFreezeState(bool toFreeze)
@@ -23,9 +24,11 @@ namespace Dev.Scripts.Items
                 Rigidbody.velocity = Vector3.zero;
                 Rigidbody.angularVelocity = Vector3.zero;
                 Rigidbody.useGravity = false;
+                Rigidbody.isKinematic = true;
             }
             else
             {
+                Rigidbody.isKinematic = false;
                 Rigidbody.useGravity = true;
             }
             
@@ -33,6 +36,7 @@ namespace Dev.Scripts.Items
         
         public void MakeFree(Vector3 throwVelocity)
         {
+            Rigidbody.isKinematic = false;
            Rigidbody.centerOfMass = Vector3.zero;
            Rigidbody.useGravity = true;
            Rigidbody.velocity += throwVelocity;     

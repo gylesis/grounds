@@ -67,9 +67,10 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
 
             foreach (Hand hand in playerCharacter.PlayerController.Hands.HandsList)
             {
-                hand.ItemTaken.TakeUntilDestroy(this).Subscribe((s => OnItemTakenToHands(s, playerRef)));
+                hand.ItemTaken.TakeUntilDestroy(this).Subscribe((s => OnItemTakenToHands(s, playerRef, hand.HandType)));
+                
                 hand.ItemDropped.TakeUntilDestroy(this)
-                    .Subscribe((s => OnItemDroppedFromHands(s, playerRef)));
+                    .Subscribe((s => OnItemDroppedFromHands(s, playerRef, hand.HandType)));
             }
         }
 
@@ -101,33 +102,23 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
                 targetHand = playerCharacter.PlayerController.Hands.GetHandByType(HandType.Right);
             }
 
-            Debug.Log($"Item {context.ItemId} to remove - {context.ToRemove}, is left hand {isLeftHand}");
+            Debug.Log($"Item {context.ItemId} to remove - {context.ToRemoveFromHand}, is left hand {isLeftHand}");
                 
-            if (context.ToRemove)
+            if (context.ToRemoveFromHand)
             {
-                var leftHand = playerCharacter.PlayerController.Hands.GetHandByType(HandType.Left);
-                var rightHand = playerCharacter.PlayerController.Hands.GetHandByType(HandType.Right);
-                
-                if (leftHand.IsFree == false)
+                if (targetHand.IsFree == false)
                 {
                     var itemData = new ItemData(itemId);
                     
                     PutItemInInventory(itemData, playerRef);
+
+                    HandType handType = isLeftHand ? HandType.Left : HandType.Right;
+                    RemoveItemFromHands(playerRef, itemId, handType);
                     
-                    RemoveItemFromHands(playerRef, itemId);
-                    _itemsDataService.RPC_RemoveItemFromWorld(leftHand.ContainingItem);
-                    leftHand.RPC_DropItem();
-                }
-                else if (rightHand.IsFree == false)
-                {
-                    var itemData = new ItemData(itemId);
-                    
-                    PutItemInInventory(itemData, playerRef);
-                    
-                    RemoveItemFromHands(playerRef, itemId);
-                    _itemsDataService.RPC_RemoveItemFromWorld(rightHand.ContainingItem);
-                    rightHand.RPC_DropItem();
-                }
+                    _itemsDataService.RPC_RemoveItemFromWorld(targetHand.ContainingItem);
+                    targetHand.RPC_DropItem();
+                } 
+               
             }
             else
             {
@@ -139,22 +130,22 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             
         }
 
-        private void OnItemDroppedFromHands(ItemData itemData, PlayerRef playerRef)
+        private void OnItemDroppedFromHands(ItemData itemData, PlayerRef playerRef, HandType handType)
         {
-            RemoveItemFromHands(playerRef, itemData.ItemId);
+            RemoveItemFromHands(playerRef, itemData.ItemId, handType);
 
             //Debug.Log($"Item {itemData.ItemName} dropped from hands");
         }
 
-        private void RemoveItemFromHands(PlayerRef playerRef, int itemId)
+        private void RemoveItemFromHands(PlayerRef playerRef, int itemId, HandType handType)
         {
             InventoryData inventoryData = GetInventoryData(playerRef);
             var indexOf = _playersInventoryDatas.IndexOf(inventoryData);
 
-            if(inventoryData.HandItems.Any(x => x.ItemId == itemId) == false) return;
+            if(inventoryData.HandItems.Any(x => x.ItemId == itemId && x.HandType == handType) == false) return;
             
-            ItemData data = inventoryData.HandItems.First(x => x.ItemId == itemId);
-
+            HandItemData data = inventoryData.HandItems.First(x => x.ItemId == itemId && x.HandType == handType);
+    
             inventoryData.HandItems.Remove(data);
             _playersInventoryDatas[indexOf] = inventoryData;
         }
@@ -171,18 +162,21 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             inventoryData.InventoryItems.Remove(data);
             _playersInventoryDatas[indexOf] = inventoryData;
 
-            Debug.Log($"Removed item {itemId} from Player {playerRef}");
+            Debug.Log($"<color=red>Removed</color> item {itemId} from Player {playerRef}'s inventory");
         }   
         
-        private void OnItemTakenToHands(ItemData itemData, PlayerRef playerRef)
+        private void OnItemTakenToHands(ItemData itemData, PlayerRef playerRef, HandType handType)
         {
             InventoryData inventoryData = GetInventoryData(playerRef);
             var indexOf = _playersInventoryDatas.IndexOf(inventoryData);
 
-            //Debug.Log($"Item {itemData.ItemName} added to hands");
+            Debug.Log($"Item {itemData.ItemId} added to hands");
 
             inventoryData.InventoryItems.Remove(itemData);
-            inventoryData.HandItems.Add(itemData);
+
+            var handItemData = new HandItemData(itemData, handType);
+            
+            inventoryData.HandItems.Add(handItemData);
             
             _playersInventoryDatas[indexOf] = inventoryData;
         }
@@ -211,7 +205,7 @@ namespace Dev.Scripts.PlayerLogic.InventoryLogic
             data.InventoryItems.Add(itemData);
 
             _playersInventoryDatas[indexOf] = data;
-            Debug.Log($"Item {itemData.ItemId} added to Player {playerRef}");
+            Debug.Log($"Item {itemData.ItemId} <color=green>added</color> to Player {playerRef}'s inventory");
         }
 
         public void ShowInventory(PlayerRef playerRef)

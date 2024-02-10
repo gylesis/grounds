@@ -24,7 +24,7 @@ namespace Dev.Scripts.Items
 
         private Vector3 _raycastHitPoint;
 
-        public bool IsDragging { get; private set; }
+        public bool IsDragging => _isDragging;
         public DraggableObject FocusedObject => _tagetDragObj;
         
         public Subject<DraggableObject> DraggableObjectUp { get; } = new Subject<DraggableObject>();
@@ -80,8 +80,8 @@ namespace Dev.Scripts.Items
 
             if (toStartDrag)
             {
-                IsDragging = true;
-                        
+                _isDragging = true;
+                
                 _dragHeight = _ground.transform.position.y + _dragObjHeight;
                 
                 _tagetDragObj.PrepareToDrag();
@@ -108,8 +108,6 @@ namespace Dev.Scripts.Items
 
             if (Input.GetMouseButtonUp(0))
             {
-                IsDragging = false;
-
                 var throwVelocity = new Vector3(_lastMouseDelta.x, 0, _lastMouseDelta.y);
                 _tagetDragObj.MakeFree(throwVelocity);
 

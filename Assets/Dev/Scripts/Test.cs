@@ -1,105 +1,175 @@
 ﻿using System;
 using System.Collections.Generic;
-using Dev.Scripts.Infrastructure;
-using Fusion;
-using Fusion.Sockets;
+using System.Linq;
+using Dev.Scripts.Utils;
+using Unity.Collections;
+using Unity.Jobs;
 using UnityEngine;
-using NetAddress = Fusion.Sockets.NetAddress;
+using UnityEngine.Jobs;
+using UnityEngine.Profiling;
+using Random = UnityEngine.Random;
 
 namespace Dev.Scripts
 {
-    public class Test : NetworkContext, INetworkRunnerCallbacks
+    public class Test : MonoBehaviour
     {
-        private NetworkRunner _networkRunner;
-        private SceneLoader _sceneLoader;
+        [SerializeField] private int _numbersAmount = 100;
+        [SerializeField] private float _velocityModifier = 1;
+        [SerializeField] private TestBall _ballPrefab;
 
-        private bool _isloading;
-        
+        [SerializeField] private BoxCollider _collider;
+
+        [SerializeField] private bool _useThreads;
+
+
+        private List<TestBall> _balls = new List<TestBall>();
+
+        private NativeArray<Vector3> _position;
+        private NativeArray<Vector3> _velocities;
+
+        private Vector3 BoundsSize => _collider.transform.localScale;
+
+        private TransformAccessArray _transformAccessArray;
+
         private void Awake()
         {
-            _networkRunner = gameObject.AddComponent<NetworkRunner>();
-            _sceneLoader = gameObject.AddComponent<SceneLoader>();
+            CreateBalls();
         }
 
-        private void OnGUI()
+        private void CreateBalls()
         {
-            if(_isloading) return;
-            
-            if (GUI.Button(new Rect(100, 100, 100, 100), "Join 1"))
-            {
-                StartGame("Session 1");
-            } 
-            
-            if (GUI.Button(new Rect(300, 100, 100, 100), "Join 2"))
-            {
-                StartGame("Session 2");
-            } 
-            
-        }
+            _position = new NativeArray<Vector3>(_numbersAmount, Allocator.Persistent);
+            _velocities = new NativeArray<Vector3>(_numbersAmount, Allocator.Persistent);
 
-        private async void StartGame(string sessionName)
-        {
-            _isloading = true;
-            
-            if (_networkRunner.IsShutdown == false)
+            for (int i = 0; i < _numbersAmount; i++)
             {
-                await _networkRunner.Shutdown(false, ShutdownReason.GameClosed);
+                Vector3 spawnPos = Vector3.zero;
+
+                TestBall ball = Instantiate(_ballPrefab, spawnPos, Quaternion.identity);
+
+                _balls.Add(ball);
+                _position[i] = spawnPos;
+                _velocities[i] = Random.insideUnitSphere.normalized * _velocityModifier;
             }
-            
-            var startGameArgs = new StartGameArgs();
-            startGameArgs.GameMode = GameMode.AutoHostOrClient;
-            startGameArgs.SceneManager = _sceneLoader;
-            startGameArgs.SessionName = sessionName;
 
-            StartGameResult result = await _networkRunner.StartGame(startGameArgs);
+            _transformAccessArray = new TransformAccessArray(_balls.Select(x => x.transform).ToArray());
+        }
 
-            _isloading = false;
-
-            if (result.Ok)
+        public void Update()
+        {
+            /*if (Input.anyKey)
             {
-                Debug.Log($"Connected to session {sessionName}");
+                float vertical = Input.GetAxis("Vertical");
+                float horizontal = Input.GetAxis("Horizontal");
+                float heightAxis = 0;
+                if (Input.GetKey(KeyCode.Space))
+                {   
+                    heightAxis = 1;
+                }
+                else if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    heightAxis = -1;
+                }
+
+                Vector3 moveVector = Vector3.forward * vertical + Vector3.right * horizontal;
+                moveVector.y = heightAxis;
+                
+                for (int i = 0; i < _numbersAmount; i++)
+                {
+                    _velocities[i] = moveVector * _velocityModifier;
+                }
+            }*/
+
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                for (int i = 0; i < _numbersAmount; i++)
+                {
+                    _velocities[i] = Random.insideUnitSphere.normalized * _velocityModifier;
+                }
+            }
+
+
+            if (_useThreads)
+            {
+                MoveWithThreads();
             }
             else
             {
-                Debug.Log($"Error: {result.ErrorMessage}");
+                MoveUsually();
             }
-            
         }
-        
-        public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) { }
 
-        public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) { }
-
-        public void OnInput(NetworkRunner runner, NetworkInput input) { }
-
-        public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
-
-        public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
+        private void MoveUsually()
         {
-            Debug.Log($"Server shutdown {shutdownReason}");
+            for (var i = 0; i < _balls.Count; i++)
+            {
+                TestBall ball = _balls[i];
+
+                Vector3 pos = ball.transform.position;
+
+                ball.transform.position += _velocities[i] * (_velocityModifier * Time.deltaTime);
+
+                if (pos.x > BoundsSize.x || pos.x < -BoundsSize.x || pos.y > BoundsSize.y || pos.y < -BoundsSize.y)
+                {
+                    ball.transform.position = Vector3.zero;
+                }
+
+                _position[i] = ball.transform.position;
+            }
         }
 
-        public void OnConnectedToServer(NetworkRunner runner) { }
+        private void MoveWithThreads()
+        {
+            var job = new MoveJob()
+            {
+                deltaTime = Time.deltaTime,
+                position = _position,
+                velocity = _velocities,
+                BoundsSize = BoundsSize
+            };
 
-        public void OnDisconnectedFromServer(NetworkRunner runner) { }
+            JobHandle jobHandle = job.Schedule(_transformAccessArray);
 
-        public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request,
-            byte[] token) { }
+            Profiler.BeginSample("Jobs");
+            jobHandle.Complete();
+            Profiler.EndSample();
+        }
 
-        public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason) { }
+        private void OnDrawGizmos()
+        {
+            Gizmos.DrawWireCube(Vector3.zero, _collider.transform.localScale);
+        }
 
-        public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
+        private void OnDestroy()
+        {
+            _position.Dispose();
+            _velocities.Dispose();
+            _transformAccessArray.Dispose();
+        }
+    }
 
-        public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) { }
+    struct MoveJob : IJobParallelForTransform
+    {
+        public NativeArray<Vector3> velocity;
+        public NativeArray<Vector3> position;
 
-        public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }
+        public float deltaTime;
+        public Vector3 BoundsSize;
 
-        public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
+        public void Execute(int i, TransformAccess transform)
+        {
+            Vector3 pos = position[i];
 
-        public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ArraySegment<byte> data) { }
+            transform.position += velocity[i] * deltaTime;
 
-        public void OnSceneLoadDone(NetworkRunner runner) { }
-
-        public void OnSceneLoadStart(NetworkRunner runner) { }
+            if (pos.x > BoundsSize.x || pos.x < -BoundsSize.x || pos.y > BoundsSize.y || pos.y < -BoundsSize.y)
+            {
+                position[i] = Vector3.zero;
+            }
+            else
+            {
+                position[i] = transform.position;
+            }
+        }
     }
 }

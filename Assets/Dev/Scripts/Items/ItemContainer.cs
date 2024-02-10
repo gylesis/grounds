@@ -25,7 +25,7 @@ namespace Dev.Scripts.Items
         {
             if (IsFree == false) return;
             
-            Debug.Log("Put Item");
+            Debug.Log($"Item {item.ItemId} placed to item container {name}");
 
             SetItem(item);
             ContainingItem.RPC_ChangeState(true);

@@ -171,8 +171,8 @@ Transform:
   m_GameObject: {fileID: 805255598167959499}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.5549964, y: 0, z: 0.93799734}
-  m_LocalScale: {x: 2.9647, y: 1, z: 0.19595999}
+  m_LocalPosition: {x: 3.32, y: 0, z: 0.93799734}
+  m_LocalScale: {x: 10.5715275, y: 1, z: 0.19595999}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2542722223819611347}
@@ -193,7 +193,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 805255598167959499}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -875,8 +875,9 @@ MonoBehaviour:
   _craftTriggerZone: {fileID: 2768016171455226465}
   _dropItemZone: {fileID: 883774696088571703}
   _itemInfoPiedestalZone: {fileID: 8877857460311261043}
-  _leftHandView: {fileID: 1940093783537148950}
-  _rightHandView: {fileID: 9218036672460028876}
+  _inventoryHandViews:
+  - {fileID: 9218036672460028876}
+  - {fileID: 1940093783537148950}
   _spawnBox: {fileID: 3888689958485016833}
 --- !u!114 &993430994118803740
 MonoBehaviour:
@@ -1377,7 +1378,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6717818868003425265}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -1607,7 +1608,7 @@ Transform:
   m_GameObject: {fileID: 8447348590702209958}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.47, z: 0}
   m_LocalScale: {x: 4.871207, y: 1, z: 3.1080782}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1713,8 +1714,8 @@ Transform:
   m_GameObject: {fileID: 8674828670991535568}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.22, y: 2.64, z: 0.59}
-  m_LocalScale: {x: 8.928498, y: 1.1695, z: 4.8922567}
+  m_LocalPosition: {x: -2.63, y: 2.64, z: 0.8}
+  m_LocalScale: {x: 10.778836, y: 1.1695, z: 3.6680183}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6346048531358467271}
@@ -2241,6 +2242,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6552127407998129870}
     m_Modifications:
+    - target: {fileID: 153820054447453972, guid: d1b39a90ca15b3f43af39e90bbed3e1d,
+        type: 3}
+      propertyPath: _isLeftHand
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1258213381417132452, guid: d1b39a90ca15b3f43af39e90bbed3e1d,
         type: 3}
       propertyPath: Flags
